@@ -8,7 +8,6 @@ import { ButtonInterface } from "./models/buttons";
 export default function(bot:Telegraf) {
   bot.command("/magisk", async(ctx) => {
     const { data: { magisk: stable, } } = await axios.get(`${api_urls.magisk}/stable.json`);
-    const { data: { magisk: beta } } = await axios.get(`${api_urls.magisk}/stable.json`);
     const { data: { magisk: canary } } = await axios.get(`${api_urls.magisk}/stable.json`);
     ctx.replyWithMarkdown(
       `*Ultimas versiones de magisk*\n\n` +
@@ -19,11 +18,7 @@ export default function(bot:Telegraf) {
       `_Canary_\n` +
       `*• Version:* _${canary.version}_(${canary.versionCode})\n` +
       `*• Apk:* [app-release.apk](${canary.link})\n` +
-      `*• Notes:* [magisk-${canary.versionCode}.md](${canary.note})\n\n` +
-      `_Beta_\n` +
-      `*• Version:* _${beta.version}_(${beta.versionCode})\n` +
-      `*• Apk:* [app-release.apk](${beta.link})\n` +
-      `*• Notes:* [magisk-${beta.versionCode}.md](${beta.note})\n\n`
+      `*• Notes:* [magisk-${canary.versionCode}.md](${canary.note})\n\n`
     );
   });
   bot.command("/fw", async(ctx) => {
@@ -63,6 +58,10 @@ export default function(bot:Telegraf) {
           {
             text: `Sammobile`,
             url: `https://www.sammobile.com/samsung/firmware/SM-${model}/${csc}/`
+          },
+          {
+            text: `Sfirmware`,
+            url: `https://sfirmware.com/samsung-sm-${model.toLowerCase()}/#tab=firmwares`
           },
           {
             text: `SamFw`,

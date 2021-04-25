@@ -1,21 +1,22 @@
-const owner = {
-    username: "CarlosBurelo",
+import { IBotConfig, IOwner } from "interfaces/config.interface";
+
+export const owner:IOwner = {
     id: 823410643,
+    username: "CarlosBurelo",
+    first_name: 'Carlos',
     db: "http://localhost:3000",
 };
 
-const botConfig = {
-    username: "AssitantCortana_bot",
+export const botConfig:IBotConfig = {
     id: 1317616064,
-    name: "Cortana",
+    username: "AssitantCortana_bot",
+    first_name: "Cortana",
+    repository: 'https://github.com/carlos-burelo/CortanaTs'
 };
 
-const api_urls = {
+export const api_urls:any = {
     monoschinos: process.env.API_MONOSCHINOS,
-    magisk: "https://raw.githubusercontent.com/topjohnwu/magisk-files/master",
+    magisk: "https://raw.githubusercontent.com/topjohnwu/magisk_files/master",
     github: "https://api.github.com",
     sams: "http://fota-cloud-dn.ospserver.net/firmware",
 };
-
-
-export { botConfig, owner, api_urls };

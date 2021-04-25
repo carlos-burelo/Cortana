@@ -1,9 +1,5 @@
 import { botConfig, owner } from "../config";
 
-export const mdhelp_text:string =
-`/add md *bold text* _italic text_ [url text](http://www.example.com/)
-[mention](tg://user?id=1748193652) {code text}
-`
 export const mdhelp_string:string =
 `
 Markdown es un lenguaje de formato de texto
@@ -12,18 +8,25 @@ las funcionalidades de este bot, vea algunos
 ejemplos de la sintaxis y comienze a estilizar
 sus notas :)
 
-• _text_ : Texto en cursiva
-• *text* : Texto en negritas
-• {text} : Texto monoespaciado
-• [text](tg://user?id=<userid>) : Mencion a un usuario por su id
+• _text_ : Genera texto en cursiva
+• *text* : Genera texto en negritas
+• {text} : Genera texto monoespaciado
+• [text](tg://user?id=aquivaelID) : Mencion a un usuario por su id
+con un texto alternativo
 • [text](url) : Creara un enlace acortado
+• ![text](url_img) : Crea el acceso a una imagen a travez de un enlace
 
 Copie y pege el siguente ejemplo para ver una demostraicion
 `
 export const start_msg:string =
-  `Hola, soy ${botConfig.name}, un bot administrador de grupos ` +
+  `Hola, soy ${botConfig.first_name}, un bot administrador de grupos ` +
   `desarrollado en NodeJS y Typescript por @${owner.username}.\n` +
   `Escriba /help ver todos los comandos disponibles`;
+
+export const mdhelp_text:string =
+  `/add md *bold text* _italic text_ [url text](http://www.example.com/)
+  [mention](tg://user?id=1748193652) {code text}
+  `
 
 export const help_msg:string =
   `Aqui te presento algunos de los modulos que actualmente tengo disponibles.\n` +

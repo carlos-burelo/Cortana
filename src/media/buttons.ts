@@ -10,7 +10,7 @@ export const start_buttons = Markup.inlineKeyboard(
     ),
     Markup.button.url(
       "📄 View Documentation",
-      `http://github.com/carlos-burelo/CortanaJs`
+      `${botConfig.repository}`
     ),
   ],
   { columns: 2 }
@@ -39,7 +39,6 @@ export const help_buttons = Markup.inlineKeyboard(
   ],
   { columns: 3 }
 );
-
 export const back_button = Markup.inlineKeyboard([
-  Markup.button.callback("⬅️ Back", "back"),
+  Markup.button.callback("atras", "back"),
 ]);

@@ -12,6 +12,7 @@ import translatorModule from "./modules/translator.module";
 import bansModule from "./modules/bans.module";
 import ownerModule from "./modules/owner.module";
 import { Telegraf } from "telegraf";
+import usersModule from "./modules/users.module";
 
 export default function (bot:Telegraf) {
   AdminModule(bot);
@@ -27,4 +28,5 @@ export default function (bot:Telegraf) {
   WelcomeModule(bot);
   stickersModule(bot);
   translatorModule(bot)
+  usersModule(bot)
 }

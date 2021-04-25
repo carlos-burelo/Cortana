@@ -74,4 +74,5 @@ export default function(bot:Telegraf) {
       ctx.reply('Dispositivo no encontradoo o datos inconrectos');
     };
   });
+
 }

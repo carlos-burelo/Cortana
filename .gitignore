@@ -1,3 +1,4 @@
 node_modules
 .env
 doc
+src/db.json

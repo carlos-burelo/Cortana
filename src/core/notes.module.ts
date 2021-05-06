@@ -1,0 +1,38 @@
+import { add_or_update_note, detect_format, FormatI, get_note, get_notes } from '../controllers/notes.controller';
+import { Telegraf } from 'telegraf';
+import { FileI, NoteI } from '../interfaces/controllers';
+
+export default function (bot: Telegraf) {
+    bot.command('/notes', async (ctx) => {
+        let account = ctx.chat
+        const res = await get_notes(ctx, account);
+        ctx.replyWithHTML(res)
+    });
+    bot.command('/get', async (ctx) => {
+        let account = ctx.chat.id.toString()
+        let notename = ctx.message.text.split(' ')[1]
+        await get_note(ctx,account, notename)
+        // ctx.reply(res)
+    });
+    bot.command(['/add', '/save'], async (ctx) => {
+        let account_id = ctx.chat.id.toString()
+        
+        if (ctx.message.reply_to_message) { //Respondiendo al mensaje
+            let name = ctx.update.message.text.split(' ')[1];
+            let reply_mesage = ctx.update.message.reply_to_message
+            
+            if (name == undefined) {
+                ctx.reply('❗ No se detecto un nombre');
+                return;
+            };
+            let resp:FormatI = await detect_format(reply_mesage);
+            let note: NoteI = {
+                id: name,
+                type: resp.tipo,
+                content: resp.source
+            }
+            const res = await add_or_update_note(ctx, account_id, note);
+            ctx.reply(res)
+        }
+    });
+}

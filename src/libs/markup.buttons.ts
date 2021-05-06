@@ -1,5 +1,6 @@
-import { ButtonInterface } from "modules/models/buttons";
+import { ButtonInterface } from "../interfaces/functions";
 import { Markup } from "telegraf";
+import { KeyboardButton, ReplyKeyboardMarkup } from "telegraf/typings/core/types/typegram";
 
 function getMarkupButtons(buttons) {
     let markupButtons = buttons.map(button => {

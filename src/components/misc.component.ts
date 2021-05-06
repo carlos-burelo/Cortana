@@ -1,6 +1,3 @@
-
-export const ownerAlert:string = 'CAACAgEAAxkBAAIF82BiOO52JsFUf6WiZxuxJsqUfcvSAALJAANPuxFHYDRey2rskjAeBA';
-export const admin_sticker:string = 'CAACAgQAAxkBAAIMCWCDL1kJp5kT0QxKeRWuixiRMZuFAAIoAANnZ08sGquHhUcGqq4fBA'
 export const array_lolis:Array<string> = [
     'CAACAgQAAxkBAAIMEWCDPRQTtaVhtjQccNGW8XDbeLrOAAKjAgACS7geCUH1G0tgDPPtHwQ',
     'CAACAgQAAxkBAAIMEGCDPRSbIzZ25Q8WzqKE8b8Qh8wuAAJcAgACS7geCUIaMY5UJZ07HwQ',

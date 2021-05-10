@@ -2,10 +2,13 @@ import 'dotenv/config'
 import { Telegraf } from "telegraf";
 const bot = new Telegraf(process.env.TOKEN);
 import all_modules from "./bot";
-import { createConection } from "./database";
-createConection()
+import { connect } from "./database";
 
-all_modules(bot);
-bot.launch();
-console.clear()
-console.log('Bot started')
+async function init() {
+    await connect()
+    all_modules(bot);
+    bot.launch();
+    console.clear();
+    console.log('Bot started')
+}
+init();

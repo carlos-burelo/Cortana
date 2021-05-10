@@ -1,4 +1,4 @@
-export const array_lolis:Array<string> = [
+export const array_lolis: string[] = [
     'CAACAgQAAxkBAAIMEWCDPRQTtaVhtjQccNGW8XDbeLrOAAKjAgACS7geCUH1G0tgDPPtHwQ',
     'CAACAgQAAxkBAAIMEGCDPRSbIzZ25Q8WzqKE8b8Qh8wuAAJcAgACS7geCUIaMY5UJZ07HwQ',
     'CAACAgEAAxkBAAIMFGCDPXceZA7freeQrw7rofvASpjrAAI9AQACx_IwRN3z_fWACm2NHwQ',

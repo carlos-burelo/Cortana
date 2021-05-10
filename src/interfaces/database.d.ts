@@ -1,20 +1,26 @@
-export interface DatabaseI{
+export interface DatabaseI {
     accounts: AccountsI[];
     gbanned: GbanI[];
     sudo: string[];
 }
-export interface AccountModelI{
+export interface AccountModelI {
     id: string;
-    account: string;
+    title: string;
+    account?: string;
+    type: "group" | "supergroup" | "private"
     bios?: Array<any>;
-    notes: Array<any>;
-    prefs: any;
+    notes?: Array<any>;
+    prefs?: PrefsI;
 }
-export interface AccountsI{
+export interface PrefsI {
+    welcome: { status: boolean, message: string }
+    goodbye: { status: boolean, message: string }
+}
+export interface AccountsI {
     id: (string | number);
     account: string
 }
-export interface GbanI{
+export interface GbanI {
     id: (string | number);
     username: string;
     reason: string;

@@ -1,13 +1,13 @@
 import { FileI, NoteI } from "../interfaces/controllers";
-import { checkAccount, create_account, getDB } from "../database";
+import { check_account, create_account, db } from "../database";
 let not_exist = 'La nota no existe'
 
 // Main Functions
 export async function get_notes(ctx, account: any): Promise<string> {
     let account_id = account.id.toString()
     try {
-        if (await checkAccount(account_id) == true) {
-            const notes = getDB().get("accounts").find({ id: account_id }).get('notes').value();
+        if (await check_account(account_id) == true) {
+            const notes = db().get("accounts").find({ id: account_id }).get('notes').value();
             if (notes.length == 0) {
                 return 'No hay notas en este chat'
             } else {
@@ -40,15 +40,14 @@ export async function get_notes(ctx, account: any): Promise<string> {
 };
 export async function get_note(ctx, account_id: string, notename: string) {
     try {
-        const note: NoteI = getDB()
+        const note: NoteI = db()
             .get('accounts')
             .find({ id: account_id })
             .get('notes')
             .find({ id: notename })
             .value()
         if (note !== undefined) {
-            // return res.content
-            return await get_note_method(ctx,note)
+            return await get_note_method(ctx, note)
         } else {
             return not_exist
         }
@@ -58,8 +57,8 @@ export async function get_note(ctx, account_id: string, notename: string) {
 };
 export async function add_or_update_note(ctx, account_id: string, note: NoteI) {
     try {
-        if (await checkAccount(account_id) == true) {
-            const find = await get_note(ctx,account_id, note.id)
+        if (await check_account(account_id) == true) {
+            const find = await get_note(ctx, account_id, note.id)
             if (find == not_exist) {
                 const res = await add_note(account_id, note);
                 return res
@@ -79,8 +78,7 @@ export async function add_or_update_note(ctx, account_id: string, note: NoteI) {
 };
 export async function add_note(account, note: NoteI): Promise<string> {
     note.content = note.content.replace(/["]/g, "'")
-    // note.content = note.content.replace(/[`]/g, '{}')
-    await getDB().get('accounts')
+    await db().get('accounts')
         .find({ id: account })
         .get('notes')
         .push(note)
@@ -88,7 +86,7 @@ export async function add_note(account, note: NoteI): Promise<string> {
     return 'Nota agregada'
 };
 export async function update_note(account, note: NoteI): Promise<string> {
-    await getDB().get('accounts')
+    await db().get('accounts')
         .find({ id: account })
         .get('notes')
         .find({ id: note.id })
@@ -96,7 +94,20 @@ export async function update_note(account, note: NoteI): Promise<string> {
         .write();
     return 'Nota actualizada'
 };
-
+export async function delete_note(account_id: string, note_id: string) {
+    const note: NoteI = db()
+        .get('accounts')
+        .find({ id: account_id })
+        .get('notes')
+        .find({ id: note_id })
+        .value()
+    if (note !== undefined) {
+        await db().get('accounts').find({ id: account_id }).get('notes').remove({ id: note_id }).write();
+        return 'Nota eliminada'
+    } else {
+        return 'La nota no existe'
+    }
+}
 //Extra functions
 
 export interface FormatI {
@@ -108,6 +119,12 @@ export async function detect_format(message): Promise<FormatI> {
     let tipo = arrl[arrl.length - 1];
     let source;
     let reply: FileI = message
+    if (tipo == 'caption_entities') {
+        tipo = 'markdown';
+        source = reply.caption
+        source = source.replace('/save ', '')
+        source = source.replace('/add ', '')
+    }
     if (tipo == 'entities' || tipo == 'text') {
         tipo = 'text';
         source = reply.text.replace(/["]/g, "'")
@@ -121,12 +138,11 @@ export async function detect_format(message): Promise<FormatI> {
                     tipo == "audio" ? (source = reply.audio.file_id) :
                         "indefinido";
     let response: FormatI = { tipo, source }
-    console.log(response)
     return response
 };
-export async function get_note_method(ctx,note:NoteI) {
+export async function get_note_method(ctx, note: NoteI) {
     const { message_id } = ctx.message;
-    if(note.type == 'text'){
+    if (note.type == 'text') {
         let note_parced = note.content.replace(/[{}]/g, '`')
         note_parced = note_parced.replace(/[']/g, '"')
         return ctx.replyWithMarkdown(note_parced, { reply_to_message_id: message_id })
@@ -140,14 +156,14 @@ export async function get_note_method(ctx,note:NoteI) {
     if (note.type == 'audio') {
         return ctx.replyWithAudio(note.content, { reply_to_message_id: message_id })
     }
-    if(note.type == 'sticker'){
-        return ctx.replyWithAudio(note.content, { reply_to_message_id: message_id })    
+    if (note.type == 'sticker') {
+        return ctx.replyWithAudio(note.content, { reply_to_message_id: message_id })
     }
     if (note.type == 'video') {
         return ctx.replyWithVideo(note.content, { reply_to_message_id: message_id })
     }
     else {
-        return ctx.replyWithMarkdown('*Formato de nota desconocido*', { reply_to_message_id: message_id })
+        return ctx.replyWithMarkdown(note.content, { reply_to_message_id: message_id })
     }
-    
+
 };

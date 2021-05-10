@@ -91,7 +91,7 @@ export default function (bot: Telegraf) {
       if (ctx.chat.type == 'supergroup') {
         if (ctx.update.message.reply_to_message) {
           let emisor = ctx.update.message.from
-          let receptor:any = ctx.update.message.reply_to_message.from;
+          let receptor: any = ctx.update.message.reply_to_message.from;
           if (emisor.id == receptor.id) {
             ctx.reply('No puedes borrar tu propia biografia');
             return;

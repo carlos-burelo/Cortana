@@ -4,3 +4,10 @@ export interface UserI {
     username?: string;
     last_name?: string;
 }
+
+export interface ButtonI {
+    text: string;
+    url?: string;
+    callback?: string;
+    content?: string;
+}

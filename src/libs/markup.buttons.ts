@@ -1,20 +1,30 @@
-import { ButtonInterface } from "../interfaces/functions";
 import { Markup } from "telegraf";
-import { KeyboardButton, ReplyKeyboardMarkup } from "telegraf/typings/core/types/typegram";
+import { ButtonI } from "interfaces/modules";
 
-function getMarkupButtons(buttons) {
+function url_buttons_maker(buttons: ButtonI[]) {
     let markupButtons = buttons.map(button => {
-        return Markup.button.url(
-            `${button.text}`,
-            `${button.url}`
-        )
+        return Markup.button.url(button.text, button.url);
     });
     let columnButtons = [];
     columnButtons = markupButtons;
     return columnButtons;
 }
-export function ButtonUrls(buttons:Array<ButtonInterface>, columns:number ) {
-    let columnButtons = getMarkupButtons(buttons);
-    let keyboard:any = Markup.inlineKeyboard(columnButtons, {columns: columns});
+
+function callback_buttons_maker(buttons: ButtonI[]) {
+    let markupButtons = buttons.map(button => {
+        return Markup.button.callback(button.text, button.callback);
+    });
+    let columnButtons = [];
+    columnButtons = markupButtons;
+    return columnButtons;
+}
+export function callback_buttons(buttons: ButtonI[], columns: number) {
+    let _buttons = callback_buttons_maker(buttons);
+    let keyboard: any = Markup.inlineKeyboard(_buttons, { columns: columns });
+    return keyboard;
+}
+export function url_buttons(buttons: ButtonI[], columns: number) {
+    let _buttons = url_buttons_maker(buttons);
+    let keyboard: any = Markup.inlineKeyboard(_buttons, { columns: columns });
     return keyboard;
 }

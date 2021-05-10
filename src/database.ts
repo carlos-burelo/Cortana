@@ -21,7 +21,7 @@ export async function check_account(id: (string | number)): Promise<boolean> {
   } else {
     return false
   }
-}
+};
 export async function create_account(account: AccountModelI) {
   if (account.type == "private") {
     let accountModel = {

@@ -1,9 +1,21 @@
-import { owner } from "../config";
+import { owner, _bot } from "../config";
 import { ChatMember } from "telegraf/typings/core/types/typegram";
 import { db } from "../database";
 import { PermsI } from "../interfaces/controllers";
 
 export async function get_access(emisor: ChatMember, receptor: ChatMember, operation: string[]): Promise<PermsI> {
+    if (emisor.user.id == owner.id) {
+        return {
+            status: true,
+            message: `${receptor.user.first_name} ha sido ${operation[1]} por ${emisor.user.first_name}`
+        }
+    }
+    if ( receptor.user.id == _bot.id) {
+        return {
+            status: false,
+            message: `No tienes permiso para ${operation[0]} al bot`
+        }
+    }
     if (emisor.user.id == receptor.user.id) {
         return {
             status: false,
@@ -28,16 +40,19 @@ export async function get_access(emisor: ChatMember, receptor: ChatMember, opera
             message: `Un administrador no puede ${operation[0]} al propietario`
         }
     };
-    if (
-        emisor.status == 'administrator' && receptor.status == 'member' ||
-        emisor.status == 'creator' && receptor.status == 'member' ||
-        emisor.user.id == owner.id
-    ) {
+    if(emisor.status =='administrator' && receptor.status == 'member'){
         return {
             status: true,
             message: `${receptor.user.first_name} ha sido ${operation[1]} por ${emisor.user.first_name}`
         }
     }
+    if(emisor.status == 'creator' && receptor.status == 'member'){
+        return {
+            status: true,
+            message: `${receptor.user.first_name} ha sido ${operation[1]} por ${emisor.user.first_name}`
+        }
+    }
+    
     if (emisor.user.id) {
         const res = await db().get('sudos').value()
         let found: boolean;

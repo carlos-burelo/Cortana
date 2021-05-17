@@ -18,4 +18,5 @@ export const api_urls: ApisI = {
     magisk: "https://raw.githubusercontent.com/topjohnwu/magisk_files/master",
     github: "https://api.github.com",
     samsung: "http://fota-cloud-dn.ospserver.net/firmware",
+    twrp: 'https://eu.dl.twrp.me'
 };

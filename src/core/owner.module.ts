@@ -1,6 +1,6 @@
 import { db } from '../database';
 import { Telegraf } from 'telegraf';
-import { add_sudos, get_perms, get_sudos } from '../controllers/owner.controller';
+import { add_or_update_sudo, get_perms, get_sudos } from '../controllers/owner.controller';
 import { owner } from '../config';
 
 export default function (bot: Telegraf) {
@@ -20,16 +20,21 @@ export default function (bot: Telegraf) {
         ctx.reply(await get_sudos())
     });
     bot.command('/sudo', async (ctx) => {
-        let emisor = ctx.message.from
-        let user = ctx.message.reply_to_message.from
-        let range = parseInt(ctx.message.text.split(' ')[1])
-        if (!range) {
-            ctx.reply('Porfavor establezca un rango');
-            return
+        let emisor = ctx.update.message.from
+        let user:any = ctx.update.message.reply_to_message
+        if(!user || user == undefined){
+            ctx.reply('No detecto usuario a promover');
+            return;
         }
-
+        user = user.from
+        let arg:number = parseInt(ctx.message.text.split(' ')[1])
+        let role:string = ctx.message.text.split(' ')[2]
+        if(!arg || arg == NaN){
+            ctx.reply('No detecto argumentos');
+            return;
+        }
         if (emisor.id == owner.id) {
-            ctx.reply(await add_sudos(ctx, user, range))
+            ctx.reply(await add_or_update_sudo(ctx, user, arg, role))
         } else {
             ctx.reply('Solo el propietario puede agregar sudo users')
         }

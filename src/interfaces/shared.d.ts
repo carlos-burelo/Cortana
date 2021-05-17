@@ -14,4 +14,5 @@ export interface ApisI {
     magisk: string;
     github: string;
     samsung: string;
+    twrp: string
 }

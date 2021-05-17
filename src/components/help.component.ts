@@ -1,5 +1,7 @@
-const string_base = "Aqui esta la ayuda para el modulo: ";
-export let help_array: Array<any> = [{
+import { HelpI } from "../interfaces/components";
+
+const string_base:string = "Aqui esta la ayuda para el modulo: ";
+export let help_array: HelpI[] = [{
   text: "Administrador",
   callback: 'help_admin',
   content: `${string_base} Admin\n\n` +
@@ -9,7 +11,14 @@ export let help_array: Array<any> = [{
     `/pin <replymessage> or <text> : ancla una nota\n` +
     `/unpin : desancla la nota actual\n`,
 },
-
+{
+  text: 'Propietario',
+  callback: 'help_owner',
+  content: `${string_base} owner\n\n` +
+    `/sudolist | /sudos : retorna la lista de los superusuarios\n` +
+    `/sudo <replymessage> : Promueve a superusuario\n` +
+    `/eco <message> : Envia un mensage a todos los grupos en la base de datos\n`
+},
 {
   text: "Anime",
   callback: 'help_anime',
@@ -80,7 +89,7 @@ export let help_array: Array<any> = [{
   content: `${string_base} Notas\n\n` +
     `/notes : Obtiene todas las notas guardadas\n` +
     `/add <name> <conten> : Agrega una nota a la base de datos\n` +
-    `/get <notename> : Obtiene una nota en especifico \n` +
+    `/g <notename> : Obtiene una nota en especifico \n` +
     `/del <notename> : Borra la nota de la base de datos \n`,
 },
 {

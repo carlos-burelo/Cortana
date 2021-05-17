@@ -1,46 +1,55 @@
+import { get_access } from "../guards/admin.guard";
 import { Telegraf } from "telegraf";
 import { owner } from "../config";
 
-export default function(bot:Telegraf) {
-  bot.command('/ban', async(ctx) => {
+export default function (bot: Telegraf) {
+  bot.command('/ban', async (ctx) => {
     if (!ctx.update.message.reply_to_message) {
       ctx.reply('No detecto al usuario para banear')
     } else {
       try {
-        let userIdA = ctx.update.message.from.id
-        let userIdB = ctx.update.message.reply_to_message.from.id
-        const userA = await ctx.getChatMember(userIdA);
-        const userB = await ctx.getChatMember(userIdB);
-        if (userA.status == 'member' && userB.status == 'administrator') {
-          ctx.reply('Un miembro no puede banear a un administrador');
-          return;
-        };
-        if (userA.status == 'administrator' && userB.status == 'administrator') {
-          ctx.reply('Un administrador no puede banear a otro administrador');
-          return;
-        };
-        if (userA.status == 'member' || userA.status == 'administrator' && userB.status == 'creator') {
-        //   ctx.replyWithSticker(ownerAlert);
-          return;
-        };
-        if (owner.id == userB.user.id) {
-        //   ctx.replyWithSticker(ownerAlert)
-          return;
-        }
-        if (userA.status == 'administrator' && userB.status == 'member') {
-          ctx.reply('Administrador puede banear a miembro');
-          const res = await ctx.kickChatMember(userB.user.id);
-          if(res == true){
-            let User = userB.user
-            ctx.reply(`${User.first_name} ha sido baneado.`);
-            return;
-          } else {
-            ctx.reply(`No se pudo banear a ${userA.user.first_name}`);
-            return;
+        const emisor = await ctx.getChatMember(ctx.update.message.from.id);
+        const receptor = await ctx.getChatMember(ctx.update.message.reply_to_message.from.id);
+        let operation: string[] = ['banear', 'baneado']
+        let { message, status } = await get_access(emisor, receptor, operation)
+        if (status == true) {
+          try {
+            // await ctx.kickChatMember(receptor.user.id);
+            ctx.reply('Intento de baneo exitoso')
+          } catch (error) {
+            ctx.reply('No se pudo banear a '+receptor.user.first_name)
           }
-        };
+        } else {
+          ctx.reply(message)
+        }
       } catch (error2) {
-        ctx.reply('try catch error');
+        ctx.reply(error2.toString());
+        return;
+      }
+    };
+
+  });
+  bot.command('/unban', async (ctx) => {
+    if (!ctx.update.message.reply_to_message) {
+      ctx.reply('No detecto al usuario para desbanear')
+    } else {
+      try {
+        const emisor = await ctx.getChatMember(ctx.update.message.from.id);
+        const receptor = await ctx.getChatMember(ctx.update.message.reply_to_message.from.id);
+        let operation: string[] = ['desbanear', 'desbaneado']
+        let { message, status } = await get_access(emisor, receptor, operation)
+        if (status == true) {
+          try {
+            // await ctx.kickChatMember(receptor.user.id);
+            ctx.reply('Intento de desbaneo exitoso')
+          } catch (error) {
+            ctx.reply('No se pudo desbanear a '+receptor.user.first_name)
+          }
+        } else {
+          ctx.reply(message)
+        }
+      } catch (error2) {
+        ctx.reply(error2.toString());
         return;
       }
     };

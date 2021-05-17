@@ -9,12 +9,12 @@ export default function (bot: Telegraf) {
         ctx.replyWithHTML(res)
     });
     bot.command('/get', async (ctx) => {
-        let account = ctx.chat.id.toString()
+        let account = ctx.chat
         let notename = ctx.message.text.split(' ')[1]
         await get_note(ctx, account, notename)
     });
     bot.command(['/add', '/save'], async (ctx) => {
-        let account_id = ctx.chat.id.toString()
+        let account = ctx.chat
 
         if (ctx.message.reply_to_message) { //Respondiendo al mensaje
             let name = ctx.update.message.text.split(' ')[1];
@@ -30,13 +30,13 @@ export default function (bot: Telegraf) {
                 type: resp.tipo,
                 content: resp.source
             }
-            const res = await add_or_update_note(ctx, account_id, note);
+            const res = await add_or_update_note(ctx, account, note);
             ctx.reply(res)
         }
     });
     bot.command('/del', async (ctx) => {
-        let account_id = ctx.chat.id.toString()
+        let account = ctx.chat
         let note = ctx.message.text.split(' ')[1]
-        ctx.reply(await delete_note(account_id, note))
+        ctx.reply(await delete_note(account, note))
     });
 }

@@ -7,7 +7,7 @@ import { stickers } from "../shared/stickers";
 
 export default function (bot: Telegraf) {
   bot.command('/bio', async (ctx) => {
-    let account_id = ctx.chat.id.toString();
+    let account = ctx.chat
     try {
       if (ctx.chat.type == 'private') {// @ Si esta en un chat privado
         ctx.reply('Este comando solo funciona en grupos');
@@ -19,7 +19,7 @@ export default function (bot: Telegraf) {
       };
       if (ctx.chat.type == 'supergroup' && ctx.update.message.reply_to_message) {// @supergrupo y mensage de respuesta
         let user: UserI = ctx.update.message.reply_to_message.from;
-        const bio: string = await get_bio(account_id, user);
+        const bio = await get_bio(account, user);
         ctx.reply(bio);
         return
       };
@@ -96,8 +96,8 @@ export default function (bot: Telegraf) {
             ctx.reply('No puedes borrar tu propia biografia');
             return;
           }
-          let chat_id = ctx.chat.id.toString()
-          const res = await delete_bio(chat_id, receptor.id.toString())
+          let account = ctx.chat
+          const res = await delete_bio(account, receptor.id.toString())
           ctx.reply(res)
         } else {
           ctx.reply('No detecto al usuario');

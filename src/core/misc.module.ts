@@ -36,4 +36,35 @@ export default function (bot: Telegraf) {
     bot.command('/loli', async (ctx) => {
         ctx.replyWithSticker(array_lolis[Math.floor(Math.random() * array_lolis.length)])
     });
+    bot.command('/ctx', async (ctx) => {
+        console.clear()
+        let contexto = JSON.stringify(ctx)
+        console.log(contexto)
+        // ctx.reply(contexto.toString())
+    });
+    bot.command('/poll', async (ctx) => {
+        if (ctx.chat.type == "private") {
+            ctx.reply('No se pueden hacer encuestas en chats privados');
+            return;
+        }
+        let msg = ctx.message.text.replace('/poll ', '').split(')')
+        try {
+            let question = msg[0].replace(/[(]/g, '').replace('\n', 'e')
+            let options: string[] = JSON.parse(msg[1])
+            if (!options[1]) {
+                ctx.reply('Necesito al menos 2 respuestas');
+                return
+            }
+            ctx.replyWithPoll(question, options, 
+                {
+                    is_anonymous:false,
+
+                }
+            )
+        } catch (error) {
+            ctx.reply('Formato de encuesta incorrecto');
+            return
+        }
+
+    });
 }

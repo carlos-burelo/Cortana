@@ -136,4 +136,18 @@ export default function (bot: Telegraf) {
             ctx.reply("Solo puedo obtener enlaces en grupos");
         }
     });
+    bot.command('/perms', async (ctx) => {
+        let {permissions:perms, title}:any = await ctx.getChat()
+        ctx.replyWithMarkdown(
+            `*Permisos en ${title}*\n\n`+
+            `*can_send_messages:*  ${perms.can_send_messages}\n`+
+            `*can_send_media_messages:*  ${perms.can_send_media_messages}\n`+
+            `*can_send_polls:*  ${perms.can_send_polls}\n`+
+            `*can_send_other_messages:*  ${perms.can_send_other_messages}\n`+
+            `*can_add_web_page_previews:*  ${perms.can_add_web_page_previews}\n`+
+            `*can_change_info:*  ${perms.can_change_info}\n`+
+            `*can_invite_users:*  ${perms.can_invite_users}\n`+
+            `*can_pin_messages:*  ${perms.can_pin_messages}\n`
+        )
+    });
 }

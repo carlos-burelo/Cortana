@@ -1,5 +1,5 @@
 import { FileI, NoteI } from "../interfaces/controllers";
-import { check_account, create_account, db } from "../database";
+import { check_account, connect, create_account, db } from "../database";
 let not_exist = 'La nota no existe'
 
 // Main Functions
@@ -7,7 +7,8 @@ export async function get_notes(ctx, account: any): Promise<string> {
     let account_id = account.id.toString()
     try {
         if (await check_account(account_id) == true) {
-            const notes = db().get("accounts").find({ id: account_id }).get('notes').value();
+            await connect(account)
+            const notes = db(account).get('notes').value();
             if (notes.length == 0) {
                 return 'No hay notas en este chat'
             } else {
@@ -28,7 +29,7 @@ export async function get_notes(ctx, account: any): Promise<string> {
                     let indice = indice1 <= 9 ? `0${indice1}` : `${indice1}`;
                     notas += `<b>${indice} - </b><code>${note.id}</code>\n`;
                 });
-                notas += '\nObten las notas con <code>/get</code> <i>notename</i>'
+                notas += '\nObten las notas con <code>/g <i>notename</i></code>'
                 return notas
             }
         } else {
@@ -38,11 +39,10 @@ export async function get_notes(ctx, account: any): Promise<string> {
         return 'Error en notes.controller.ts'
     }
 };
-export async function get_note(ctx, account_id: string, notename: string) {
+export async function get_note(ctx, account: any, notename: string) {
     try {
-        const note: NoteI = db()
-            .get('accounts')
-            .find({ id: account_id })
+        await connect(account)
+        const note: NoteI = db(account)
             .get('notes')
             .find({ id: notename })
             .value()
@@ -55,21 +55,21 @@ export async function get_note(ctx, account_id: string, notename: string) {
         return 'Error en notes.controller.ts'
     }
 };
-export async function add_or_update_note(ctx, account_id: string, note: NoteI) {
+export async function add_or_update_note(ctx, account: any, note: NoteI) {
     try {
-        if (await check_account(account_id) == true) {
-            const find = await get_note(ctx, account_id, note.id)
+        if (await check_account(account.id) == true) {
+            const find = await get_note(ctx, account, note.id)
             if (find == not_exist) {
-                const res = await add_note(account_id, note);
+                const res = await add_note(account, note);
                 return res
             } else {
-                const res = await update_note(account_id, note);
+                const res = await update_note(account, note);
                 return res
             }
         } else {
             let account = ctx.getChat();
             await create_account(account)
-            const res = await add_note(account_id, note);
+            const res = await add_note(account, note);
             return res
         }
     } catch (error) {
@@ -78,31 +78,34 @@ export async function add_or_update_note(ctx, account_id: string, note: NoteI) {
 };
 export async function add_note(account, note: NoteI): Promise<string> {
     note.content = note.content.replace(/["]/g, "'")
-    await db().get('accounts')
-        .find({ id: account })
+    await connect(account)
+    await db(account)
         .get('notes')
         .push(note)
         .write();
     return 'Nota agregada'
 };
 export async function update_note(account, note: NoteI): Promise<string> {
-    await db().get('accounts')
-        .find({ id: account })
+    await connect(account)
+    await db(account)
         .get('notes')
         .find({ id: note.id })
         .assign(note)
         .write();
     return 'Nota actualizada'
 };
-export async function delete_note(account_id: string, note_id: string) {
-    const note: NoteI = db()
-        .get('accounts')
-        .find({ id: account_id })
+export async function delete_note(account: any, note_id: string) {
+    await connect(account)
+    const note: NoteI = db(account)
         .get('notes')
         .find({ id: note_id })
         .value()
     if (note !== undefined) {
-        await db().get('accounts').find({ id: account_id }).get('notes').remove({ id: note_id }).write();
+        await connect(account)
+        await db(account)
+        .get('notes')
+        .remove({ id: note_id })
+        .write();
         return 'Nota eliminada'
     } else {
         return 'La nota no existe'

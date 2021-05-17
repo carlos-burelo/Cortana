@@ -6,7 +6,7 @@ export interface DatabaseI {
 export interface AccountModelI {
     id: string;
     title: string;
-    account?: string;
+    username?: string;
     type: "group" | "supergroup" | "private"
     bios?: Array<any>;
     notes?: Array<any>;

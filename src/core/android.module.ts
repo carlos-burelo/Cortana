@@ -2,7 +2,7 @@ import axios from "axios";
 import { api_urls } from "../config";
 import { parseString } from "xml2js";
 import { Telegraf } from "telegraf";
-import { get_version, magisk_format } from "../controllers/android.controller";
+import { get_version, magisk_format, scraping_twrp } from "../controllers/android.controller";
 import { ButtonI } from "../interfaces/modules";
 import { url_buttons } from "../libs/markup.buttons";
 
@@ -71,5 +71,20 @@ export default function (bot: Telegraf) {
         } catch (error) {
             ctx.reply('Dispositivo no encontradoo o datos inconrectos');
         };
+    });
+    bot.command('/twrp', async (ctx) => {
+        let device = ctx.message.text.split(' ')[1]
+        if(!device){
+            ctx.reply('Coloque un dispositivo');
+            return;
+        }
+        try {
+            const {data} = await axios.get(`${api_urls.twrp}/${device}/`)
+            const res  = await scraping_twrp(data, device);
+            ctx.replyWithHTML(res)
+        } catch (error) {
+            ctx.reply('Error en la solicitud o dispositivo no encontrado')
+        }
+        
     });
 }

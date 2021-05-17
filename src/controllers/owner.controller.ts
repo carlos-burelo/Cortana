@@ -11,31 +11,77 @@ export async function get_perms(account_id): Promise<boolean> {
 };
 
 export async function get_sudos(): Promise<string> {
-    const res = await db().get('sudos').value()
-    if (res.length == 0) {
+    const sudos:SudoI[] = await db().get('sudos').value()
+    if (sudos.length == 0) {
         return 'Aun no hay Sudo Users'
     } else {
-
+        let sudolist:string = "◼️ Sudo list\n\n"
+        sudos.forEach(sudo=>{
+            sudolist += `• ${sudo.first_name} | ${sudo.role}\n`
+        })
+        return sudolist
     }
 };
-export async function add_sudos(ctx, user: UserI, range: number) {
+export async function add_or_update_sudo(ctx, user: UserI, range: number, role:string) {
+    const res = await get_sudo(user.id)
+    if(res !== false){
+        const msg = await update_sudos(ctx, user, range, role);
+        return msg
+    } else {
+        const msg = await add_sudos(ctx, user, range, role)
+        return msg
+    }
+};
+export async function add_sudos(ctx, user: UserI, range: number, role) {
     let sudo: SudoI = {
         id: user.id,
         first_name: user.first_name,
         username: user.username,
         range: range,
-        role: `${await decide_rol(range)}`
+        role: `${!role ? await rol(range) : role}`
     }
-    await ctx.setChatAdministratorCustomTitle(user.id, await decide_rol(range))
+    try {
+        await ctx.setChatAdministratorCustomTitle(user.id, `${!role ? await rol(range) : role}`)
+    } catch (error) {
+        return `${user.first_name} primero debe ser administrador`
+    }
     await db().get('sudos').push(sudo).write()
     return `${user.first_name} ha sido promovido a ${sudo.role}`
 };
-
+export async function update_sudos(ctx, user: UserI, range: number, role) {
+    let sudo: SudoI = {
+        id: user.id,
+        first_name: user.first_name,
+        username: user.username,
+        range: range,
+        role: `${!role ? await rol(range) : role}`
+    }
+    try {
+        await ctx.setChatAdministratorCustomTitle(user.id, `${!role ? await rol(range) : role}`)
+    } catch (error) {
+        return `${user.first_name} primero debe ser administrador`
+    }
+    await db()
+    .get('sudos')
+    .find({id: sudo.id})
+    .assign(sudo).write()
+    return `${user.first_name} ha sido promovido a ${sudo.role}`
+};
+export async function get_sudo(id:number) {
+    const sudos:SudoI[] = await db().get('sudos').value();
+    let found = sudos.find(sudo => sudo.id == id)
+    if(found !== undefined){
+        return found
+    } else {
+        return false
+    }
+    // 
+};
 
 
 //Extra functions
 
-export async function decide_rol(range): Promise<string> {
+export async function rol(range): Promise<string> {
     let role;
     range == 1 ? role = 'Sudo' :
         range == 2 ? role = 'Manager' :

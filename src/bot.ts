@@ -14,14 +14,14 @@ import anime_module from "./core/anime.module";
 export default async function (bot: Telegraf) {
   admin_module(bot);
   android_module(bot);
-  anime_module(bot)
+  anime_module(bot);
   bans_module(bot);
   bios_module(bot);
-  github_module(bot)
-  help_module(bot)
+  github_module(bot);
+  help_module(bot);
   misc_module(bot);
   notes_module(bot);
   owner_module(bot);
-  translator_module(bot)
-  welcome_module(bot)
+  translator_module(bot);
+  welcome_module(bot);
 }

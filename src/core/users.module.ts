@@ -41,7 +41,7 @@
 //                 } catch (error) {
 //                     ctx.reply('error', {reply_to_message_id: ctx.message.message_id})
 //                 }
-//             } 
+//             }
 //         }
 //     });
 //     bot.command("/id", (ctx) => {
@@ -74,4 +74,4 @@
 //           ctx.reply('No cuentas con una biografia')
 //         }
 //     });
-// }; 
+// };

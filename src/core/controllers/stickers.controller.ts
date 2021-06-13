@@ -33,7 +33,7 @@ export async function kangSticker(ctx) {
     } catch (error) {
       found = undefined;
     }
-    let {message_id: msgId} = await ctx.reply('Getting file url ...')
+    let {message_id: msgId} = await ctx.reply('`Obteniendo url...`',{parse_mode:'Markdown'})
     let url: any = await ctx.telegram.getFileLink(file_id);
     let base: string = `${ctx.from.id}-${basename(url.href)}.png`;
     let spl: string[] = ctx.message.text.split(" ");
@@ -52,11 +52,11 @@ export async function kangSticker(ctx) {
       "stickers",
       base
     );
-    await editMessage(ctx, msgId, 'Downloading file from telegram ...')
+    await editMessage(ctx, msgId, '`Descargando imagen...`')
     await downloadImage(url.href, file_dir);
     if (found) {
       if (ctx.message.reply_to_message.photo) {
-        await editMessage(ctx, msgId, 'Proccesing photo...')
+        await editMessage(ctx, msgId, '`Procesando imagen...`')
         let image = await resizeImage(file_dir);
         await image.writeAsync(file_dir);
       }
@@ -70,8 +70,6 @@ export async function kangSticker(ctx) {
       } catch (error) {
         unlinkSync(file_dir);
         await editMessage(ctx, msgId, error.toString())
-        // return error.toString();
-
       }
     } else {
       if (ctx.message.reply_to_message.photo) {
@@ -111,11 +109,27 @@ export async function downloadImage(url, file_dir: string) {
 }
 
 export async function resizeImage(file_dir: string) {
-  let image = await Jimp.read(file_dir);
-  if (image.bitmap.height < 512) {
-    image.resize(512, image.bitmap.height);
+  let imageFile = await Jimp.read(file_dir);
+  let { bitmap:image} = imageFile
+  if(image.height < 512 && image.width < 512 ){
+    let size1 = image.width
+    let size2 = image.height
+    let size1new:number;
+    let size2new:number
+    if(image.width > image.height){
+      let scale:number = 512 / size1
+      size1new = 512
+      size2new = size2 * scale
+    } else {
+      let scale:number = 512 / size2
+      size1new = size1 * scale
+      size2new = 512
+    }
+      size1new = Math.floor(size1new)
+      size2new = Math.floor(size2new)
+      imageFile.resize(size1new, size2new)
   } else {
-    image.resize(512, 512);
+    imageFile.resize(512, 512)
   }
-  return image;
+  return imageFile;
 }

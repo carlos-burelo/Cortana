@@ -65,7 +65,7 @@ export async function sendMessage(
   }
 }
 
-export async function sendMethod(ctx, account, msg) {
+export async function sendMethod(ctx:Context, account, msg) {
   switch (msg.type) {
     case "sticker":
       ctx.telegram.sendSticker(account, msg.source);
@@ -80,8 +80,10 @@ export async function sendMethod(ctx, account, msg) {
       ctx.telegram.sendAudio(account, msg.source);
       break;
     case "voice":
-      console.log(msg);
       ctx.telegram.sendVoice(account, msg.source);
+      break;
+    case "document":
+      ctx.telegram.sendDocument(account, msg.source);
       break;
     default:
       ctx.telegram.sendMessage(account, msg.source);

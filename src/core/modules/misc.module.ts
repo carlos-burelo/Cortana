@@ -71,7 +71,7 @@ export default function (bot: Telegraf) {
       ctx.reply("No detecto ningun sticker o imagen");
       return;
     }
-    const resp = await kangSticker(ctx);
-    ctx.replyWithMarkdown(resp);
+    await kangSticker(ctx);
+    
   });
 }

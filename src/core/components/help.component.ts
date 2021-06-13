@@ -19,6 +19,8 @@ export let help_array: HelpI[] = [
     content:
       `${string_base} owner\n\n` +
       `/sudolist | /sudos : retorna la lista de los superusuarios\n` +
+      `/groups : retorna la lista de los grupos vinculados\n` +
+      `/send <id> <message> | <replymessage> : Envia un mensaje directo o multimedia a una cuenta especifica.\n` +
       `/sudo <replymessage> : Promueve a superusuario\n` +
       `/eco <message> : Envia un mensage a todos los grupos en la base de datos\n`,
   },
@@ -59,9 +61,7 @@ export let help_array: HelpI[] = [
       `${string_base} Bios And Abouts\n\n` +
       `/setbio <replymessage>: Establece una biografia al usuario\n` +
       `/bio <replymessage> : Obtiene la biografia del usuario\n` +
-      `/info <replymessage> : Obtiene la informacion de un usuario\n` +
-      `/me : Obtiene la biografia del propio usuario\n` +
-      `/id <replymessage>[optional]: Obtine el Id del usuario/grupo/canal\n`,
+      `/info <replymessage> : Obtiene la informacion de un usuario\n`
   },
   {
     text: "Lista negra",
@@ -76,12 +76,17 @@ export let help_array: HelpI[] = [
       `${string_base} GitHub\n\n` +
       `/git <username> : Retorna la informacion del usuario \n` +
       `/repos <username> : Obtiene los repositosios del usuario\n` +
+      `/clone <user> <repo> | <github_url>: Descarga el repositorio\n` +
       `/repo <username> <repo> : Obtiene un repositorio en especifico \n`,
   },
   {
     text: "Extras",
     callback: "help_extras",
-    content: `${string_base} Extras\n\n` + `MODULO NO DISPONIBLE POR AHORA \n`,
+    content: `${string_base} Extras\n\n` + 
+    `/cc <conincode> <codeorig> <codedest>: Retorna la equvalencia actual de las monedas en solicidatas \n`+
+    `Por ejemplo /cc 1 USD MXO \n`+
+    `/loli : Retorna una loli \n`+
+    `/poll (question) ["1", "2"]: Retorna una encuesta publica \n`,
   },
   {
     text: "Silencio",
@@ -96,7 +101,7 @@ export let help_array: HelpI[] = [
       `${string_base} Notas\n\n` +
       `/notes : Obtiene todas las notas guardadas\n` +
       `/add <name> <conten> : Agrega una nota a la base de datos\n` +
-      `/g <notename> : Obtiene una nota en especifico \n` +
+      `#<notename> : Obtiene una nota en especifico \n` +
       `/del <notename> : Borra la nota de la base de datos \n`,
   },
   {
@@ -107,7 +112,10 @@ export let help_array: HelpI[] = [
   {
     text: "Stickers",
     callback: "help_stickers",
-    content: `${string_base} Stickers\n\n` + `/stickerid <username>\n`,
+    content: 
+      `${string_base} Stickers\n\n` + 
+      `/stickerid <username>\n`+
+      `/kang <sticker> | <photo> : Añade como sticker la imagen/sticker a su propio StickerPack\n`,
   },
   {
     text: "Traductor",
@@ -120,7 +128,9 @@ export let help_array: HelpI[] = [
     text: "Usuarios",
     callback: "help_users",
     content:
-      `${string_base} Usuarios\n\n` + `MODULO NO DISPONIBLE POR AHORA \n`,
+      `${string_base} Usuarios\n\n` + 
+      `/info <replymessage[optional]>: retorna la informacion del usuario\n`+
+      `/id <replymessage[optional]>: retorna solo el id del usuario/grupo\n`,
   },
   {
     text: "Advertencias",
@@ -132,18 +142,33 @@ export let help_array: HelpI[] = [
     text: "Bienvenidas",
     callback: "help_welcomes",
     content:
-      `${string_base} Bienvenidas\n\n` + `MODULO NO DISPONIBLE POR AHORA \n`,
+      `${string_base} Bienvenidas\n\n` + 
+      `/welcome: Muestra las configuraciones actuales de las bienvenidas \n`+
+      `/setwelcome: Establece una bienvenida personalizada \n`+
+      `/welcome off/on: Activa/desactiva las bienvenidas en el chat \n`+
+      `/goodbye: Muestra las configuraciones actuales de las despedidas \n`+
+      `/setgoodbye: Establece una despedida personalizada \n`+
+      `/goodbye off/on: Activa/desactiva las despedidas en el chat \n`,
   },
   {
-    text: "Wikipedia",
-    callback: "help_wikipedia",
+    text: "NPM",
+    callback: "help_npm",
     content:
-      `${string_base} Wikipedia\n\n` + `MODULO NO DISPONIBLE POR AHORA \n`,
+      `${string_base} NPM\n\n` + 
+      `/npm <packagename>: Retorna informacion del paquete solicitado \n`+
+      `/npm ? <packagename>: Hace una busqueda de las coincidencias del paquete solicitado \n`,
   },
   {
-    text: "Youtube",
-    callback: "help_youtube",
-    content: `${string_base} Youtube\n\n` + `MODULO NO DISPONIBLE POR AHORA \n`,
+    text: "Node",
+    callback: "help_node",
+    content: `${string_base} Node\n\n` + 
+    `/os : Retorna informacion sobre el entorno donde se ejecuta el bot \n`,
+  },
+  {
+    text: "Texto a voz",
+    callback: "help_tts",
+    content: `${string_base} Text to speach\n\n` + 
+    `/tss <lang> <text> | <replymessage> : Retorna un audio en el lenguaje solicidato \n`,
   },
   {
     text: "Android",
@@ -152,6 +177,6 @@ export let help_array: HelpI[] = [
       `${string_base} Android\n\n` +
       `/magisk : Retorna las ultimas versiones de magisk\n` +
       `/twrp <username> : [No disponible\n` +
-      `/sm <model> <csc> : Retorna la ultima compilacion de los firmwares de samsung \n`,
+      `/fw <model> <csc> : Retorna la ultima compilacion de los firmwares de samsung \n`,
   },
 ];

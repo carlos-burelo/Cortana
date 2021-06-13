@@ -2,10 +2,12 @@ import { unlinkSync, promises } from "fs";
 import { basename, resolve } from "path";
 import Jimp from "jimp";
 import { mainDir, _bot } from "../../config";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
+import { editMessage } from "../libs/messages.lib";
 
 export async function kangSticker(ctx) {
   try {
+    
     let file_id;
     if (ctx.message.reply_to_message.sticker) {
       file_id = ctx.message.reply_to_message.sticker.file_id;
@@ -31,6 +33,7 @@ export async function kangSticker(ctx) {
     } catch (error) {
       found = undefined;
     }
+    let {message_id: msgId} = await ctx.reply('Getting file url ...')
     let url: any = await ctx.telegram.getFileLink(file_id);
     let base: string = `${ctx.from.id}-${basename(url.href)}.png`;
     let spl: string[] = ctx.message.text.split(" ");
@@ -49,9 +52,11 @@ export async function kangSticker(ctx) {
       "stickers",
       base
     );
-    await downloadImage(url.ref, file_dir);
+    await editMessage(ctx, msgId, 'Downloading file from telegram ...')
+    await downloadImage(url.href, file_dir);
     if (found) {
       if (ctx.message.reply_to_message.photo) {
+        await editMessage(ctx, msgId, 'Proccesing photo...')
         let image = await resizeImage(file_dir);
         await image.writeAsync(file_dir);
       }
@@ -61,9 +66,12 @@ export async function kangSticker(ctx) {
           emojis: emoji,
         });
         unlinkSync(file_dir);
+        await editMessage(ctx, msgId, `Sticker añadido, puede encontrarlo [aqui](https://t.me/addstickers/${pack_name})`)
       } catch (error) {
         unlinkSync(file_dir);
-        return error.toString();
+        await editMessage(ctx, msgId, error.toString())
+        // return error.toString();
+
       }
     } else {
       if (ctx.message.reply_to_message.photo) {
@@ -71,6 +79,7 @@ export async function kangSticker(ctx) {
         await image.writeAsync(file_dir);
       }
       try {
+        await editMessage(ctx, msgId, 'Creating sticker pack ...')
         await ctx.createNewStickerSet(
           pack_name,
           `${ctx.from.first_name} Kang Pack V${pack_num + 1}`,
@@ -82,22 +91,23 @@ export async function kangSticker(ctx) {
           }
         );
         unlinkSync(file_dir);
+        await editMessage(ctx, msgId, `Sticker añadido, puede encontrarlo [aqui](https://t.me/addstickers/${pack_name})`)
       } catch (error) {
         unlinkSync(file_dir);
-        return error.toString();
+        await editMessage(ctx, msgId, error.toString())
+        // return error.toString();
       }
     }
-    return `Sticker añadido, puede encontrarlo [aqui](https://t.me/addstickers/${pack_name})`;
   } catch (error: any) {
     return error.toString();
   }
 }
 
-export async function downloadImage(url: string, file_dir: string) {
-  const { data }: AxiosResponse = await axios.get(url, {
+export async function downloadImage(url, file_dir: string) {
+  const res = await axios.get(url, {
     responseType: "arraybuffer",
   });
-  await promises.writeFile(file_dir, data);
+  await promises.writeFile(file_dir, res.data);
 }
 
 export async function resizeImage(file_dir: string) {

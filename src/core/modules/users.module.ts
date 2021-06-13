@@ -1,6 +1,6 @@
 import { getGroupInfo, getInfo } from "../controllers/users.controller";
-import { connect, db } from "../../database";
 import { Telegraf } from "telegraf";
+import { editMessage } from "../libs/messages.lib";
 
 export default function (bot: Telegraf) {
   bot.command("/info", async (ctx) => {
@@ -35,5 +35,9 @@ export default function (bot: Telegraf) {
         ctx.replyWithMarkdown(`El ID de ${msg.first_name} es: \`${msg.id}\``);
       }
     }
+  });
+  bot.command('/edit', async (ctx) => {
+    let { message_id:msgId}= await ctx.reply('Hello')
+    await editMessage(ctx, msgId, 'Message edit')
   });
 }

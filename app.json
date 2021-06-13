@@ -1,0 +1,29 @@
+{
+    "name": "CortanaTS",
+    "description": "Powerfull telegram bot",
+    "keywords": [
+      "bot",
+      "telegram bot",
+      "typescript telegram bot"
+    ],
+    "website": "https://carlosburelo.tk/",
+    "repository": "https://github.com/carlos-burelo/CortanaTS",
+    "env": {
+      "TOKEN": {
+        "description": "TOKEN BOT FROM BOT FATHER",
+        "required": true
+      },
+      "CURRENCY": {
+        "description": "CURRENCY API KEY",
+        "required":true
+      },
+      "SPAMWATCH_TOKEN":{
+        "description":"API KEY FROM SPAMWATCH",
+        "required":true
+      },
+      "URL":{
+        "description":"URL FROM YOUR APPS TO SET WEBHOOK. CHANGE <your app name> WITH YOUR HEROKU APP NAME.",
+        "value":"https://<your app name>.herokuapp.com"
+      }
+    }
+  }

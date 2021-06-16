@@ -30,9 +30,10 @@ export interface WelcomeI {
   type: string;
 }
 export interface FilterI {
-  word: string;
-  response: string;
-  status: boolean;
+  id: string;
+  strings?: string[];
+  type:string;
+  source?:string;
 }
 export interface BioI {
   id: number;

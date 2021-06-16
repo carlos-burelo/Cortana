@@ -1,7 +1,7 @@
 import { Telegraf } from "telegraf";
 import { array_lolis } from "../components/misc.component";
 import axios from "axios";
-import { kangSticker } from "../controllers/stickers.controller";
+import { downloadSticker, getStickers, kangSticker } from "../controllers/stickers.controller";
 import { detectFormat } from "../libs/type.detect";
 import { ReplyMessage } from "telegraf/typings/core/types/typegram";
 export default function (bot: Telegraf) {
@@ -73,5 +73,23 @@ export default function (bot: Telegraf) {
     }
     await kangSticker(ctx);
     
+  });
+  bot.command('/stickers', async (ctx) => {
+    let query:string = ctx.message.text.replace('/stickers', '').trim()
+    let page:number = parseInt(ctx.message.text.split(' ')[1])
+    if(isNaN(page)){
+      ctx.reply('numero de pagina invalido');
+    }
+    query = query.replace(`${page}`, '').trim()
+    if(query.length < 3){
+      ctx.reply('Ingrese al menos 3 caracteres');
+      return;
+    }
+    await getStickers(ctx, query, page)
+  });
+  bot.command('/getsticker', async (ctx) => {
+    let {sticker}:any = ctx.message.reply_to_message
+    let {href} = await bot.telegram.getFileLink(sticker.file_id)
+    await downloadSticker(ctx, href, sticker)
   });
 }

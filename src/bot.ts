@@ -1,3 +1,4 @@
+import filtersModule from "./core/modules/filters.module";
 import { Telegraf } from "telegraf";
 import adminModule from "./core/modules/admin.module";
 import afkModule from "./core/modules/afk.module";
@@ -25,6 +26,7 @@ export default async function (bot: Telegraf) {
   animeModule(bot);
   bansModule(bot);
   biosModule(bot);
+  filtersModule(bot);
   githubModule(bot);
   helpModule(bot);
   _indexModule(bot);

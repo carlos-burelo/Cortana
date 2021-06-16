@@ -1,13 +1,46 @@
-import { unlinkSync, promises } from "fs";
-import { basename, resolve } from "path";
-import Jimp from "jimp";
-import { mainDir, _bot } from "../../config";
 import axios from "axios";
+import { renameFile } from "../libs/download.files";
+import { promises, unlinkSync } from "fs";
+import Jimp from "jimp";
+import { basename, resolve } from "path";
+import { Context } from "telegraf";
+import { downloadDir, mainDir, _bot } from "../../config";
 import { editMessage } from "../libs/messages.lib";
+
+export async function getStickers(ctx:Context, query:string, page:number):Promise<void> {
+  let {message_id:msgI} = await ctx.replyWithMarkdown('`Buscando sticker spacks...`');
+  let url = `https://combot.org/telegram/stickers?page${!page ? page = 1 : page}=&q=`
+  let res = await axios.get(`${url}${query}`);
+  console.log(`${url}${query}`)
+  console.log(res)
+};
+
+export async function downloadSticker(ctx:Context, url:string, sticker:any) {
+  let {message_id:msgId} = await ctx.replyWithMarkdown('`Descargando sticker...`');
+  let file_dir:string = resolve(downloadDir, 'stickers', `${basename(url)}`);
+  await downloadImage(url, file_dir );
+  let file = await renameFile(resolve(downloadDir, 'stickers'), basename(url), 'sticker.png')
+  await ctx.deleteMessage(msgId)
+  await ctx.replyWithDocument(
+    {
+      source: file,
+    }, 
+    {
+      parse_mode:'Markdown',
+      caption:
+      `*Sticker Pack:* [${sticker.set_name}](https://t.me/addstickers/${sticker.set_name})\n\n`+
+      `*Ancho:* _${sticker.width}_ px\n`+
+      `*Alto:* _${sticker.height}_ px\n`+
+      `*Emoji:* ${sticker.emoji}\n`+
+      `*Animado:* _${sticker.is_animated == false ? 'No': 'Si'}_\n`+
+      `*Tamaño:* _${Math.round(sticker.file_size / 1024)} kb_`
+    }
+  );
+  unlinkSync(file)
+};
 
 export async function kangSticker(ctx) {
   try {
-    
     let file_id;
     if (ctx.message.reply_to_message.sticker) {
       file_id = ctx.message.reply_to_message.sticker.file_id;

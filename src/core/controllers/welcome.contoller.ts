@@ -3,13 +3,15 @@ import { start_msg } from "../shared/strings";
 import { checkAccount, connect, createAccount, db } from "../../database";
 import { PrefsI } from "../interfaces/index";
 import { owner } from "../../config";
+import { Context } from "telegraf";
 
-export async function get_account(ctx: any, chat: number): Promise<any> {
+export async function get_account(ctx: Context, chat: number): Promise<any> {
   try {
+    // console.log(checkAccount(ctx.chat.id.toString()))
     if ((await checkAccount(chat.toString())) == true) {
       return ctx.reply(start_msg, start_buttons);
     } else {
-      let res = await ctx.getChat();
+      let res: any = await ctx.getChat();
       let new_account = {
         id: res.id.toString(),
         title: res.title,
@@ -17,7 +19,8 @@ export async function get_account(ctx: any, chat: number): Promise<any> {
         type: res.type,
       };
       await createAccount(new_account);
-      return ctx.reply("Cuenta creada satisfactoriamente");
+      return ctx.reply(start_msg, start_buttons);
+      // return ctx.reply("Cuenta creada satisfactoriamente");
     }
   } catch (error) {}
 }
@@ -65,11 +68,11 @@ export async function set_status(
     if (current == status) {
       return `El estado ya es: ${status}`;
     } else {
-      let a = await db(account)
-        .get(`prefs.${pref}`)
-        .assign({ status: status })
-        .write();
-      return `${pref} status: ${a.status}`;
+      // let a = await db(account)
+      //   .get(`prefs.${pref}`)
+      //   .assign({ status: status })
+      //   .write();
+      // return `${pref} status: ${a.status}`;
     }
   } catch (error) {
     return "Error";

@@ -1,5 +1,6 @@
 import { ApisI, BotI, DatabaseI, OwnerI } from "./core/interfaces/index";
 import { resolve } from "path";
+import { Chat } from "telegraf/typings/core/types/typegram";
 
 export const mainDir = __dirname;
 export const downloadDir = `${resolve(__dirname, "assets", "downloads")}`;
@@ -60,10 +61,10 @@ export async function makeDBSchema(a: DatabaseI): Promise<DatabaseI> {
       first_name: a.first_name,
       username: a.username,
       type: a.type,
-      bios: [],
+      // bios: [],
       notes: [],
-      warns: [],
-      filters: [],
+      // warns: [],
+      // filters: [],
       prefs: {
         welcome: {
           status: true,

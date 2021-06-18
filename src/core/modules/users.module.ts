@@ -36,8 +36,8 @@ export default function (bot: Telegraf) {
       }
     }
   });
-  bot.command('/edit', async (ctx) => {
-    let { message_id:msgId}= await ctx.reply('Hello')
-    await editMessage(ctx, msgId, 'Message edit')
+  bot.command("/edit", async (ctx) => {
+    let { message_id: msgId } = await ctx.reply("Hello");
+    await editMessage(ctx, msgId, "Message edit");
   });
 }

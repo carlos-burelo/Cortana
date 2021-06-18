@@ -8,7 +8,10 @@ export const start_buttons = Markup.inlineKeyboard(
       "➕ Add to group",
       `http://t.me/${_bot.username}?startgroup=true`
     ),
-    Markup.button.url("📄 View Documentation", `${_bot.repository}`),
+    Markup.button.url(
+      "📄 View Documentation",
+      `https:botincompletoporahora.com`
+    ),
   ],
   { columns: 2 }
 );

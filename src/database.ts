@@ -3,7 +3,8 @@ import FileSync from "lowdb/adapters/FileSync";
 import { resolve } from "path";
 import { readdirSync, existsSync, mkdirSync } from "fs";
 import { mainDir, makeDBSchema } from "./config";
-import { DatabaseI } from "core/interfaces";
+import { CollectionsI, DatabaseI } from "./core/interfaces";
+import { Chat } from "telegraf/typings/core/types/typegram";
 
 let data: LowdbSync<DatabaseI>;
 export const dir = resolve(__dirname, "databases");
@@ -51,5 +52,18 @@ export async function getDatabases(): Promise<number[]> {
     return dbs;
   } catch (error) {
     return [];
+  }
+}
+
+export async function checkCollection(
+  chat: DatabaseI | Chat,
+  collection: CollectionsI
+) {
+  let schema: any = chat;
+  let data = await makeDBSchema(schema);
+  if (db(chat).get(collection).value() == undefined) {
+    console.log("La colleccion no existe");
+    let newCollection = { [collection]: data[collection] };
+    db(chat).assign(newCollection).write();
   }
 }

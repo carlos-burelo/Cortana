@@ -16,6 +16,21 @@ export interface DatabaseI {
   prefs?: PrefsI;
 }
 
+export type CollectionsI =
+  | "id"
+  | "sudos"
+  | "gbanned"
+  | "title"
+  | "first_name"
+  | "username"
+  | "rules"
+  | "type"
+  | "notes"
+  | "warns"
+  | "bios"
+  | "filters"
+  | "prefs";
+
 export interface RulesI {
   status: boolean;
   content: string;
@@ -32,8 +47,8 @@ export interface WelcomeI {
 export interface FilterI {
   id: string;
   strings?: string[];
-  type:string;
-  source?:string;
+  type: string;
+  source?: string;
 }
 export interface BioI {
   id: number;
@@ -47,9 +62,18 @@ export interface WarnI {
   count: number;
 }
 export interface NoteI {
-  id: string;
-  type: string;
-  content: string;
+  id?: string;
+  type?:string;
+  photo?: any;
+  sticker?: any;
+  voice?: any;
+  video?: any;
+  audio?: any;
+  document?: any;
+  text?: any;
+  reply_markup?: any;
+  caption?: any;
+  entities?: any;
 }
 
 // MAIN DATABASE INTERFACES
@@ -125,4 +149,33 @@ export interface FileI {
   photo?: any;
   audio?: any;
   voice?: any;
+}
+
+// MESSAGE INTERFACES
+
+export interface ReplyI {
+  message_id: number;
+  from?: FromI;
+  chat?: {
+    id: number;
+    title: string;
+    type: string;
+  };
+  date: number;
+  caption?: any;
+  photo?: any;
+  sticker?: any;
+  voice?: any;
+  video?: any;
+  audio?: any;
+  document?: any;
+  text?: any;
+  reply_markup?: any;
+}
+
+export interface FromI {
+  id: number;
+  is_bot: boolean;
+  firts_name: string;
+  username: string;
 }

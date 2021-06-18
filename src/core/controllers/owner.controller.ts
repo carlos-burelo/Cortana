@@ -1,12 +1,13 @@
-import { db } from "../../database";
+import { connect, db } from "../../database";
 import { SudoI, ChatUserI } from "../interfaces/index";
 import { readdirSync, readFileSync } from "fs";
 import { resolve } from "path";
 import { Context } from "telegraf";
 import { sudoPerms } from "../guards/sudo.guard";
 import { Message } from "telegraf/typings/core/types/typegram";
-import { mainDir } from "../../config";
+import { mainDir, owner } from "../../config";
 import { detectFormat } from "../libs/type.detect";
+import { images } from "../shared/images";
 
 export async function getGroupsFromDB(
   ctx: Context,
@@ -65,7 +66,7 @@ export async function sendMessage(
   }
 }
 
-export async function sendMethod(ctx:Context, account, msg) {
+export async function sendMethod(ctx: Context, account, msg) {
   switch (msg.type) {
     case "sticker":
       ctx.telegram.sendSticker(account, msg.source);
@@ -91,116 +92,92 @@ export async function sendMethod(ctx:Context, account, msg) {
   }
 }
 
-export async function get_sudos(): Promise<string> {
-  const sudos: SudoI[] = await db().get("sudos").value();
+// COMMANDS FOR SUDOS
+export async function getSudo(id: number) {
+  const find = db({ id: "main" }).get("sudos").find({ id: id }).value();
+  if (find !== undefined) {
+    return find;
+  } else {
+    return undefined;
+  }
+}
+export async function getSudos(ctx: Context) {
+  const sudos: SudoI[] = db({ id: "main" }).get("sudos").value();
   if (sudos.length == 0) {
-    return "Aun no hay Sudo Users";
+    ctx.reply("No hay sudos por el momento");
   } else {
-    let sudolist: string = "◼️ Sudo list\n\n";
+    let sudolist: string = "Sudos \n\n";
     sudos.forEach((sudo) => {
-      sudolist += `• ${sudo.first_name} | ${sudo.role}\n`;
-    });
-    return sudolist;
-  }
-}
-
-export async function add_or_update_sudo(
-  ctx: Context,
-  user: ChatUserI,
-  range: number,
-  role: string
-) {
-  const res = await get_sudo(user.id);
-  if (res !== false) {
-    const msg = await update_sudos(ctx, user, range, role);
-    return msg;
-  } else {
-    const msg = await add_sudos(ctx, user, range, role);
-    return msg;
-  }
-}
-export async function add_sudos(ctx, user: ChatUserI, range: number, role) {
-  let sudo: SudoI = {
-    id: user.id,
-    first_name: user.first_name,
-    username: user.username,
-    range: range,
-    role: `${!role ? await rol(range) : role}`,
-  };
-  try {
-    await ctx.setChatAdministratorCustomTitle(
-      user.id,
-      `${!role ? await rol(range) : role}`
-    );
-  } catch (error) {
-    return `${user.first_name} primero debe ser administrador`;
-  }
-  await db().get("sudos").push(sudo).write();
-  return `${user.first_name} ha sido promovido a ${sudo.role}`;
-}
-export async function update_sudos(ctx, user: ChatUserI, range: number, role) {
-  let sudo: SudoI = {
-    id: user.id,
-    first_name: user.first_name,
-    username: user.username,
-    range: range,
-    role: `${!role ? await rol(range) : role}`,
-  };
-  try {
-    await ctx.setChatAdministratorCustomTitle(
-      user.id,
-      `${!role ? await rol(range) : role}`
-    );
-  } catch (error) {
-    return `${user.first_name} primero debe ser administrador`;
-  }
-  await db().get("bios").find({ id: user.id }).assign(sudo).write();
-  return `${user.first_name} ha sido promovido a ${sudo.role}`;
-}
-export async function get_sudo(id: number) {
-  const sudos: SudoI[] = await db().get("sudos").value();
-  let found = sudos.find((sudo) => sudo.id == id);
-  if (found !== undefined) {
-    return found;
-  } else {
-    return false;
-  }
-}
-export async function get_groups() {
-  try {
-    let dbs: any[] = await readdirSync("./src/databases", {
-      encoding: "utf-8",
-    });
-    let new_dbs = [];
-    dbs.forEach((bd) => {
-      if (bd !== "main" && bd.includes("-")) {
-        let data: any = readFileSync(`./src/databases/${bd}`, {
-          encoding: "utf-8",
-        });
-        data = JSON.parse(data);
-        let db = {
-          id: parseInt(data.id),
-          title: data.title,
-        };
-        new_dbs.push(db);
+      if (sudo.id !== owner.id) {
+        sudolist += `• ${sudo.first_name} | ${sudo.role}\n`;
       }
     });
-    return { pass: true, dbs: new_dbs };
-  } catch (error) {
-    return { pass: false, dbs: [] };
+    ctx.reply(sudolist);
   }
 }
-
+export async function addOrUpdateSudo(ctx: Context, sudo: SudoI) {
+  if (sudo.role == undefined) {
+    let roleDefault = await rol(sudo.range);
+    sudo.role = roleDefault;
+  }
+  if ((await getSudo(sudo.id)) == undefined) {
+    await connect({ id: "main" });
+    db({ id: "main" }).get("sudos").push(sudo).write();
+    await setCustomName(ctx, sudo.id, sudo.role);
+    ctx.reply(`${sudo.first_name} ha sido promovido a ${sudo.role}`);
+  } else {
+    await connect({ id: "main" });
+    // let sudo1 = db({id:'main'}).chain().get('sudos').ass
+    // .assign()
+    // .get('sudos').find({id: sudo.id}).assign(sudo).write()
+    // let s = sudo1.assign(sudo)
+    // db({id:'main'}).get('sudos').remove({id: sudo.id}).write()
+    // db({id:'main'}).get('sudos').push(sudo).write()
+    // await setCustomName(ctx, sudo.id, sudo.role)
+    // ctx.reply(`${sudo.first_name} ha sido promovido a ${sudo.role}`)
+  }
+}
+export async function deleteSudo(ctx: Context, user: ChatUserI) {
+  try {
+    await connect({ id: "main" });
+    if ((await getSudo(user.id)) == undefined) {
+      ctx.reply(`${user.first_name} no esta registrado como Sudo.`);
+    } else {
+      db({ id: "main" }).get("sudos").remove({ id: user.id }).write();
+      ctx.replyWithPhoto(images.demoted);
+    }
+  } catch (error) {
+    ctx.reply(error.toString());
+  }
+}
 //Extra functions
 
-export async function rol(range): Promise<string> {
-  let role;
-  range == 1
-    ? (role = "Sudo")
-    : range == 2
-    ? (role = "Manager")
-    : range == 3
-    ? (role = "Moderador")
-    : (role = "Sin rango");
+export async function rol(range: number): Promise<string> {
+  let role: string;
+  switch (range) {
+    case 0:
+      role = "Owner";
+      break;
+    case 1:
+      role = "Sudo";
+      break;
+    case 2:
+      role = "Admin";
+      break;
+    case 3:
+      role = "Mod";
+      break;
+    default:
+      role = "No rank";
+      break;
+  }
   return role;
+}
+
+export async function setCustomName(ctx: Context, id: number, title: string) {
+  try {
+    ctx.setChatAdministratorCustomTitle(id, title);
+  } catch (error) {
+    console.log(error);
+  }
 }

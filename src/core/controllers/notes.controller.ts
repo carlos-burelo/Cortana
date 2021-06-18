@@ -1,5 +1,5 @@
-import { NoteI } from "../interfaces/index";
-import { checkAccount, connect, createAccount, db } from "../../database";
+import { NoteI } from "../interfaces";
+import { checkAccount, checkCollection, connect, createAccount, db } from "../../database";
 import { Context } from "telegraf";
 let not_exist = "La nota no existe";
 
@@ -45,7 +45,7 @@ export async function getNote(ctx, account: any, notename: string) {
     await connect(account);
     const note: NoteI = db(account).get("notes").find({ id: notename }).value();
     if (note !== undefined) {
-      return await getNote_method(ctx, note);
+      // return await getNote_method(ctx, note);
     } else {
       return not_exist;
     }
@@ -53,36 +53,25 @@ export async function getNote(ctx, account: any, notename: string) {
     return "Error en notes.controller.ts";
   }
 }
-export async function getOrUpdateNote(ctx, account: any, note: NoteI) {
+export async function addOrUpdateNote(ctx:Context, note: NoteI) {
   try {
-    if ((await checkAccount(account.id)) == true) {
-      const find = await getNote(ctx, account, note.id);
-      if (find == not_exist) {
-        const res = await addNote(account, note);
-        return res;
-      } else {
-        const res = await updateNote(account, note);
-        return res;
-      }
+    await connect(ctx.chat);
+    await checkCollection(ctx.chat, 'notes');
+    if(db(ctx.chat).get('notes').find({id: note.id}).value() !== undefined){
+      await db(ctx.chat).get("notes").remove({ id: note.id }).write();
+      db(ctx.chat).get("notes").push(note).write();
+      ctx.replyWithMarkdown(`La nota \`${note.id}\` ha sido actualizada`)
     } else {
-      let account = ctx.getChat();
-      await createAccount(account);
-      const res = await addNote(account, note);
-      return res;
+      
+      db(ctx.chat).get("notes").push(note).write();
+      ctx.replyWithMarkdown(`\`${note.id}\` se ha añadido a las *notas*`)
     }
-  } catch (error) {}
+  } catch (error) {
+    ctx.reply(error.toString())
+  }
 }
-export async function addNote(account, note: NoteI): Promise<string> {
-  note.content = note.content.replace(/["]/g, "'");
-  await connect(account);
-  await db(account).get("notes").push(note).write();
-  return "Nota agregada";
-}
-export async function updateNote(account, note: NoteI): Promise<string> {
-  await connect(account);
-  await db(account).get("notes").find({ id: note.id }).assign(note).write();
-  return "Nota actualizada";
-}
+
+
 export async function deleteNote(account: any, note_id: string) {
   await connect(account);
   const note: NoteI = db(account).get("notes").find({ id: note_id }).value();
@@ -94,51 +83,110 @@ export async function deleteNote(account: any, note_id: string) {
     return "La nota no existe";
   }
 }
-export async function getNote_method(ctx: Context<any>, note: NoteI) {
-  const { message_id } = ctx.message;
-  if (note.type == "text") {
-    let note_parced = note.content.replace(/[{}]/g, "`");
-    note_parced = note_parced.replace(/[']/g, '"');
-    return ctx.replyWithMarkdown(note_parced, {
-      reply_to_message_id: message_id,
-    });
+// export async function getNote_method(ctx: Context<any>, note: NoteI) {
+//   const { message_id } = ctx.message;
+//   if (note.type == "text") {
+//     let note_parced = note.content.replace(/[{}]/g, "`");
+//     note_parced = note_parced.replace(/[']/g, '"');
+//     return ctx.replyWithMarkdown(note_parced, {
+//       reply_to_message_id: message_id,
+//     });
+//   }
+//   if (note.type == "photo") {
+//     console.log(note.id);
+//     return ctx.replyWithPhoto(note.content, {
+//       reply_to_message_id: message_id,
+//       parse_mode: "Markdown",
+//       caption: `\`#${note.id}\``,
+//     });
+//   }
+//   if (note.type == "document") {
+//     return ctx.replyWithDocument(note.content, {
+//       reply_to_message_id: message_id,
+//       parse_mode: "Markdown",
+//       caption: `\`#${note.id}\``,
+//     });
+//   }
+//   if (note.type == "audio") {
+//     return ctx.replyWithAudio(note.content, {
+//       reply_to_message_id: message_id,
+//       parse_mode: "Markdown",
+//       caption: `\`#${note.id}\``,
+//     });
+//   }
+//   if (note.type == "sticker") {
+//     return ctx.replyWithAudio(note.content, {
+//       reply_to_message_id: message_id,
+//       parse_mode: "Markdown",
+//       caption: `\`#${note.id}\``,
+//     });
+//   }
+//   if (note.type == "video") {
+//     return ctx.replyWithVideo(note.content, {
+//       reply_to_message_id: message_id,
+//     });
+//   } else {
+//     return ctx.replyWithMarkdown(note.content, {
+//       reply_to_message_id: message_id,
+//     });
+//   }
+// }
+
+export async function sendNote(ctx:Context, noteid:string) {
+  await connect(ctx.chat)
+  let note = db(ctx.chat).get('notes').find({id: noteid}).value()
+  if(note == undefined){
+    return ctx.replyWithMarkdown(`La nota ${note} no existe en mi base de datos`)
   }
-  if (note.type == "photo") {
-    console.log(note.id);
-    return ctx.replyWithPhoto(note.content, {
-      reply_to_message_id: message_id,
-      parse_mode: "Markdown",
-      caption: `\`#${note.id}\``,
-    });
+  try {
+    switch (note.type) {
+      case 'text':
+        ctx.reply(note.text, {
+          ...(note.entities) && {entities:note.entities},
+          ...(note.reply_markup) &&{reply_markup: note.reply_markup}
+        })
+      break;
+      case 'photo':
+        ctx.replyWithPhoto(note.photo, {
+          ...(note.entities) && {entities:note.entities},
+          ...(note.reply_markup) &&{reply_markup: note.reply_markup}
+        })
+      break;
+      case 'document':
+        ctx.replyWithDocument(note.document, {
+          ...(note.entities) && {entities:note.entities},
+          ...(note.reply_markup) &&{reply_markup: note.reply_markup}
+        })
+      break;
+      case 'sticker':
+        ctx.replyWithSticker(note.sticker, {
+          ...(note.entities) && {entities:note.entities},
+          ...(note.reply_markup) &&{reply_markup: note.reply_markup}
+        })
+      break;
+      case 'audio':
+        ctx.replyWithAudio(note.audio, {
+          ...(note.entities) && {entities:note.entities},
+          ...(note.reply_markup) &&{reply_markup: note.reply_markup}
+        })
+      break;
+      case 'voice':
+        ctx.replyWithVoice(note.voice, {
+          ...(note.entities) && {entities:note.entities},
+          ...(note.reply_markup) &&{reply_markup: note.reply_markup}
+        })
+      break;
+      case 'video':
+        ctx.replyWithVideo(note.video, {
+          ...(note.entities) && {entities:note.entities},
+          ...(note.reply_markup) &&{reply_markup: note.reply_markup}
+        })
+      break;
+      default:
+
+        break;
+    }
+  } catch (error) {
+    ctx.reply(error.toString())
   }
-  if (note.type == "document") {
-    return ctx.replyWithDocument(note.content, {
-      reply_to_message_id: message_id,
-      parse_mode: "Markdown",
-      caption: `\`#${note.id}\``,
-    });
-  }
-  if (note.type == "audio") {
-    return ctx.replyWithAudio(note.content, {
-      reply_to_message_id: message_id,
-      parse_mode: "Markdown",
-      caption: `\`#${note.id}\``,
-    });
-  }
-  if (note.type == "sticker") {
-    return ctx.replyWithAudio(note.content, {
-      reply_to_message_id: message_id,
-      parse_mode: "Markdown",
-      caption: `\`#${note.id}\``,
-    });
-  }
-  if (note.type == "video") {
-    return ctx.replyWithVideo(note.content, {
-      reply_to_message_id: message_id,
-    });
-  } else {
-    return ctx.replyWithMarkdown(note.content, {
-      reply_to_message_id: message_id,
-    });
-  }
-}
+};

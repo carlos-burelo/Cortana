@@ -1,4 +1,4 @@
-import { FileI } from "../interfaces/index";
+import { FileI, NoteI, ReplyI } from "../interfaces";
 import { Context } from "telegraf";
 import { owner } from "../../config";
 
@@ -19,6 +19,46 @@ export interface FormatI {
   source: string;
 }
 
+export async function detectMsgFormat(reply: ReplyI | any, id?:string) {
+  let props: string[] = Object.keys(reply);
+  let note: NoteI = {};
+  props.forEach((a) => {
+    if (
+      a !== "message_id" &&
+      a !== "from" &&
+      a !== "chat" &&
+      a !== "date" &&
+      a !== "animation" &&
+      a !== "edit_date" &&
+      a !== "caption_entities" &&
+      a !== "author_signature" &&
+      a !== "forward_from_chat" &&
+      a !== "forward_date" &&
+      a !== "forward_from_message_id" &&
+      a !== "sender_chat"
+    ) {
+      note[a] = reply[a];
+    }
+  });
+  note.type = Object.keys(note)[0]
+  note.document
+    ? (note.document = note.document.file_id)
+    : note.photo
+    ? (note.photo = note.photo[0].file_id)
+    : note.sticker
+    ? (note.sticker = note.sticker.file_id)
+    : note.audio
+    ? (note.audio = note.audio.file_id)
+    : note.voice
+    ? (note.voice = note.voice.file_id)
+    : note.video
+    ? (note.video = note.video.file_id)
+    : note;
+    id ? note.id = id : note
+  return note;
+}
+
+
 
 export async function detectFormat(
   message,
@@ -28,7 +68,7 @@ export async function detectFormat(
   let type: any = arrl[arrl.length - 1];
   let source;
   let reply: FileI = message;
-  if(words){
+  if (words) {
     if (type == "caption_entities") {
       type = "text";
       source = await replaceWords(reply.caption, words);
@@ -72,47 +112,45 @@ export async function parseVars(variables: any, text: string) {
   });
   console.log(text);
 }
-// export async function formatTextFilter(text:string):Promise<string> {
-//   text = text.split('#')
-//   return text
-// };
 
-export async function sendMethod(ctx:Context, msg:{source?:string, type?:string}) {
+export async function sendMethod(
+  ctx: Context,
+  msg: { source?: string; type?: string }
+) {
   switch (msg.type) {
     case "sticker":
       // ctx.telegram.sendSticker(account, msg.source);
-      ctx.replyWithSticker(msg.source)
+      ctx.replyWithSticker(msg.source);
       break;
     case "photo":
       // ctx.telegram.sendPhoto(account, msg.source);
-      ctx.replyWithPhoto(msg.source)
+      ctx.replyWithPhoto(msg.source);
       break;
     case "video":
-      ctx.replyWithVideo(msg.source)
+      ctx.replyWithVideo(msg.source);
       break;
     case "audio":
       // ctx.telegram.sendAudio(account, msg.source);
-      ctx.replyWithAudio(msg.source)
+      ctx.replyWithAudio(msg.source);
       break;
     case "voice":
       // ctx.telegram.sendVoice(account, msg.source);
-      ctx.replyWithVideo(msg.source)
+      ctx.replyWithVideo(msg.source);
       break;
     case "document":
       // ctx.telegram.sendDocument(account, msg.source);
-      ctx.replyWithDocument(msg.source)
+      ctx.replyWithDocument(msg.source);
       break;
     default:
       // ctx.telegram.sendMessage(account, msg.source);
       try {
-        ctx.replyWithMarkdown(msg.source)
+        ctx.replyWithMarkdown(msg.source);
       } catch (error) {
-        ctx.reply(msg.source)
+        ctx.reply(msg.source);
       }
       break;
   }
 }
-
 
 export async function reply_file(ctx: Context, msg: messageContext) {
   const { message_id } = ctx.message;

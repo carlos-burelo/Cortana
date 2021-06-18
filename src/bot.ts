@@ -1,4 +1,3 @@
-import filtersModule from "./core/modules/filters.module";
 import { Telegraf } from "telegraf";
 import adminModule from "./core/modules/admin.module";
 import afkModule from "./core/modules/afk.module";
@@ -6,18 +5,19 @@ import androidModule from "./core/modules/android.module";
 import animeModule from "./core/modules/anime.module";
 import bansModule from "./core/modules/bans.module";
 import biosModule from "./core/modules/bios.module";
+import filtersModule from "./core/modules/filters.module";
 import githubModule from "./core/modules/github.module";
 import helpModule from "./core/modules/help.module";
 import miscModule from "./core/modules/misc.module";
 import nodeModule from "./core/modules/node.module";
-// import notesModule from "./core/modules/notes.module";
+import notesModule from "./core/modules/notes.module";
 import npmModule from "./core/modules/npm.module";
 import ownerModule from "./core/modules/owner.module";
 import translatorModule from "./core/modules/translator.module";
 import ttsModule from "./core/modules/tts.module";
 import usersModule from "./core/modules/users.module";
 import warnsModule from "./core/modules/warns.module";
-// import welcomeModule from "./core/modules/welcome.module";
+import welcomeModule from "./core/modules/welcome.module";
 import _indexModule from "./core/modules/_index.module";
 export default async function (bot: Telegraf) {
   afkModule(bot);
@@ -32,12 +32,12 @@ export default async function (bot: Telegraf) {
   _indexModule(bot);
   miscModule(bot);
   nodeModule(bot);
-  // notesModule(bot);
+  notesModule(bot);
   npmModule(bot);
   ownerModule(bot);
   ttsModule(bot);
   translatorModule(bot);
   usersModule(bot);
   warnsModule(bot);
-  // welcomeModule(bot);
+  welcomeModule(bot);
 }

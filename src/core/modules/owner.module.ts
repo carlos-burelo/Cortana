@@ -1,15 +1,16 @@
 import { Telegraf } from "telegraf";
 import {
-  add_or_update_sudo,
+  addOrUpdateSudo,
+  deleteSudo,
   getGroupsFromDB,
-  get_groups,
-  get_sudos,
+  getSudo,
+  getSudos,
   sendMessage,
 } from "../controllers/owner.controller";
 import { owner } from "../../config";
 import { getDatabases } from "../../database";
-import { detectFormat } from "../libs/type.detect";
 import { sudoPerms } from "../guards/sudo.guard";
+import { ChatUserI, SudoI } from "core/interfaces";
 
 export default function (bot: Telegraf) {
   bot.command("/groups", async (ctx) => {
@@ -66,27 +67,52 @@ export default function (bot: Telegraf) {
     }
   });
   bot.command(["/sudolist", "/sudos"], async (ctx) => {
-    ctx.reply(await get_sudos());
+    // ctx.reply(await get_sudos());
+    await getSudos(ctx);
   });
   bot.command("/sudo", async (ctx) => {
-    let emisor = ctx.update.message.from;
-    let user: any = ctx.update.message.reply_to_message;
-    if (!user || user == undefined) {
+    if (ctx.message.from.id !== owner.id) {
+      ctx.reply("Solo el propietario puede agregar sudo users");
+      return;
+    }
+    if (!ctx.message.reply_to_message) {
       ctx.reply("No detecto usuario a promover");
       return;
     }
-    user = user.from;
-    let arg: number = parseInt(ctx.message.text.split(" ")[1]);
-    let role: string = ctx.message.text.split(" ")[2];
-    if (!arg || arg == NaN) {
-      ctx.reply("No detecto argumentos");
+    let msg: string[] = ctx.message.text
+      .replace(/\/sudo/, "")
+      .trim()
+      .split(" ");
+    let range: number = parseInt(msg[0]);
+    let role: string = msg[1];
+    if (isNaN(range)) {
+      ctx.reply("Ingrese un numero valido");
       return;
     }
-    if (emisor.id == owner.id) {
-      ctx.reply(await add_or_update_sudo(ctx, user, arg, role));
-    } else {
+    let user = ctx.message.reply_to_message.from;
+    let sudo: SudoI = {
+      id: user.id,
+      first_name: user.first_name,
+      username: user.username,
+      range: range,
+      role: role,
+    };
+    await addOrUpdateSudo(ctx, sudo);
+  });
+  bot.command("/delsudo", async (ctx) => {
+    if (ctx.message.from.id !== owner.id) {
       ctx.reply("Solo el propietario puede agregar sudo users");
+      return;
     }
+    if (!ctx.message.reply_to_message) {
+      ctx.reply("No detecto usuario a promover");
+      return;
+    }
+    let user: ChatUserI = ctx.message.reply_to_message.from;
+    await deleteSudo(ctx, user);
+  });
+  bot.command("/f", async (ctx) => {
+    await getSudo(ctx.message.from.id);
   });
   bot.command("/e", async (ctx) => {
     let numeros: number[] = [123456789, 246824682, 1357913579];

@@ -1,61 +1,46 @@
-import { addOrUpdateBio, delBio, getBio } from "../controllers/bios.controller";
 import { Telegraf } from "telegraf";
-import { Chat, ReplyMessage, User } from "telegraf/typings/core/types/typegram";
+import { getLang } from "../../lang";
+import { decideBio, delBio, getBio } from "../controllers/bios.controller";
+import { BioI } from "../interfaces";
 
 export default function (bot: Telegraf) {
-  bot.command("/bio", async (ctx) => {
-    let user: ReplyMessage | User = ctx.message.reply_to_message;
-    if (user == undefined) {
-      ctx.reply("Responda al mensaje de usuario");
-      return;
-    }
-    user = user.from;
-    let { chat } = ctx;
-    await getBio(ctx, user, chat);
-  });
-  bot.command("/setbio", async (ctx) => {
-    let text: string = ctx.message.text.replace(/\/setbio/g, "").trim();
-    let chat: Chat.SupergroupChat | any = ctx.chat;
-    let userA: number = ctx.message.from.id;
-    let userB: ReplyMessage | User = ctx.message.reply_to_message;
-    if (userB == undefined) {
-      ctx.reply("Responda al mensaje de usuario");
-      return;
-    }
-    if (text.length == 0) {
-      ctx.reply("Coloque algo en la biografia");
-      return;
-    }
-    userB = userB.from;
-    let data: any = {
-      text,
-      chat,
-      userA,
-      userB,
-    };
-
-    await addOrUpdateBio(ctx, data);
-  });
-  bot.command("/delbio", async (ctx) => {
-    let text: string = ctx.message.text.replace(/\/setbio/g, "").trim();
-    let chat: Chat.SupergroupChat | any = ctx.chat;
-    let userA: number = ctx.message.from.id;
-    let userB: ReplyMessage | User = ctx.message.reply_to_message;
-    if (userB == undefined) {
-      ctx.reply("Responda al mensaje de usuario");
-      return;
-    }
-    if (text.length == 0) {
-      ctx.reply("Coloque algo en la biografia");
-      return;
-    }
-    userB = userB.from;
-    let data: any = {
-      text,
-      chat,
-      userA,
-      userB,
-    };
-    await delBio(ctx, data);
-  });
+	bot.command("/bio", async (ctx) => {
+		const _ = getLang(ctx.chat);
+		if (ctx.chat.type == "private") {
+			ctx.reply(_.global.noPrivateChats);
+		}
+		if (!ctx.message.reply_to_message) {
+			ctx.reply(_.global.pleaseReplyMsg);
+		}
+		let arg: string = ctx.message.text.split(" ")[1];
+		if (arg && arg == "--rm") {
+			let A = await ctx.getChatMember(ctx.message.from.id);
+			let B = await ctx.getChatMember(
+				ctx.message.reply_to_message.from.id,
+			);
+			await delBio(ctx, A, B);
+		}
+		await getBio(ctx, ctx.message.reply_to_message.from);
+	});
+	bot.command("/setbio", async (ctx) => {
+		const _ = getLang(ctx.chat);
+		if (ctx.chat.type == "private") {
+			ctx.reply(_.global.noPrivateChats);
+		}
+		if (!ctx.message.reply_to_message) {
+			ctx.reply(_.global.pleaseReplyMsg);
+		}
+		let text = ctx.message.text.replace(/\/setbio/g, "").trim();
+		if (text.length < 1) {
+			return ctx.reply(_.bioModule.emptyBiography);
+		}
+		let Bio: BioI = {
+			id: ctx.message.reply_to_message.from.id,
+			bio: text,
+			first_name: ctx.message.reply_to_message.from.first_name,
+		};
+		const A = await ctx.getChatMember(ctx.message.from.id);
+		const B = await ctx.getChatMember(ctx.message.reply_to_message.from.id);
+		await decideBio(ctx, A, B, Bio);
+	});
 }

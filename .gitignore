@@ -1,5 +1,4 @@
 node_modules
 .env
-doc
-db.json
+old
 src/databases

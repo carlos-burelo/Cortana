@@ -8,7 +8,7 @@ export async function getNote(ctx: Context, noteId: string) {
 	const _ = getLang(ctx.chat);
 	try {
 		let a = db(ctx.chat).get("notes").find({ id: noteId }).value();
-		if (!a == undefined) {
+		if (a == undefined) {
 			return ctx.reply(_.notesModule.noteNotFound);
 		}
 		return sendMsg(ctx, a);

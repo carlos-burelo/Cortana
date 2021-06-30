@@ -30,12 +30,12 @@ export async function detectMsgFormat(
 		  (note.type = "document"),
 		  delete note["document"])
 		: note.photo
-		? ((note.content = note.photo[0].file_id),
+		? ((note.content = note.photo[note.photo.length - 1].file_id),
 		  (note.type = "photo"),
 		  delete note["photo"])
 		: note.sticker
 		? ((note.content = note.sticker.file_id),
-		  (note.type = "sticker"),
+		  (note.type = "sticker",note.is_animated = note.sticker['is_animated']),
 		  delete note["sticker"])
 		: note.audio
 		? ((note.content = note.audio.file_id),
@@ -57,7 +57,7 @@ export async function detectMsgFormat(
 	id ? (note.id = id) : note;
 	return note;
 }
-export async function sendMsg(ctx: Context, note: NoteI, vars?: ChatUserI) {
+export async function sendMsgTo(ctx: Context, note: NoteI, vars?: ChatUserI) {
 	try {
 		switch (note.type) {
 			case "text":
@@ -132,20 +132,103 @@ export async function parseVars(variables: ChatUserI | any, text: string) {
 	});
 	return text;
 }
-export async function editMessage(
+export function editMessage(
 	ctx: Context,
 	message_id: number,
 	text: string,
 	keyboard?: any,
+	parse?: 'Markdown' | 'MarkdownV2' | 'HTML',
 ) {
-	ctx.telegram.editMessageText(
+	!parse ? parse = 'Markdown' : parse
+	return ctx.telegram.editMessageText(
 		ctx.chat.id,
 		message_id,
 		`${ctx.chat.id}`,
 		text,
+		
 		{
-			parse_mode: "Markdown",
+			parse_mode: parse,
 			reply_markup: keyboard,
 		},
 	);
+}
+
+export async function sendMsg(ctx: Context, note: NoteI, id?:number, vars?: ChatUserI) {
+	if(!id || id == undefined){
+		id = ctx.chat.id
+	}
+	try {
+		switch (note.type) {
+			case "text":
+				if (vars) {
+					note.content = await parseVars(vars, note.content);
+				}
+				try {
+					ctx.telegram.sendMessage(id, note.content, {
+						entities: note.entities,
+						reply_markup: note.reply_markup,
+						parse_mode: 'Markdown'
+					})
+				} catch (error) {
+					ctx.telegram.sendMessage(id, note.content, {
+						entities: note.entities,
+						reply_markup: note.reply_markup
+					})
+				}
+				break;
+			case "photo":
+				ctx.telegram.sendPhoto(id, note.content,{
+					caption: note.caption,
+					caption_entities: note.caption_entities,
+					reply_markup: note.reply_markup
+				})
+				break;
+			case "document":
+				ctx.telegram.sendDocument(id, note.content, {
+					reply_markup: note.reply_markup,
+					caption: note.caption,
+					caption_entities: note.caption_entities,
+					thumb: note.thumb,
+				});
+				break;
+			case "sticker":
+				ctx.telegram.sendSticker(id,note.content, {
+					reply_markup: note.reply_markup,
+				});
+				break;
+			case "audio":
+				ctx.telegram.sendAudio(id,note.content, {
+					caption: note.caption,
+					caption_entities: note.caption_entities,
+					thumb: note.thumb,
+				});
+				break;
+			case "voice":
+				ctx.telegram.sendVoice(id,note.content, {
+					caption: note.caption,
+					reply_markup: note.reply_markup,
+					caption_entities: note.caption_entities,
+				});
+				break;
+			case "video":
+				ctx.telegram.sendVideo(id,note.content, {
+					caption: note.caption,
+					caption_entities: note.caption_entities,
+					reply_markup: note.reply_markup,
+					thumb: note.thumb,
+				});
+				break;
+			default:
+				if (vars) {
+					note.content = await parseVars(vars, note.content);
+				}
+				ctx.telegram.sendMessage(id,note.content, {
+					entities: note.entities,
+					reply_markup: note.reply_markup,
+				});
+				break;
+		}
+	} catch (error) {
+		ctx.reply(error.toString());
+	}
 }

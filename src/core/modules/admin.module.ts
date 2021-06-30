@@ -52,7 +52,7 @@ export default function (bot: Telegraf) {
 		}
 		await promoteMe(ctx);
 	});
-	bot.command("/admins", async (ctx) => {
+	bot.command(["/admins", "/adminlist"], async (ctx) => {
 		await getAdminList(ctx);
 	});
 	bot.command("/pin", async (ctx) => {

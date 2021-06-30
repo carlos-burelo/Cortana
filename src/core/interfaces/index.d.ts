@@ -1,7 +1,7 @@
 // ACOUNT DATABASE INTERFACES
 
 export interface DatabaseI {
-	id?: number | string;
+	id?: any | string;
 	lang?: LangI;
 	sudos?: SudoI[];
 	language_code?: LangI;
@@ -53,7 +53,7 @@ export interface RulesI {
 export interface PrefsI {
 	welcome?: WelcomeI;
 	goodbye?: WelcomeI;
-	banPrefs?: NoteI;
+	ban?: NoteI;
 }
 export interface WelcomeI {
 	status?: boolean;
@@ -78,8 +78,9 @@ export interface WarnI {
 	reasons: string[];
 }
 export interface NoteI {
+	is_animated?: boolean;
 	id?: string;
-	type?: string;
+	type?: 'text'|'document'|'sticker'|'photo'|'video'|'voice'|'audio'| string;
 	photo?: any;
 	sticker?: any;
 	voice?: any;
@@ -106,17 +107,16 @@ export interface MainDBI {
 	gbanned: GbannedI[];
 }
 interface GbannedI {
-	id: number;
-	username: string;
-	first_name: string;
-	reason: string;
+	id?: number;
+	username?: string;
+	first_name?: string;
+	reason?: string;
 }
 interface SudoI {
-	id: number;
-	range: number;
-	role: string;
-	first_name: string;
-	username: string;
+	id?: number;
+	role?: string;
+	first_name?: string;
+	username?: string;
 }
 
 // CONFIG INTERFACES
@@ -138,6 +138,7 @@ export interface ApisI {
 	github: string;
 	samsung: string;
 	twrp: string;
+	currency: ({orig,dest}) => string;
 }
 export interface HelpI {
 	text: string;

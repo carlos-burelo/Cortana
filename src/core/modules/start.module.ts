@@ -36,9 +36,4 @@ export default function (bot: Telegraf) {
 			reply_markup: createButtons(buttons, 2),
 		});
 	});
-	// bot.command('/report', async (ctx) => {
-	//     if(!ctx.message.reply_to_message){
-	//         let text:string
-	//     }
-	// });
 }

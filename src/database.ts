@@ -1,8 +1,8 @@
-import { existsSync, mkdirSync } from "fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync } from "fs";
 import Lowdb, { LowdbSync } from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
 import { resolve } from "path";
-import { makeDBSchema } from "./config";
+import { mainDir, makeDBSchema } from "./config";
 import { DatabaseI } from "./core/interfaces";
 
 let data: LowdbSync<DatabaseI>;
@@ -26,3 +26,21 @@ export const db = (database?: any) => {
 	connect(database);
 	return data;
 };
+
+export function getDatabases(): DatabaseI[] {
+	try {
+		let dbPath: string[] = readdirSync(resolve(mainDir, "databases"), { encoding: "utf-8" });
+		let groups:string[] = dbPath.filter(a => a.includes('-'))
+		let databases:DatabaseI[] = groups.map(a => {
+			return JSON.parse(readFileSync(
+				`${resolve(mainDir, "databases")}/${a}`,
+				{
+					encoding: "utf-8",
+				}
+			))
+		})
+		return databases
+	} catch (error) {
+
+	}
+}

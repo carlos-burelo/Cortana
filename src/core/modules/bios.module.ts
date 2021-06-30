@@ -7,10 +7,10 @@ export default function (bot: Telegraf) {
 	bot.command("/bio", async (ctx) => {
 		const _ = getLang(ctx.chat);
 		if (ctx.chat.type == "private") {
-			ctx.reply(_.global.noPrivateChats);
+			return ctx.reply(_.global.noPrivateChats);
 		}
 		if (!ctx.message.reply_to_message) {
-			ctx.reply(_.global.pleaseReplyMsg);
+			return ctx.reply(_.global.pleaseReplyMsg);
 		}
 		let arg: string = ctx.message.text.split(" ")[1];
 		if (arg && arg == "--rm") {
@@ -25,10 +25,10 @@ export default function (bot: Telegraf) {
 	bot.command("/setbio", async (ctx) => {
 		const _ = getLang(ctx.chat);
 		if (ctx.chat.type == "private") {
-			ctx.reply(_.global.noPrivateChats);
+			return ctx.reply(_.global.noPrivateChats);
 		}
 		if (!ctx.message.reply_to_message) {
-			ctx.reply(_.global.pleaseReplyMsg);
+			return ctx.reply(_.global.pleaseReplyMsg);
 		}
 		let text = ctx.message.text.replace(/\/setbio/g, "").trim();
 		if (text.length < 1) {

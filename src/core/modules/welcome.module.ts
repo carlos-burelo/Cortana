@@ -32,16 +32,16 @@ export default function (bot: Telegraf) {
         return setGreetins(ctx, msg, 'welcome')
       }
   });
-  bot.on("new_chat_members", async (ctx) => {
-    let {message:{new_chat_member:member}}:ChatUserI|any = ctx.update
+  bot.on("left_chat_member", async (ctx) => {
+    let {message:{left_chat_member:member}}:ChatUserI|any = ctx.update
     return sendGreetings(ctx, member, 'goodbye')
   });
-  bot.command('/welcome', async (ctx) => {
+  bot.command('/goodbye', async (ctx) => {
       const _ = getLang(ctx.chat)
       if(ctx.chat.type == 'private'){
         return ctx.reply(_.global.noPrivateChats)
       }
-      let msg = ctx.message.text.replace(/\/welcome/, '').trim()
+      let msg = ctx.message.text.replace(/\/goodbye/, '').trim()
       if(msg == 'on'){ return greetingStatus(ctx, true, 'goodbye')}
       if(msg == 'off'){ return greetingStatus(ctx, false, 'goodbye')}
       if(ctx.message.reply_to_message){

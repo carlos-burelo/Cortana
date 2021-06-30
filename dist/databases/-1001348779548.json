@@ -1,0 +1,34 @@
+{
+  "id": -1001348779548,
+  "lang": "en",
+  "title": "Prueba",
+  "type": "supergroup",
+  "rules": {
+    "content": "",
+    "status": true
+  },
+  "bios": [],
+  "notes": [],
+  "warns": [],
+  "filters": [],
+  "prefs": {
+    "welcome": {
+      "status": true,
+      "message": {
+        "text": "Bienvenido {first_name}",
+        "type": "text"
+      }
+    },
+    "goodbye": {
+      "status": true,
+      "message": {
+        "text": "Hasta pronto {first_name}",
+        "type": "text"
+      }
+    },
+    "ban": {
+      "content": "User banned",
+      "type": "text"
+    }
+  }
+}

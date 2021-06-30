@@ -1,0 +1,93 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const lang_1 = require("../../lang");
+const extras_component_1 = require("../components/extras.component");
+const extras_controller_1 = require("../controllers/extras.controller");
+const messages_1 = require("../libs/messages");
+function default_1(bot) {
+    bot.command('/getid', async (ctx) => {
+        const _ = lang_1.getLang(ctx.chat);
+        if (!ctx.message.reply_to_message) {
+            return ctx.reply(_.global.pleaseReplyMsg);
+        }
+        extras_controller_1.getIdFromFile(ctx);
+    });
+    bot.command("/cc", async (ctx) => {
+        const { extrasModule: _ } = lang_1.getLang(ctx.chat);
+        let msg = ctx.message.text.split(" ");
+        let base = parseInt(msg[1]);
+        if (!base)
+            return ctx.reply(_.noBaseFound);
+        if (isNaN(base))
+            return ctx.reply(_.baseIsNaN);
+        let orig = msg[2].toUpperCase();
+        if (!orig)
+            return ctx.reply(_.origNotFound);
+        let dest = msg[3].toUpperCase();
+        if (!dest)
+            return ctx.reply(_.destNotFound);
+        await extras_controller_1.getCurrency(ctx, dest, orig, base);
+    });
+    bot.command("/loli", async (ctx) => {
+        return ctx.replyWithSticker(extras_component_1.array_lolis[Math.floor(Math.random() * extras_component_1.array_lolis.length)]);
+    });
+    bot.command("/poll", async (ctx) => {
+        const _ = lang_1.getLang(ctx.chat);
+        if (ctx.chat.type == "private") {
+            return ctx.reply(_.global.noPrivateChats);
+        }
+        let msg = ctx.message.text.replace(/\/poll/, '').trim();
+        if (msg.length == 0) {
+            return ctx.reply(_.extrasModule.emptyPoll);
+        }
+        try {
+            let title = msg.match(/\[.*?\]/gi);
+            if (title == null) {
+                return ctx.reply(_.extrasModule.emptyTitlePoll);
+            }
+            title = title[0].replace(/[\[\]]/g, '');
+            let resp = msg.match(/".*?"/gi);
+            if (resp == null) {
+                return ctx.reply(_.extrasModule.emptyTitlePoll);
+            }
+            if (resp.length == 1) {
+                return ctx.reply(_.extrasModule.minResp);
+            }
+            resp = resp.map(r => r.replace(/"/g, ''));
+            return ctx.replyWithPoll(title, resp, {
+                is_anonymous: false,
+            });
+        }
+        catch (error) {
+            ctx.reply(_.extrasModule.errorFormatPoll);
+        }
+    });
+    bot.command("/kang", async (ctx) => {
+        const _ = lang_1.getLang(ctx.chat);
+        if (!ctx.message.reply_to_message) {
+            return ctx.reply(_.global.pleaseReplyMsg);
+        }
+        let arg = ctx.message.text.split(' ')[1];
+        if (arg == '--rm') {
+            let { sticker: { file_id } } = ctx.message.reply_to_message;
+            if (!file_id) {
+                return ctx.reply(_.extrasModule.kangFormatError);
+            }
+            return await extras_controller_1.deleteSticker(ctx, file_id);
+        }
+        const file = await messages_1.detectMsgFormat(ctx.message.reply_to_message);
+        const user = ctx.message.from;
+        switch (file.type) {
+            case 'photo':
+                await extras_controller_1.kangSticker(ctx, user, file, arg);
+                break;
+            case 'sticker':
+                await extras_controller_1.kangSticker(ctx, user, file, arg);
+                break;
+            default:
+                ctx.reply(_.extrasModule.kangFormatError);
+                break;
+        }
+    });
+}
+exports.default = default_1;

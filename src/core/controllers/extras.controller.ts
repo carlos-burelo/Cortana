@@ -72,7 +72,7 @@ export async function kangSticker(ctx:Context, user:ChatUserI, reply:NoteI, emoj
         if(emoji){
             defaultEmoji = emoji
         }
-        const { message_id:id} = await ctx.replyWithMarkdown(_[0])
+        const { message_id:id} = await ctx.replyWithMarkdown(_.kangProcess[0])
         let {href:fileUrl}:URL = await ctx.telegram.getFileLink(fileId);
         if(isAnimated == false){
             fileName = `${user.id}-kangsticker.png`;
@@ -88,14 +88,14 @@ export async function kangSticker(ctx:Context, user:ChatUserI, reply:NoteI, emoj
             "downloads",
             fileName
           );
-        await editMessage(ctx, id, _[1])
+        await editMessage(ctx, id, _.kangProcess[1])
         await downloadFile(fileUrl, fileDir);
         if(reply.type == 'photo'){
-            await editMessage(ctx, id, _[2])
+            await editMessage(ctx, id, _.kangProcess[2])
             let image = await resizeImage(fileDir);
             await image.writeAsync(fileDir)
         }
-        await editMessage(ctx, id, _[3])
+        await editMessage(ctx, id, _.kangProcess[3])
         if(existPack){
             await ctx.addStickerToSet(packName, {
                 png_sticker: {source: fileDir},

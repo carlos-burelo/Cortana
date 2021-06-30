@@ -19,7 +19,7 @@ export const es = {
 		noPrivateChats: "Este comando no es compatible en chats privados",
 		argumentError: "Argumento incorrecto",
 		notArguments: "Argumento incorrecto",
-		errorInFormat: 'Fotmato incorrecto'
+		errorInFormat: 'Formato incorrecto'
 	},
 	helpers: {
 		anyActionSucces: (i: KeyI, A: string, B: string) =>

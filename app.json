@@ -14,16 +14,40 @@
         "required": true
       },
       "CURRENCY": {
-        "description": "CURRENCY API KEY",
+        "description": "Currency api key",
         "required":true
       },
-      "SPAMWATCH_TOKEN":{
-        "description":"API KEY FROM SPAMWATCH",
+      "CHANELID":{
+        "description": "Your chanel for receive logs",
         "required":true
       },
-      "URL":{
-        "description":"URL FROM YOUR APPS TO SET WEBHOOK. CHANGE <your app name> WITH YOUR HEROKU APP NAME.",
-        "value":"https://<your app name>.herokuapp.com"
+      "OWNERID":{
+        "description": "Your own id",
+        "required":true
+      },
+      "OWNERUSERNAME":{
+        "description": "Your own id",
+        "required":true
+      },
+      "OWNERNAME":{
+        "description": "Your own id",
+        "required":true
+      },
+      "BOTID":{
+        "description": "Your own id",
+        "required":true
+      },
+      "BOTUSERNAME":{
+        "description": "Your own id",
+        "required":true
+      },
+      "BOTNAME":{
+        "description": "Your own id",
+        "required":true
+      },
+      "BOTREPO":{
+        "description": "Your own id",
+        "required":true
       }
     }
   }

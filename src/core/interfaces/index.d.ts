@@ -14,10 +14,14 @@ export interface DatabaseI {
 	notes?: NoteI[];
 	warns?: WarnI[];
 	bios?: BioI[];
+	blacklist?:BlackListI[]
 	filters?: FilterI[];
 	prefs?: PrefsI;
 }
+export interface BlackListI{
+	word: string,
 
+}
 export type CollectionsI =
 	| "id"
 	| "sudos"
@@ -35,17 +39,14 @@ export type CollectionsI =
 
 export type KeyI =
 	| "ban"
-	| "banned"
-	| "banme"
-	| "promote"
-	| "promoted"
-	| "promoteme"
 	| "demote"
+	| "promote"
+	| "mute"
+	| "banned"
+	| "unbanned"
 	| "demoted"
-	| "demoteme"
-	| "warn"
-	| "warnned"
-	| "warning";
+	| "promoted"
+	| "warn";
 export interface RulesI {
 	status: boolean;
 	content: string;
@@ -80,8 +81,19 @@ export interface WarnI {
 export interface NoteI {
 	is_animated?: boolean;
 	id?: string;
-	type?: 'text'|'document'|'sticker'|'photo'|'video'|'voice'|'audio'| string;
+	type?:
+		| "text"
+		| "document"
+		| "sticker"
+		| "photo"
+		| "video"
+		| "voice"
+		| "audio"
+		| string;
 	photo?: any;
+	args?:any;
+	poll?:any;
+	options?:string[];
 	sticker?: any;
 	voice?: any;
 	video?: any;
@@ -130,15 +142,14 @@ export interface BotI {
 export interface OwnerI {
 	id: number;
 	username: string;
-	first_name: string;
+	first_name:string;
 }
 export interface ApisI {
-	monoschinos: string;
 	magisk: string;
 	github: string;
 	samsung: string;
 	twrp: string;
-	currency: ({orig,dest}) => string;
+	currency: ({ orig, dest }) => string;
 }
 export interface HelpI {
 	text: string;

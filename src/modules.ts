@@ -7,6 +7,7 @@ import extrasModule from "./core/modules/extras.module";
 import filtersModule from "./core/modules/filters.module";
 import githubModule from "./core/modules/github.module";
 import helpModule from "./core/modules/help.module";
+// import muteModule from "./core/modules/mute.module";
 import notesModule from "./core/modules/notes.module";
 import npmModule from "./core/modules/npm.module";
 import ownerModule from "./core/modules/owner.module";
@@ -28,10 +29,10 @@ export default async function (bot: Telegraf) {
 	helpModule(bot);
 	notesModule(bot);
 	npmModule(bot);
+	// muteModule(bot);
 	ownerModule(bot);
 	transladorModule(bot);
 	warnModule(bot);
 	welcomeModule(bot);
 	texttospeachModule(bot);
-
 }

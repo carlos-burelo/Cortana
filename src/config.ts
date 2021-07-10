@@ -7,37 +7,37 @@ export const downloadDir = `${resolve(__dirname, "assets", "downloads")}`;
 export const databasesDir = `${resolve(__dirname, "databases")}`;
 
 export const _owner: OwnerI = {
-	id: 823410643,
-	username: "CarlosBurelo",
-	first_name: "Carlos",
+	id: parseInt(process.env.OWNERID),
+	username: process.env.OWNERUSERNAME,
+	first_name: process.env.OWNERNAME
 };
 export const _bot: BotI = {
-	id: 1317616064,
-	username: "AssistantCortana_bot",
-	first_name: "Cortana",
-	repository: "https://github.com/carlos-burelo/CortanaTs",
+	id: parseInt(process.env.BOTID),
+	username: process.env.BOTUSERNAME,
+	first_name: process.env.BOTNAME,
+	repository: process.env.BOTREPO,
 };
 export const _apis: ApisI = {
-	monoschinos: process.env.API_MONOSCHINOS,
 	magisk: "https://raw.githubusercontent.com/topjohnwu/magisk_files/master",
 	github: "https://api.github.com",
 	samsung: "http://fota-cloud-dn.ospserver.net/firmware",
 	twrp: "https://eu.dl.twrp.me",
-	currency: ({orig, dest})=> `https://www.alphavantage.co/query` +
-	          `?function=CURRENCY_EXCHANGE_RATE` +
-	          `&from_currency=${orig}` +
-	          `&to_currency=${dest}` +
-	          `&apikey=${process.env.CURRENCY}`
+	currency: ({ orig, dest }) =>
+		`https://www.alphavantage.co/query` +
+		`?function=CURRENCY_EXCHANGE_RATE` +
+		`&from_currency=${orig}` +
+		`&to_currency=${dest}` +
+		`&apikey=${process.env.CURRENCY}`,
 };
 export function makeDBSchema(a: DatabaseI): DatabaseI {
-	if(a.id == 'main'){
+	if (a.id == "main") {
 		const MainSchema: DatabaseI = {
-			id: 'main',
-			lang: 'en',
+			id: "main",
+			lang: "en",
 			sudos: [],
 			gbanned: [],
-		}
-		return MainSchema
+		};
+		return MainSchema;
 	}
 	if (a.type == "supergroup" || a.type == "group") {
 		const GroupSchema: DatabaseI = {
@@ -74,6 +74,7 @@ export function makeDBSchema(a: DatabaseI): DatabaseI {
 					type: "text",
 				},
 			},
+			blacklist:[],
 		};
 		return GroupSchema;
 	} else {
@@ -89,10 +90,10 @@ export function makeDBSchema(a: DatabaseI): DatabaseI {
 	}
 }
 export function checkDirs() {
-	if(existsSync(downloadDir) == false){
-		mkdirSync(downloadDir, {recursive: true});
+	if (existsSync(downloadDir) == false) {
+		mkdirSync(downloadDir, { recursive: true });
 	}
-	if(existsSync(databasesDir) == false){
-		mkdirSync(databasesDir, {recursive: true});
+	if (existsSync(databasesDir) == false) {
+		mkdirSync(databasesDir, { recursive: true });
 	}
 }

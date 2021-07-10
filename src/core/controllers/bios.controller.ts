@@ -4,6 +4,7 @@ import { _bot, _owner } from "../../config";
 import { db } from "../../database";
 import { getLang } from "../../lang";
 import { BioI, ChatUserI } from "../interfaces";
+import { generateLog } from "../libs/messages";
 
 export async function getBio(ctx: Context, B: ChatUserI) {
 	try {
@@ -17,7 +18,8 @@ export async function getBio(ctx: Context, B: ChatUserI) {
 			});
 		}
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "getBio", __filename);
 	}
 }
 export async function decideBio(
@@ -44,7 +46,8 @@ export async function decideBio(
 			await updateBio(ctx, Bio);
 		}
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "decideBio", __filename);
 	}
 }
 export async function setBio(ctx: Context, Bio: BioI) {
@@ -53,7 +56,8 @@ export async function setBio(ctx: Context, Bio: BioI) {
 		db(ctx.chat).get("bios").push(Bio).write();
 		return ctx.reply(_.bioModule.setBioSuccess);
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "setBio", __filename);
 	}
 }
 export async function updateBio(ctx: Context, Bio: BioI) {
@@ -62,7 +66,8 @@ export async function updateBio(ctx: Context, Bio: BioI) {
 		db(ctx.chat).get("bios").find({ id: Bio.id }).assign(Bio).write();
 		return ctx.reply(_.bioModule.updateBioSuccess);
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "updateBio", __filename);
 	}
 }
 export async function delBio(ctx: Context, A: ChatMember, B: ChatMember) {
@@ -78,6 +83,7 @@ export async function delBio(ctx: Context, A: ChatMember, B: ChatMember) {
 		db(ctx.chat).get("bios").remove({ id: B.user.id }).write();
 		return ctx.reply(_.bioModule.deleteBioSuccess);
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "delBio", __filename);
 	}
 }

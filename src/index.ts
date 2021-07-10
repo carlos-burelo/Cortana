@@ -6,10 +6,11 @@ const bot = new Telegraf(process.env.TOKEN);
 
 async function init() {
 	modules(bot);
-	checkDirs()
+	checkDirs();
 	bot.launch().then(() => {
 		console.clear();
 		console.log("Bot started");
 	});
+	
 }
 init();

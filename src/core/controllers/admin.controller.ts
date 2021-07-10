@@ -1,8 +1,11 @@
+import { readdirSync } from "fs";
+import { resolve } from "path";
 import { Context } from "telegraf";
 import { ChatMember } from "telegraf/typings/core/types/typegram";
-import { _bot, _owner } from "../../config";
+import { mainDir, _bot, _owner } from "../../config";
 import { getLang } from "../../lang";
 import { ChatUserI } from "../interfaces";
+import { generateLog } from "../libs/messages";
 import { isSudo } from "../libs/validators";
 
 export async function decidePromote(
@@ -15,11 +18,11 @@ export async function decidePromote(
 		if (recep.status == "creator") {
 			return ctx.reply(_.helpers.anyActionCreator("promote"));
 		}
-		if (recep.user.id == _bot.id) {
-			await promoteUser(ctx, emit.user, recep.user);
+		if (emit.status == "creator" && recep.user.id == _bot.id) {
+			return await promoteUser(ctx, emit.user, recep.user);
 		}
 		if (emit.user.id == _owner.id) {
-			await promoteUser(ctx, emit.user, recep.user);
+			return await promoteUser(ctx, emit.user, recep.user);
 		}
 		if (emit.user.id == recep.user.id) {
 			return ctx.reply(_.helpers.noYourAutoAction("promote"));
@@ -30,9 +33,10 @@ export async function decidePromote(
 		if (emit.status == "administrator" && recep.status == "administrator") {
 			return ctx.reply(_.helpers.adminActionAdmin("promote"));
 		}
-		await promoteUser(ctx, emit.user, recep.user);
-	} catch (error) {
-		return ctx.reply(error.toString());
+		return await promoteUser(ctx, emit.user, recep.user);
+	} catch (e) {
+		const [, l, c] = e.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, e, [l, c], "decidePromote", __filename);
 	}
 }
 export async function decideDemote(
@@ -43,7 +47,7 @@ export async function decideDemote(
 	try {
 		const _ = getLang(ctx.chat);
 		if (recep.user.id == _bot.id) {
-			return ctx.reply(_.helpers.noAutoAction("demoteme"));
+			return ctx.reply(_.helpers.noAutoAction("demote"));
 		}
 		if (recep.status == "creator") {
 			return ctx.reply(_.helpers.anyActionCreator("demote"));
@@ -64,8 +68,9 @@ export async function decideDemote(
 			return ctx.reply(_.helpers.adminActionAdmin("demote"));
 		}
 		await demoteUser(ctx, emit.user, recep.user);
-	} catch (error) {
-		return ctx.reply(error.toString());
+	} catch (e) {
+		const [, l, c] = e.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, e, [l, c], " decidePromote", __filename);
 	}
 }
 export async function promoteUser(ctx: Context, A: ChatUserI, B: ChatUserI) {
@@ -84,7 +89,8 @@ export async function promoteUser(ctx: Context, A: ChatUserI, B: ChatUserI) {
 			_.helpers.anyActionSucces("promoted", A.first_name, B.first_name),
 		);
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "promoteUser", __filename);
 	}
 }
 export async function demoteUser(ctx: Context, A: ChatUserI, B: ChatUserI) {
@@ -105,7 +111,8 @@ export async function demoteUser(ctx: Context, A: ChatUserI, B: ChatUserI) {
 			_.helpers.anyActionSucces("demote", A.first_name, B.first_name),
 		);
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "demoteUser", __filename);
 	}
 }
 export async function promoteMe(ctx: Context) {
@@ -120,7 +127,8 @@ export async function promoteMe(ctx: Context) {
 			can_manage_chat: true,
 		});
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "promoteMe", __filename);
 	}
 }
 // GET ADMIN LIST
@@ -138,7 +146,8 @@ export async function getAdminList(ctx: Context) {
 		});
 		ctx.replyWithMarkdown(adminlist);
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "getAdminList", __filename);
 	}
 }
 export async function pinMessage(
@@ -153,7 +162,8 @@ export async function pinMessage(
 		});
 		ctx.reply(_.adminMoodule.pinSuccess);
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "pinMessage", __filename);
 	}
 }
 export async function unPinMessage(ctx: Context, message_id?: number) {
@@ -167,7 +177,8 @@ export async function unPinMessage(ctx: Context, message_id?: number) {
 			return ctx.reply(_.adminMoodule.unPinSuccess);
 		}
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "unPinMessage", __filename);
 	}
 }
 export async function getChatPerms(ctx: Context, p: any, title) {
@@ -186,7 +197,8 @@ export async function getChatPerms(ctx: Context, p: any, title) {
 		text += `${_.can_pin_messages(p["can_pin_messages"])}\n`;
 		ctx.replyWithMarkdown(text);
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "getChatPerms", __filename);
 	}
 }
 export async function getUserPerms(ctx: Context, userId: number) {
@@ -206,6 +218,31 @@ export async function getUserPerms(ctx: Context, userId: number) {
 		text += `${_.is_anonymous(p["is_anonymous"])}\n`;
 		ctx.replyWithMarkdown(text);
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "getUserPerms", __filename);
 	}
+}
+export function getBackup(ctx:Context) {
+try {
+	let id = ctx.chat.id.toString()
+	let dir:string[] =readdirSync(resolve(mainDir,'databases'))
+	let file:string = dir.find(i => i.includes(id));
+	if(file){
+		let path:string = resolve(mainDir, 'databases', file);
+		let text = `*Backup generated successfuly*\n`;
+		return ctx.replyWithDocument(
+			{
+				source:path
+			},
+			{
+				caption:text, 
+				parse_mode:'Markdown',
+				disable_content_type_detection:false,
+				thumb:'https://icons555.com/images/icons-red/image_icon_data_backup_pic_512x512.png'
+			})
+	}
+} catch (error) {
+	const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+	generateLog(ctx, error, [l, c], "getBackup", __filename);
+}
 }

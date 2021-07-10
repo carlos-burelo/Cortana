@@ -18,29 +18,30 @@ export const connect = (database?: any) => {
 	if (existsSync(dbPath) == false) {
 		schema = makeDBSchema(database);
 	}
+
 	const adapter = new FileSync<DatabaseI>(dbPath);
 	data = Lowdb(adapter);
 	data.defaults(schema).write();
 };
 export const db = (database?: any) => {
 	connect(database);
+	let schema = makeDBSchema(database);
 	return data;
 };
 
 export function getDatabases(): DatabaseI[] {
 	try {
-		let dbPath: string[] = readdirSync(resolve(mainDir, "databases"), { encoding: "utf-8" });
-		let groups:string[] = dbPath.filter(a => a.includes('-'))
-		let databases:DatabaseI[] = groups.map(a => {
-			return JSON.parse(readFileSync(
-				`${resolve(mainDir, "databases")}/${a}`,
-				{
+		let dbPath: string[] = readdirSync(resolve(mainDir, "databases"), {
+			encoding: "utf-8",
+		});
+		let groups: string[] = dbPath.filter((a) => a.includes("-"));
+		let databases: DatabaseI[] = groups.map((a) => {
+			return JSON.parse(
+				readFileSync(`${resolve(mainDir, "databases")}/${a}`, {
 					encoding: "utf-8",
-				}
-			))
-		})
-		return databases
-	} catch (error) {
-
-	}
+				}),
+			);
+		});
+		return databases;
+	} catch (error) {}
 }

@@ -4,13 +4,19 @@ import { _bot, _owner } from "../../config";
 import { db } from "../../database";
 import { getLang } from "../../lang";
 import { ChatUserI, WarnI } from "../interfaces";
+import { generateLog } from "../libs/messages";
 
 export function getWarn(ctx: Context, id: number): WarnI | undefined {
-	let user = db(ctx.chat).get("warns").find({ id: id }).value();
-	if (!user || user == undefined) {
-		return undefined;
-	} else {
-		return user;
+	try {
+		let user = db(ctx.chat).get("warns").find({ id: id }).value();
+		if (!user || user == undefined) {
+			return undefined;
+		} else {
+			return user;
+		}
+	} catch (error) {
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		generateLog(ctx, error, [l, c], "getWarn", __filename);
 	}
 }
 export function setWarn(
@@ -47,7 +53,7 @@ export function setWarn(
 					.get("reasons")
 					.push(reason)
 					.write();
-				return ctx.reply("Ultima advertencia");
+				return ctx.reply(_.warnModule.lastWarn);
 			}
 			if (user.count == 2) {
 				return ctx.reply("Por ahora no puedo banear, por ahora...");
@@ -61,21 +67,27 @@ export function setWarn(
 				reasons: [reason],
 			};
 			db(ctx.chat).get("warns").push(warnedUser).write();
-			return ctx.reply("Primera advertencia");
+			return ctx.reply(_.warnModule.firstWarn);
 		}
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "setWarn", __filename);
 	}
 }
 export function getWarnInfo(ctx: Context, B: ChatUserI) {
-	const _ = getLang(ctx.chat);
-	let user: WarnI = getWarn(ctx, B.id);
-	if (user !== undefined) {
-		let text = _.warnModule.warnInfo(user);
-		user.reasons.map((r, i) => (text += `<b>${i + 1}</b> - ${r}\n`));
-		return ctx.replyWithHTML(text);
-	} else {
-		return ctx.reply(_.warnModule.noWarns(B.user.first_name));
+	try {
+		const _ = getLang(ctx.chat);
+		let user: WarnI = getWarn(ctx, B.id);
+		if (user !== undefined) {
+			let text = _.warnModule.warnInfo(user);
+			user.reasons.map((r, i) => (text += `<b>${i + 1}</b> - ${r}\n`));
+			return ctx.replyWithHTML(text);
+		} else {
+			return ctx.reply(_.warnModule.noWarns(B.user.first_name));
+		}
+	} catch (error) {
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "getWarnInfo", __filename);
 	}
 }
 export function removeWarn(ctx: Context, A: ChatMember, B: ChatMember) {
@@ -101,6 +113,7 @@ export function removeWarn(ctx: Context, A: ChatMember, B: ChatMember) {
 			return ctx.reply(_.warnModule.noWarns(B.user.first_name));
 		}
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "removeWarn", __filename);
 	}
 }

@@ -2,6 +2,7 @@ import { Context } from "telegraf";
 import { FilterI } from "../../../src/core/interfaces";
 import { db } from "../../database";
 import { getLang } from "../../lang";
+import { generateLog } from "../libs/messages";
 
 export async function setFilter(ctx: Context, newFilter: FilterI) {
 	const _ = getLang(ctx.chat);
@@ -15,7 +16,8 @@ export async function setFilter(ctx: Context, newFilter: FilterI) {
 			ctx.replyWithMarkdown(_.filterModule.filterSaved(newFilter.id));
 		}
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "setFilter", __filename);
 	}
 }
 export async function stopFilter(ctx: Context, filter: string) {
@@ -29,7 +31,8 @@ export async function stopFilter(ctx: Context, filter: string) {
 			ctx.replyWithMarkdown(_.filterModule.removedFilter(filter));
 		}
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "stoptFilter", __filename);
 	}
 }
 export async function getFilters(ctx: Context) {
@@ -47,7 +50,8 @@ export async function getFilters(ctx: Context) {
 			ctx.replyWithMarkdown(_.filterModule.noFiltersFound);
 		}
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "getFilters", __filename);
 	}
 }
 export async function getFilter(ctx: Context, filter: string) {
@@ -75,6 +79,7 @@ export async function getFilter(ctx: Context, filter: string) {
 			return ctx.replyWithMarkdown(text);
 		}
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "getFilter", __filename);
 	}
 }

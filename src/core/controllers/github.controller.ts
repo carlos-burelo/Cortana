@@ -6,6 +6,7 @@ import { Context } from "telegraf";
 import { downloadDir, _apis } from "../../config";
 import { getLang } from "../../lang";
 import { downloadFile, renameFile } from "../libs/files";
+import { generateLog } from "../libs/messages";
 
 export async function getGitUser(ctx: Context, user: string) {
 	const _ = getLang(ctx.chat);
@@ -23,10 +24,10 @@ export async function getGitUser(ctx: Context, user: string) {
 				`*Following: * ${$.following}\n`,
 		);
 	} catch (error) {
-		ctx.reply(_.githubModule.profileNotFound);
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "getGitUser", __filename);
 	}
 }
-
 export async function getGitRepos(ctx: Context, user: string) {
 	try {
 		const { githubModule: _ } = getLang(ctx.chat);
@@ -47,7 +48,8 @@ export async function getGitRepos(ctx: Context, user: string) {
 			return ctx.reply(_.profileNotFound);
 		}
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "gteGitRepos", __filename);
 	}
 }
 export async function getGitRepo(ctx: Context, user: string, repo: string) {
@@ -70,10 +72,10 @@ export async function getGitRepo(ctx: Context, user: string, repo: string) {
 			ctx.reply("Datos incorrectos");
 		}
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "getGitRepo", __filename);
 	}
 }
-
 export async function getRepository(ctx: Context, user: string, repo: string) {
 	try {
 		const { data }: AxiosResponse = await axios.get(
@@ -83,13 +85,14 @@ export async function getRepository(ctx: Context, user: string, repo: string) {
 		let el = $("li:nth-child(2).Box-row.Box-row--hover-gray.p-0 a");
 		let donwLink: string = `https://github.com${el.attr("href")}`;
 		let base: string = `${basename(donwLink)}`;
-		let file_dir: string = resolve(downloadDir, "repos");
+		let file_dir: string = downloadDir;
 		let file: string = resolve(file_dir, base);
 		await downloadFile(donwLink, file);
 		let fileDir = renameFile(file_dir, base, `${repo}.zip`);
 		ctx.replyWithDocument({ source: fileDir });
 		unlinkSync(fileDir);
 	} catch (error) {
-		ctx.reply("Ha ocurrido un error al descargar el repositorio");
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "getRepository", __filename);
 	}
 }

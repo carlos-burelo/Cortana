@@ -25,7 +25,7 @@ export function extractButtons(text: string): StringBtn | undefined {
 	let regex: RegExp = /\[.+?\s?&\s?http[s]?:\/\/.+?\]/gim;
 	let buttonsArr: string[] = text.match(regex);
 
-	if (buttonsArr == null) {
+	if (buttonsArr == null || buttonsArr == undefined) {
 		return undefined;
 	}
 	buttonsArr.map((a) => {

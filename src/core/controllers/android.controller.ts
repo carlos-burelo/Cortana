@@ -5,6 +5,7 @@ import { _apis } from "../../config";
 import { getLang } from "../../lang";
 import { ButtonI } from "../interfaces/index";
 import { createButtons } from "../libs/buttons";
+import { generateLog } from "../libs/messages";
 
 export async function getMagisk(ctx: Context) {
 	try {
@@ -27,7 +28,8 @@ export async function getMagisk(ctx: Context) {
 			`*• Notes:* [magisk-${canary.versionCode}.md](${canary.note})\n\n`;
 		return ctx.replyWithMarkdown(response);
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "getMagisk", __filename);
 	}
 }
 export async function getFirmware(ctx: Context, model: string, csc: string) {
@@ -67,7 +69,8 @@ export async function getFirmware(ctx: Context, model: string, csc: string) {
 			reply_markup: createButtons(btns, 2),
 		});
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "getFirmware", __filename);
 	}
 }
 export function getMask(build: number): string {
@@ -111,6 +114,7 @@ export async function getTWRP(ctx: Context, device: string) {
 		});
 		return ctx.replyWithHTML(res);
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "getTWRP", __filename);
 	}
 }

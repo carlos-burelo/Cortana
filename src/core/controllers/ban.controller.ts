@@ -5,6 +5,7 @@ import { getLang } from "../../lang";
 import { isSudo } from "../libs/validators";
 import { NoteI } from "../interfaces";
 import { db } from "../../database";
+import { generateLog } from "../libs/messages";
 
 export async function decideBan(
 	ctx: Context,
@@ -51,7 +52,8 @@ export async function decideBan(
 		}
 		await setBan(ctx, emit, recep);
 	} catch (error) {
-		return ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "decideBan", __filename);
 	}
 }
 export async function decideUnBan(
@@ -75,7 +77,8 @@ export async function decideUnBan(
 		}
 		await setUnBan(ctx, emit, recep);
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "decideUnban", __filename);
 	}
 }
 export async function setBan(ctx: Context, A: ChatMember, B: ChatMember) {
@@ -90,7 +93,8 @@ export async function setBan(ctx: Context, A: ChatMember, B: ChatMember) {
 			),
 		);
 	} catch (error) {
-		return ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "setBan", __filename);
 	}
 }
 export async function setUnBan(ctx: Context, A: ChatMember, B: ChatMember) {
@@ -101,7 +105,8 @@ export async function setUnBan(ctx: Context, A: ChatMember, B: ChatMember) {
 		});
 		return ctx.reply(_.banModule.unBanSuccess);
 	} catch (error) {
-		return ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "setUnBan", __filename);
 	}
 }
 export async function setBanMessage(ctx: Context, message: NoteI) {
@@ -111,6 +116,7 @@ export async function setBanMessage(ctx: Context, message: NoteI) {
 		db(ctx.chat).get("prefs").assign({ banPrefs: message }).write();
 		return ctx.reply(_.setBanSuccess);
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "setBanMessage", __filename);
 	}
 }

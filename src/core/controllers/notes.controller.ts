@@ -2,7 +2,7 @@ import { Context } from "telegraf";
 import { db } from "../../database";
 import { getLang } from "../../lang";
 import { NoteI } from "../interfaces";
-import { sendMsg } from "../libs/messages";
+import { generateLog, sendMsg } from "../libs/messages";
 
 export async function getNote(ctx: Context, noteId: string) {
 	const _ = getLang(ctx.chat);
@@ -13,7 +13,8 @@ export async function getNote(ctx: Context, noteId: string) {
 		}
 		return sendMsg(ctx, a);
 	} catch (error) {
-		ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "getNote", __filename);
 	}
 }
 export async function getNotes(ctx: Context) {
@@ -35,13 +36,14 @@ export async function getNotes(ctx: Context) {
 			notes.map((note, i) => {
 				let indice1 = i + 1;
 				let indice = indice1 <= 9 ? `0${indice1}` : `${indice1}`;
-				notas += `*${indice} - *\`#|${note.id}\`\n`;
+				notas += `*${indice} - *\`#${note.id}\`\n`;
 			});
 			notas += _.notesModule.noteSuggest;
 			return ctx.reply(notas, { parse_mode: "Markdown" });
 		}
 	} catch (error) {
-		return ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "getNotes", __filename);
 	}
 }
 export async function addOrUpdateNote(ctx: Context, note: NoteI) {
@@ -59,16 +61,22 @@ export async function addOrUpdateNote(ctx: Context, note: NoteI) {
 			return ctx.replyWithMarkdown(_.notesModule.noteAdded(note.id));
 		}
 	} catch (error) {
-		return ctx.reply(error.toString());
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "addOrUpdateNote", __filename);
 	}
 }
 export async function deleteNote(ctx: Context, noteId: string) {
-	const _ = getLang(ctx.chat);
-	let a: NoteI = db(ctx.chat).get("notes").find({ id: noteId }).value();
-	if (!a == undefined) {
-		return ctx.reply(_.notesModule.noteNotFound);
-	} else {
-		await db(ctx.chat).get("notes").remove({ id: noteId }).write();
-		return ctx.replyWithMarkdown(_.notesModule.deleteNote(noteId));
+	try {
+		const _ = getLang(ctx.chat);
+		let a: NoteI = db(ctx.chat).get("notes").find({ id: noteId }).value();
+		if (!a == undefined) {
+			return ctx.reply(_.notesModule.noteNotFound);
+		} else {
+			await db(ctx.chat).get("notes").remove({ id: noteId }).write();
+			return ctx.replyWithMarkdown(_.notesModule.deleteNote(noteId));
+		}
+	} catch (error) {
+		const [, l, c] = error.stack.match(/(\d+):(\d+)/);
+		return generateLog(ctx, error, [l, c], "deleteNote", __filename);
 	}
 }

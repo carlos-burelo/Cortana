@@ -6,13 +6,13 @@ import { resolve } from "path";
 export async function downloadFile(url: string, file_dir: string) {
 	const res = await axios.get(url, { responseType: "arraybuffer" });
 	await promises.writeFile(file_dir, res.data);
-};
+}
 export function renameFile(dir: string, Old: string, New: string): string {
 	let oldRoute = resolve(dir, Old);
 	let newRoute = resolve(dir, New);
 	renameSync(oldRoute, newRoute);
 	return `${newRoute}`;
-};
+}
 export async function resizeImage(file_dir: string) {
 	let imageFile = await Jimp.read(file_dir);
 	let { bitmap: image } = imageFile;
@@ -37,4 +37,4 @@ export async function resizeImage(file_dir: string) {
 		imageFile.resize(512, 512).quality(100);
 	}
 	return imageFile;
-};
+}

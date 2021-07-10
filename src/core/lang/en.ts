@@ -470,6 +470,24 @@ export const en = {
 	trasnlatorModule: {
 		limit: "The message exceeds the allowed character limit (200)",
 	},
+	usersModule:{
+		youId:(id:number)=>`Your id is: \`${id}\``,
+		yourId:(name:string,id:number)=>`${name}'s id is: \`${id}\``,
+		myId:(id:number)=> `My is is: \`${id}\``,
+		groupId:(id:number)=>`Group ID is: \`${id}\``,
+		id:(id:number)=>`<b>Id:</b> <code>${id}</code>\n`,
+		name:(name:string)=>`<b>Name:</b> <i>${name}</i>\n`,
+		lastName:(lastName:string)=>`<b>Lastname:</b> <i>${lastName}</i>\n`,
+		acount: (username:string)=>`<b>Account:</b> <i>@${username}</i>\n`,
+		range:(range:string)=>`<b>Range:</b> <i>${range}</i>\n`,
+		customTitle:(title:string)=>`<b>Custum title:</b> <i>${title}</i>\n`,
+		isBot: (v:boolean)=>`<b>Type:</b> ${v ? ' <i>Bot</i>': '<i>User</i>'}\n`,
+		type:(type:string)=> `<b>Type:</b> <i>${type}</i>\n`,
+		groupInfo:'<b>Group Info:</b>\n\n',
+		userInfo:'<b>User Info:</b>\n\n',
+		title:(title:string)=>`<b>Title:</b> <i>${title}</i>\n`,
+		inviteLink:(link:string, name:string)=>`<b>Invite link:</b> <a href="${link}">@${name}</a>\n`
+	}
 };
 
 const keys = {

@@ -473,6 +473,24 @@ export const es = {
 	trasnlatorModule: {
 		limit: "El mensaje sobrepasa el limite de caracteres permitido (200)",
 	},
+	usersModule:{
+		youId:(id:number)=>`Tu ID es: \`${id}\``,
+		yourId:(name:string,id:number)=>`El ID de ${name} es: \`${id}\``,
+		myId:(id:number)=> `Mi ID es: \`${id}\``,
+		groupId:(id:number)=>`El ID del grupo es: \`${id}\``,
+		id:(id:number)=>`<b>Id:</b> <code>${id}</code>\n`,
+		name:(name:string)=>`<b>Nombre:</b> <i>${name}</i>\n`,
+		lastName:(lastName:string)=>`<b>Apellido:</b> <i>${lastName}</i>\n`,
+		acount: (username:string)=>`<b>Cuenta:</b> <i>@${username}</i>\n`,
+		range:(range:string)=>`<b>Rango:</b> <i>${range}</i>\n`,
+		customTitle:(title:string)=>`<b>Titulo personalizado:</b> <i>${title}</i>\n`,
+		isBot: (v:boolean)=>`<b>Tipo:</b> ${v ? ' <i>Bot</i>': '<i>Usuario</i>'}\n`,
+		type:(type:string)=> `<b>Tipo:</b> <i>${type}</i>\n`,
+		groupInfo:'<b>Informacion de grupo</b>\n\n',
+		userInfo:'<b>Informacion de usuario</b>\n\n',
+		title:(title:string)=>`<b>Titulo:</b> <i>${title}</i>\n`,
+		inviteLink:(link:string, name:string)=>`<b>Link de invitacion:</b> <a href="${link}">@${name}</a>\n`
+	}
 };
 
 const keys = {

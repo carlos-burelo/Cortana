@@ -23,6 +23,11 @@
         "value":"https://<your app name>.herokuapp.com",
         "required": true
       },
+      "PORT": {
+        "description": "your port from heroku",
+        "value":"3000",
+        "required": true
+      },
       "CURRENCY": {
         "description": "Currency api key",
         "required":true

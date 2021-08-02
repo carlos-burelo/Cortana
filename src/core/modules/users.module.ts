@@ -1,27 +1,26 @@
-import { getGroupInfo, getInfo } from "../controllers/users.controller";
-import { Telegraf } from "telegraf";
-import { editMessage } from "../libs/messages";
-import { getLang } from "../../lang";
+import { getGroupInfo, getInfo } from '../controllers/users.controller';
+import { Telegraf } from 'telegraf';
+import { lang } from '../../database';
 
 export default function (bot: Telegraf) {
-  bot.command("/info", async (ctx) => {
-    if (ctx.chat.type == "private") {
+  bot.command('/info', async (ctx) => {
+    if (ctx.chat.type == 'private') {
       if (!ctx.message.reply_to_message) {
-        ctx.replyWithHTML(getInfo(ctx,await ctx.getChat()));
+        ctx.replyWithHTML(await getInfo(ctx, await ctx.getChat()));
       } else {
-        ctx.replyWithHTML(getInfo(ctx,ctx.message.reply_to_message.from));
+        ctx.replyWithHTML(await getInfo(ctx, ctx.message.reply_to_message.from));
       }
     } else {
       if (!ctx.message.reply_to_message) {
-        ctx.replyWithHTML(getGroupInfo(ctx,await ctx.getChat()));
+        ctx.replyWithHTML(await getGroupInfo(ctx, await ctx.getChat()));
       } else {
-        ctx.replyWithHTML(getInfo(ctx,ctx.message.reply_to_message.from));
+        ctx.replyWithHTML(await getInfo(ctx, ctx.message.reply_to_message.from));
       }
     }
   });
-  bot.command("/id", async (ctx) => {
-      const {usersModule:_} = getLang(ctx.chat)
-    if (ctx.chat.type == "private") {
+  bot.command('/id', async (ctx) => {
+    const { usersModule: _ } = await lang(ctx);
+    if (ctx.chat.type == 'private') {
       if (!ctx.message.reply_to_message) {
         ctx.replyWithMarkdown(_.youId(ctx.message.from.id));
       } else {

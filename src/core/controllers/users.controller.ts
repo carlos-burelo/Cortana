@@ -1,9 +1,9 @@
-import { Context } from "telegraf";
-import { getLang } from "../../lang";
+import { Context } from 'telegraf';
+import { lang } from '../../database';
 
-export function getInfo(ctx: Context, res: any): string {
-  const { usersModule: _ } = getLang(ctx.chat)
-  let Info: string = "";
+export async function getInfo(ctx: Context, res: any): Promise<string> {
+  const { usersModule: _ } = await lang(ctx);
+  let Info: string = '';
   if (res.id || res.id !== undefined) {
     Info += _.id(res.id);
   }
@@ -27,13 +27,12 @@ export function getInfo(ctx: Context, res: any): string {
   }
   if (res.is_bot) {
     Info += _.isBot(res.is_bot);
-    
   }
   return Info;
 }
 
-export function getGroupInfo(ctx:Context,chat: any): string{
-  const { usersModule: _ } = getLang(ctx.chat)
+export async function getGroupInfo(ctx: Context, chat: any): Promise<string> {
+  const { usersModule: _ } = await lang(ctx);
   let chatinfo: string =
     _.groupInfo +
     _.id(chat.id) +

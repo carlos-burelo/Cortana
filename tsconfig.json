@@ -67,5 +67,14 @@
     /* Advanced Options */
     "skipLibCheck": true,                           /* Skip type checking of declaration files. */
     "forceConsistentCasingInFileNames": true        /* Disallow inconsistently-cased references to the same file. */
-  }
+  },
+  "typedocOptions": {
+    "excludeExternals": true,
+    "includeVersion": true,
+    "media": "docs/assets/",
+    "name": "CortanaTs",
+    "out": "docs/",
+    "readme": "README2.md"
+  },
+  "include": ["src/"]
 }

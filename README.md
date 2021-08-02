@@ -17,3 +17,21 @@ Modular telegram bot written in typescript and running on NodeJs created with th
 ```ts
 console.log('Hello')
 ```
+>Functions
+
+* **Notes**
+    * Se incorporo la capacidad de agredar notas de todo tipo (mensajes, audios,imagenes, videos, etc)
+* **Administrator Functions** 
+
+
+>In process
+
+- Whitelist database
+[
+
+]
+* /request *chat_id*
+* /allow $id|$message|$button {database,controller,model, translation}
+* /decline $id|$message|$button {controller, model, translation}
+
+

@@ -15,7 +15,7 @@
       },
       "NODE_ENV": {
         "description": "TOKEN BOT FROM BOT FATHER",
-        "value":"prod",
+        "value":"production",
         "required": true
       },
       "URL": {

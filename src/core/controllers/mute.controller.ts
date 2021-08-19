@@ -4,7 +4,7 @@ import { BOT_ID, OWNER_ID } from '../../config';
 import { lang } from '../../database';
 import { log } from '../libs/messages';
 import { ExtraRestrictChatMember } from 'telegraf/typings/telegram-types';
-import { ChatUserI } from '../interfaces';
+import { ChatUserI } from '../types';
 
 const muteRights: ExtraRestrictChatMember = {
   permissions: { can_send_messages: false }

@@ -2,12 +2,12 @@ import { lang } from '../../database';
 import { Telegraf } from 'telegraf';
 import { ChatMember } from 'telegraf/typings/core/types/typegram';
 import { decideBan, decideUnBan, setBanMessage } from '../controllers/ban.controller';
-import { matchMessage, errorHandler } from '../libs/messages';
+import { matchMessage, log } from '../libs/messages';
 
 export default function (bot: Telegraf) {
-  bot.command('/ban', async (ctx) => {
+  bot.command('ban', async (ctx) => {
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       if (ctx.chat.type == 'private') {
         return ctx.reply(_.global.noPrivateChat);
       }
@@ -19,12 +19,12 @@ export default function (bot: Telegraf) {
       await decideBan(ctx, A, B);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/ban', l });
+      log({ ctx, error, __filename, f: '/ban', l });
     }
   });
-  bot.command('/unban', async (ctx) => {
+  bot.command('unban', async (ctx) => {
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       if (ctx.chat.type == 'private') {
         return ctx.reply(_.global.noPrivateChat);
       }
@@ -36,12 +36,12 @@ export default function (bot: Telegraf) {
       await decideUnBan(ctx, A, B);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/unban', l });
+      log({ ctx, error, __filename, f: '/unban', l });
     }
   });
-  bot.command('/setban', async (ctx) => {
+  bot.command('setban', async (ctx) => {
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       if (ctx.chat.type == 'private') {
         return ctx.reply(_.global.noPrivateChat);
       }
@@ -53,12 +53,12 @@ export default function (bot: Telegraf) {
       await setBanMessage(ctx, msg);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/setban', l });
+      log({ ctx, error, __filename, f: '/setban', l });
     }
   });
-  bot.command('/gban', async (ctx) => {
+  bot.command('gban', async (ctx) => {
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       if (ctx.chat.type == 'private') {
         return ctx.reply(_.global.noPrivateChat);
       }
@@ -70,7 +70,7 @@ export default function (bot: Telegraf) {
       await setBanMessage(ctx, msg);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/gban', l });
+      log({ ctx, error, __filename, f: '/gban', l });
     }
   });
 }

@@ -1,5 +1,5 @@
 import { Markup } from 'telegraf';
-import { ButtonI } from '../interfaces';
+import { ButtonI } from '../types';
 
 function buttonMaker(buttons: ButtonI[]) {
   let markupButtons: any[] = buttons.map((button) => {

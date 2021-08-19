@@ -1,37 +1,38 @@
 import { Telegraf } from 'telegraf';
-import { _bot } from '../../config';
 import { isAllowed, db, noAccess, lang, setLang } from '../../database';
-import { ButtonI } from '../interfaces';
+import { ButtonI } from '../types';
 import { createButtons } from '../libs/buttons';
-import { errorHandler } from '../libs/messages';
+import { log } from '../libs/messages';
 
 export default function (bot: Telegraf) {
   bot.start(async (ctx) => {
     if (!isAllowed(ctx)) {
       return ctx.replyWithMarkdownV2(noAccess);
     }
-    const _ = await lang(ctx);
+    const { startModule: _ } = lang(ctx);
     try {
       if (ctx.chat.type == 'private') {
         db(ctx.message.from).value();
-        ctx.reply(_.startModule.message, {});
+        ctx.replyWithMarkdown(_.message(ctx.message.from.first_name), {
+          reply_markup: createButtons(_.buttons, 2)
+        });
       } else {
         db(ctx.chat).value();
-        ctx.reply(_.startModule.message, {
-          reply_markup: createButtons(_.startModule.buttons, 2)
+        ctx.reply(_.message(ctx.message.from.first_name), {
+          reply_markup: createButtons(_.buttons, 2)
         });
       }
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/clone', l });
+      log({ ctx, error, __filename, f: '/clone', l });
     }
   });
-  bot.command('/lang', async (ctx) => {
+  bot.command('lang', async (ctx) => {
     if (!isAllowed(ctx)) {
       return ctx.replyWithMarkdownV2(noAccess);
     }
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       let lang1: 'es' | 'en' | string = ctx.message.text.split(' ')[1];
       if (lang1 == 'en' || lang1 == 'es') {
         setLang(ctx, lang1);
@@ -40,7 +41,7 @@ export default function (bot: Telegraf) {
       }
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/clone', l });
+      log({ ctx, error, __filename, f: '/clone', l });
     }
   });
   bot.action('set_lang', async (ctx) => {
@@ -48,7 +49,7 @@ export default function (bot: Telegraf) {
       return ctx.replyWithMarkdownV2(noAccess);
     }
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       let langs: ButtonI[] = [
         { text: 'Español 🇲🇽', callback: 'lang:es' },
         { text: 'English 🇺🇸', callback: 'lang:en' }
@@ -59,7 +60,7 @@ export default function (bot: Telegraf) {
       });
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/clone', l });
+      log({ ctx, error, __filename, f: '/clone', l });
     }
   });
   bot.action(/lang:.+/, async (ctx) => {
@@ -67,13 +68,13 @@ export default function (bot: Telegraf) {
       return ctx.replyWithMarkdownV2(noAccess);
     }
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       let { data }: any = ctx.callbackQuery;
       let lang1 = data.split(':')[1];
       setLang(ctx, lang1);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/clone', l });
+      log({ ctx, error, __filename, f: '/clone', l });
     }
   });
 }

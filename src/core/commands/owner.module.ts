@@ -1,5 +1,5 @@
 import { Telegraf } from 'telegraf';
-import { _owner } from '../../config';
+import { OWNER_ID } from '../../config';
 import { getDatabases, lang } from '../../database';
 import {
   delSudo,
@@ -8,13 +8,13 @@ import {
   sendMessageTo,
   setSudo
 } from '../controllers/owner.controller';
-import { ChatUserI, DBModel } from '../interfaces';
-import { errorHandler } from '../libs/messages';
+import { ChatUserI, DBModel } from '../types';
+import { log } from '../libs/messages';
 
 export default function (bot: Telegraf) {
-  bot.command('/send', async (ctx) => {
+  bot.command('send', async (ctx) => {
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       let user: ChatUserI;
       let msg: any;
       let id: number;
@@ -34,10 +34,10 @@ export default function (bot: Telegraf) {
       await sendMessageTo(ctx, user, msg, id);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/send', l });
+      log({ ctx, error, __filename, f: '/send', l });
     }
   });
-  bot.command('/eco', async (ctx) => {
+  bot.command('eco', async (ctx) => {
     try {
       let user: ChatUserI;
       let msg: any;
@@ -60,16 +60,16 @@ export default function (bot: Telegraf) {
       }
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/eco', l });
+      log({ ctx, error, __filename, f: '/eco', l });
     }
   });
-  bot.command('/groups', async (ctx) => {
+  bot.command('groups', async (ctx) => {
     try {
       let id: number = ctx.from.id;
       getGroups(ctx, id);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/groups', l });
+      log({ ctx, error, __filename, f: '/groups', l });
     }
   });
   bot.command(['/sudolist', '/sudos'], async (ctx) => {
@@ -77,16 +77,16 @@ export default function (bot: Telegraf) {
       getSudos(ctx);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/sudos', l });
+      log({ ctx, error, __filename, f: '/sudos', l });
     }
   });
-  bot.command('/sudo', async (ctx) => {
+  bot.command('sudo', async (ctx) => {
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       if (!ctx.message.reply_to_message) {
         return ctx.reply(_.global.noReplyMessage);
       }
-      if (ctx.from.id !== _owner.id) {
+      if (ctx.from.id !== OWNER_ID) {
         return ctx.reply(_.global.permissionsDenied);
       }
       let user = ctx.message.reply_to_message.from;
@@ -100,10 +100,10 @@ export default function (bot: Telegraf) {
       setSudo(ctx, user, arg);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/sudo', l });
+      log({ ctx, error, __filename, f: '/sudo', l });
     }
   });
-  bot.command('/ctx', async (ctx) => {
+  bot.command('ctx', async (ctx) => {
     console.log(JSON.stringify(ctx));
   });
 }

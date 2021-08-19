@@ -3,15 +3,15 @@ import cheerio from 'cheerio';
 import { unlinkSync } from 'fs';
 import { basename, resolve } from 'path';
 import { Context } from 'telegraf';
-import { downloadDir, _apis } from '../../config';
+import { downloadDir, GITHUB_API } from '../../config';
 import { lang } from '../../database';
 import { downloadFile, renameFile } from '../libs/files';
-import { errorHandler } from '../libs/messages';
+import { log } from '../libs/messages';
 
 export async function getGitUser(ctx: Context, user: string) {
-  const _ = await lang(ctx);
+  const _ = lang(ctx);
   try {
-    const { data }: any = await axios.get(`${_apis.github}/users/${user}`);
+    const { data }: any = await axios.get(`${GITHUB_API}/users/${user}`);
     const $ = data;
     return ctx.replyWithMarkdown(
       `*Git user: * ${$.login}\n` +
@@ -25,14 +25,14 @@ export async function getGitUser(ctx: Context, user: string) {
     );
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getGitUser()', l });
+    log({ ctx, error, __filename, f: 'getGitUser()', l });
   }
 }
 export async function getGitRepos(ctx: Context, user: string) {
   try {
-    const { githubModule: _ } = await lang(ctx);
+    const { githubModule: _ } = lang(ctx);
     let repositories: string = '';
-    const { data } = await axios.get(`${_apis.github}/users/${user}/repos`);
+    const { data } = await axios.get(`${GITHUB_API}/users/${user}/repos`);
     if (data.length !== 0) {
       repositories += _.reposTitle(data.length);
       data.forEach((repo: any, i: number) => {
@@ -48,12 +48,12 @@ export async function getGitRepos(ctx: Context, user: string) {
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getGitRepos()', l });
+    log({ ctx, error, __filename, f: 'getGitRepos()', l });
   }
 }
 export async function getGitRepo(ctx: Context, user: string, repo: string) {
   try {
-    const { data } = await axios.get(`${_apis.github}/repos/${user}/${repo}`);
+    const { data } = await axios.get(`${GITHUB_API}/repos/${user}/${repo}`);
     if (data.length !== 0) {
       const repo = data;
       ctx.replyWithMarkdown(
@@ -70,7 +70,7 @@ export async function getGitRepo(ctx: Context, user: string, repo: string) {
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getGitRepo()', l });
+    log({ ctx, error, __filename, f: 'getGitRepo()', l });
   }
 }
 export async function getRepository(ctx: Context, user: string, repo: string) {
@@ -88,6 +88,6 @@ export async function getRepository(ctx: Context, user: string, repo: string) {
     unlinkSync(fileDir);
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getRepository()', l });
+    log({ ctx, error, __filename, f: 'getRepository()', l });
   }
 }

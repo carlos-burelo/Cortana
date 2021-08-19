@@ -1,10 +1,10 @@
 import { Context } from 'telegraf';
 import { db, lang } from '../../database';
-import { MsgI } from '../interfaces';
-import { errorHandler, sendMessage } from '../libs/messages';
+import { MsgI } from '../types';
+import { log, sendMessage } from '../libs/messages';
 
 export async function getNote(ctx: Context, MsgId: string) {
-  const _ = await lang(ctx);
+  const _ = lang(ctx);
   try {
     let a = db(ctx.chat).get('notes').find({ id: MsgId }).value();
     if (a == undefined) {
@@ -13,11 +13,11 @@ export async function getNote(ctx: Context, MsgId: string) {
     return await sendMessage({ ctx, msg: a });
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getNote()', l });
+    log({ ctx, error, __filename, f: 'getNote()', l });
   }
 }
 export async function getNotes(ctx: Context) {
-  const _ = await lang(ctx);
+  const _ = lang(ctx);
   try {
     const notes = db(ctx.chat).get('notes').value();
     if (notes.length == 0) {
@@ -42,11 +42,11 @@ export async function getNotes(ctx: Context) {
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getNotes()', l });
+    log({ ctx, error, __filename, f: 'getNotes()', l });
   }
 }
 export async function addOrUpdateNote(ctx: Context, note: MsgI) {
-  const _ = await lang(ctx);
+  const _ = lang(ctx);
   try {
     if (db(ctx.chat).get('notes').find({ id: note.id }).value() !== undefined) {
       await db(ctx.chat).get('notes').remove({ id: note.id }).write();
@@ -58,12 +58,12 @@ export async function addOrUpdateNote(ctx: Context, note: MsgI) {
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'addOrUpdateNote()', l });
+    log({ ctx, error, __filename, f: 'addOrUpdateNote()', l });
   }
 }
 export async function deleteNote(ctx: Context, MsgId: string) {
   try {
-    const _ = await lang(ctx);
+    const _ = lang(ctx);
     let a: MsgI = db(ctx.chat).get('notes').find({ id: MsgId }).value();
     if (!a == undefined) {
       return ctx.reply(_.notesModule.noteNotFound);
@@ -73,6 +73,6 @@ export async function deleteNote(ctx: Context, MsgId: string) {
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'deleteNote()', l });
+    log({ ctx, error, __filename, f: 'deleteNote()', l });
   }
 }

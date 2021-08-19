@@ -1,16 +1,17 @@
 import { Context } from 'telegraf';
 import { db, lang } from '../../database';
-import { _bot, _owner } from '../../config';
-import { ChatUserI, MsgI, OwnerI, WelcomeI } from '../interfaces';
-import { editMessage, errorHandler, sendMessage } from '../libs/messages';
+import { BOT_ID, BOT_NAME } from '../../config';
+import { ChatUserI, MsgI, OwnerI, GreetingI } from '../types';
+import { editMessage, log, sendMessage } from '../libs/messages';
 import { promoteUser } from './admin.controller';
 
 export async function welcomeOwner(ctx: Context, user: OwnerI | ChatUserI) {
   try {
-    const _ = await lang(ctx);
+    const _ = lang(ctx);
     let { message_id: id } = await ctx.replyWithMarkdown(`\`${_.welcomeModule.ownerProcess[0]}\``);
     try {
       await editMessage({ ctx, id, text: `\`${_.welcomeModule.ownerProcess[1]}\`` });
+      const _bot = { first_name: BOT_NAME, id: BOT_ID };
       await promoteUser(ctx, _bot, user);
       await editMessage({ ctx, id, text: `\`${_.welcomeModule.ownerProcess[3]}\`` });
     } catch (error) {
@@ -18,15 +19,15 @@ export async function welcomeOwner(ctx: Context, user: OwnerI | ChatUserI) {
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'welcomeOwner()', l });
+    log({ ctx, error, __filename, f: 'welcomeOwner()', l });
   }
 }
-export async function getPrefs(ctx: Context, pref: 'welcome' | 'goodbye'): Promise<WelcomeI> {
+export async function getPrefs(ctx: Context, pref: 'welcome' | 'goodbye'): Promise<GreetingI> {
   try {
     return db(ctx.chat).get(`prefs.${pref}`).value();
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getPrefs()', l });
+    log({ ctx, error, __filename, f: 'getPrefs()', l });
   }
 }
 export async function sendGreetings(ctx: Context, member: ChatUserI, pref: 'welcome' | 'goodbye') {
@@ -41,22 +42,22 @@ export async function sendGreetings(ctx: Context, member: ChatUserI, pref: 'welc
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'sendGreetings()', l });
+    log({ ctx, error, __filename, f: 'sendGreetings()', l });
   }
 }
 export async function setGreetins(ctx: Context, msg: MsgI, pref: 'welcome' | 'goodbye') {
-  const _ = await lang(ctx);
+  const _ = lang(ctx);
   try {
     db(ctx.chat).get(`prefs`).get(pref).assign({ message: msg }).write();
     return ctx.reply(_.welcomeModule.prefSuccess(pref));
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'setGreetings()', l });
+    log({ ctx, error, __filename, f: 'setGreetings()', l });
   }
 }
 export async function greetingStatus(ctx: Context, stat: boolean, pref: 'welcome' | 'goodbye') {
   try {
-    const _ = await lang(ctx);
+    const _ = lang(ctx);
     let { status } = db(ctx.chat).get('prefs').get(pref).value();
     if (status == stat) {
       return ctx.reply(_.welcomeModule.prefRepeat(`${stat ? 'on' : 'off'}`));
@@ -65,6 +66,6 @@ export async function greetingStatus(ctx: Context, stat: boolean, pref: 'welcome
     return ctx.reply(_.welcomeModule.prefSuccess(pref));
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'greetingsStatus()', l });
+    log({ ctx, error, __filename, f: 'greetingsStatus()', l });
   }
 }

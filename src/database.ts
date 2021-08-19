@@ -1,27 +1,24 @@
-import { DBModel, LangI, LanguageI, MainDBI, SudoI } from './core/interfaces/index';
 import { existsSync, readdirSync, readFileSync } from 'fs';
 import Lowdb, { LowdbSync } from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync';
 import { resolve } from 'path';
-import { databasesDir, _bot, _owner } from './config';
 import { Context } from 'telegraf';
 import { Message } from 'telegraf/typings/core/types/typegram';
+import { databasesDir, OWNER_ID } from './config';
+import * as langs from './core/locales';
 import _ from './core/locales/en';
-
-/**
- * @module Database
- */
+import { DBModel, LangI, MainDB, SudoI } from './core/types';
+import { LanguageI } from './core/types/locales';
 
 let data: LowdbSync<DBModel>;
-let data2: LowdbSync<MainDBI>;
+let data2: LowdbSync<MainDB>;
 export const noAccess = `*${_.global.noUsePerms}*`;
 /**
  * @type {DBModel}
  * @interface DBModel
- * @param {DBModel} database?
+ * @param {DBModel} [database]
  */
 export function connect(database?: DBModel) {
-  if (!database) database = { id: 'main' };
   const dbPath: string = resolve(databasesDir, `${database.id}.json`);
   let schema: DBModel;
   if (existsSync(dbPath) == false) {
@@ -37,15 +34,12 @@ export function db(database?: any): LowdbSync<DBModel> {
 }
 export function mainConnect() {
   const dbPath: string = resolve(databasesDir, `main.json`);
-  let schema: MainDBI = {
-    id: 'main',
-    type: 'main',
-    language_code: 'en',
-    accounts: [_owner.id],
+  let schema: MainDB = {
+    whitelist: [OWNER_ID],
     sudos: [],
     gbanned: []
   };
-  const adapter = new FileSync<MainDBI>(dbPath);
+  const adapter = new FileSync<MainDB>(dbPath);
   data2 = Lowdb(adapter);
   return data2.defaults(schema).write();
 }
@@ -61,7 +55,7 @@ export function main() {
  */
 export function isAllowed(ctx: Context): number | undefined {
   const { id } = ctx.chat;
-  const db: number[] = mainConnect().accounts;
+  const db: number[] = mainConnect().whitelist;
   return db.find((a: number) => a == id);
 }
 /**
@@ -70,7 +64,7 @@ export function isAllowed(ctx: Context): number | undefined {
  * the generated objects.
  * @return {DBModel[]}
  */
-export function getDatabases(): DBModel[] {
+export function getDatabases(): DBModel[] | undefined {
   try {
     let dbPath: string[] = readdirSync(databasesDir, {
       encoding: 'utf-8'
@@ -84,7 +78,9 @@ export function getDatabases(): DBModel[] {
       );
     });
     return databases;
-  } catch (error) {}
+  } catch (error) {
+    return undefined;
+  }
 }
 /**
  * Obtains an object derived from the telegraph context with the chat
@@ -206,23 +202,30 @@ export function isSudo(id: number): boolean {
  */
 export async function setLang(ctx: Context, lang2: LangI): Promise<Message.TextMessage> {
   try {
-    const _ = await lang(ctx);
+    const _ = lang(ctx);
     let current = db(ctx.chat).get('lang').value();
     if (lang2 == current) {
       return ctx.reply(_.global.sameLanguage(lang2));
     }
     db(ctx.chat).assign({ lang: lang2 }).write();
     return ctx.reply(_.global.setLanguageSucces(lang2));
-  } catch (error) {}
+  } catch (error) {
+    return undefined;
+  }
 }
+
 /**
  * It makes a query in the corresponding database of the chat and obtains
  * the value of the property "language_code" to import the object
  * corresponding to the requested language.
  * @param  {Context|any} ctx
  */
-export async function lang(ctx: Context | any):Promise<LanguageI> {
-  let lang = db(ctx.chat).get('language_code').value();
-  const locale = await import(`./core/locales/${lang}`);
-  return locale.default;
+export function lang(ctx: Context | string): LanguageI {
+  let lang: string;
+  if (typeof ctx == 'string') {
+    lang = ctx;
+  } else {
+    lang = db(ctx.chat).get('language_code').value();
+  }
+  return langs.default[lang];
 }

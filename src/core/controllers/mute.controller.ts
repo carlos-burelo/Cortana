@@ -1,8 +1,8 @@
 import { Context } from 'telegraf';
 import { ChatMember } from 'typegram';
-import { _bot, _owner } from '../../config';
+import { BOT_ID, OWNER_ID } from '../../config';
 import { lang } from '../../database';
-import { errorHandler } from '../libs/messages';
+import { log } from '../libs/messages';
 import { ExtraRestrictChatMember } from 'telegraf/typings/telegram-types';
 import { ChatUserI } from '../interfaces';
 
@@ -13,18 +13,18 @@ const unMuteRights: ExtraRestrictChatMember = {
   permissions: { can_send_messages: true }
 };
 export async function decideMuteUser(ctx: Context, A: ChatMember, B: ChatMember) {
-  const _ = await lang(ctx);
+  const _ = lang(ctx);
   try {
     if (B.status == 'creator') {
       return ctx.reply(_.helpers.anyActionCreator('mute'));
     }
-    if (B.user.id == _owner.id) {
+    if (B.user.id == OWNER_ID) {
       return ctx.reply(_.helpers.anyActionOwner('mute'));
     }
-    if (B.user.id == _bot.id) {
+    if (B.user.id == BOT_ID) {
       return ctx.reply(_.global.preventBot);
     }
-    if (A.user.id == _owner.id) {
+    if (A.user.id == OWNER_ID) {
       return await muteUser(ctx, A.user, B.user);
     }
     if (A.status == 'member' && B.status == 'administrator') {
@@ -36,30 +36,30 @@ export async function decideMuteUser(ctx: Context, A: ChatMember, B: ChatMember)
     return await muteUser(ctx, A.user, B.user);
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'decideMuteUser()', l });
+    log({ ctx, error, __filename, f: 'decideMuteUser()', l });
   }
 }
 export async function muteUser(ctx: Context, A: ChatUserI, B: ChatUserI) {
-  const _ = await lang(ctx);
+  const _ = lang(ctx);
   try {
     await ctx.restrictChatMember(B.id, muteRights);
     return ctx.reply(_.helpers.anyActionSuccess('mute', A.first_name, B.first_name));
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'muteUser()', l });
+    log({ ctx, error, __filename, f: 'muteUser()', l });
     return ctx.reply(_.helpers.actionError('mute'));
   }
 }
 export async function decideUnMuteUser(ctx: Context, A: ChatMember, B: ChatMember) {
-  const _ = await lang(ctx);
+  const _ = lang(ctx);
   try {
     if (B.status == 'creator') {
       return ctx.reply(_.muteModule.noUnMuted(B.user.first_name));
     }
-    if (B.user.id == _owner.id) {
+    if (B.user.id == OWNER_ID) {
       return ctx.reply(_.muteModule.noUnMuted(B.user.first_name));
     }
-    if (B.user.id == _bot.id) {
+    if (B.user.id == BOT_ID) {
       return ctx.reply(_.muteModule.noUnMuted(B.user.first_name));
     }
     if (A.status == 'member') {
@@ -68,31 +68,31 @@ export async function decideUnMuteUser(ctx: Context, A: ChatMember, B: ChatMembe
     return await unMuteUser(ctx, B.user);
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'decideUnMuteUser()', l });
+    log({ ctx, error, __filename, f: 'decideUnMuteUser()', l });
   }
 }
 export async function unMuteUser(ctx: Context, B: ChatUserI) {
-  const _ = await lang(ctx);
+  const _ = lang(ctx);
   try {
     await ctx.restrictChatMember(B.id, unMuteRights);
     return ctx.reply(_.muteModule.unMuted(B.first_name));
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'unMuteUser()', l });
+    log({ ctx, error, __filename, f: 'unMuteUser()', l });
     return ctx.reply(_.muteModule.noUnMuted(B.first_name));
   }
 }
 
 // export async function setMute(ctx: Context, A: ChatMember, B: ChatMember, args?: string) {
 //   try {
-//     const _ = await lang(ctx);
-//     if (B.user.id == _bot.id) {
+//     const _ = lang(ctx)
+//     if (B.user.id == BOT_ID) {
 //       return ctx.reply(_.helpers.noAutoAction('mute'));
 //     }
 //     if (B.status == 'creator') {
 //       return ctx.reply(_.helpers.anyActionCreator('mute'));
 //     }
-//     if (A.user.id == _owner.id) {
+//     if (A.user.id == OWNER_ID) {
 //       if (!args) {
 //         args = '$messages';
 //       }
@@ -116,19 +116,19 @@ export async function unMuteUser(ctx: Context, B: ChatUserI) {
 //     }
 //   } catch (error) {
 //     const [l] = error.stack.match(/(\d+):(\d+)/);
-//     errorHandler({ ctx, error, __filename, f: 'setMute()', l });
+//    log({ ctx, error, __filename, f: 'setMute()', l });
 //   }
 // }
 // export async function decideUnmute(ctx: Context, A: ChatMember, B: ChatMember, args?: string) {
 //   try {
-//     const _ = await lang(ctx);
-//     if (B.user.id == _bot.id) {
+//     const _ = lang(ctx)
+//     if (B.user.id == BOT_ID) {
 //       return ctx.reply(_.global.preventBot);
 //     }
-//     if (B.user.id == _owner.id) {
+//     if (B.user.id == OWNER_ID) {
 //       return ctx.reply(_.global.preventOwner);
 //     }
-//     if (A.user.id == _owner.id) {
+//     if (A.user.id == OWNER_ID) {
 //       unMuteUser(ctx, B.user, args);
 //     }
 //     if (A.status == 'member') {
@@ -137,7 +137,7 @@ export async function unMuteUser(ctx: Context, B: ChatUserI) {
 //     unMuteUser(ctx, B.user, args);
 //   } catch (error) {
 //     const [l] = error.stack.match(/(\d+):(\d+)/);
-//     errorHandler({ ctx, error, __filename, f: 'decideUnmute()', l });
+//    log({ ctx, error, __filename, f: 'decideUnmute()', l });
 //   }
 // }
 // export async function argEvalue(ctx: Context, arg: string, v: boolean) {
@@ -164,7 +164,7 @@ export async function unMuteUser(ctx: Context, B: ChatUserI) {
 //     }
 //   } catch (error) {
 //     const [l] = error.stack.match(/(\d+):(\d+)/);
-//     errorHandler({ ctx, error, __filename, f: 'argEvalue()', l });
+//    log({ ctx, error, __filename, f: 'argEvalue()', l });
 //   }
 // }
 
@@ -174,7 +174,7 @@ export async function unMuteUser(ctx: Context, B: ChatUserI) {
 //     ctx.restrictChatMember(user.id, { permissions: perms });
 //   } catch (error) {
 //     const [l] = error.stack.match(/(\d+):(\d+)/);
-//     errorHandler({ ctx, error, __filename, f: 'muteUser()', l });
+//    log({ ctx, error, __filename, f: 'muteUser()', l });
 //   }
 // }
 // export async function unMuteUser(ctx: Context, user: ChatUserI, args: string) {
@@ -184,6 +184,6 @@ export async function unMuteUser(ctx: Context, B: ChatUserI) {
 //     ctx.restrictChatMember(user.id, { permissions: perms });
 //   } catch (error) {
 //     const [l] = error.stack.match(/(\d+):(\d+)/);
-//     errorHandler({ ctx, error, __filename, f: 'unMuteUser()', l });
+//    log({ ctx, error, __filename, f: 'unMuteUser()', l });
 //   }
 // }

@@ -1,5 +1,4 @@
 import { Telegraf } from 'telegraf';
-import { _apis } from '../../config';
 import { lang } from '../../database';
 import {
   getGitRepo,
@@ -7,12 +6,12 @@ import {
   getGitUser,
   getRepository
 } from '../controllers/github.controller';
-import { errorHandler } from '../libs/messages';
+import { log } from '../libs/messages';
 
 export default function (bot: Telegraf) {
-  bot.command('/git', async (ctx) => {
+  bot.command('git', async (ctx) => {
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       let msg: string[] = ctx.message.text.split(' ');
       if (!msg[1]) {
         return ctx.reply(_.githubModule.noUserFound);
@@ -20,12 +19,12 @@ export default function (bot: Telegraf) {
       await getGitUser(ctx, msg[1]);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/git', l });
+      log({ ctx, error, __filename, f: '/git', l });
     }
   });
-  bot.command('/repos', async (ctx) => {
+  bot.command('repos', async (ctx) => {
     try {
-      const { githubModule: _ } = await lang(ctx);
+      const { githubModule: _ } = lang(ctx);
       let user: string[] | string = ctx.update.message.text.split(' ');
       user = user[1];
       if (!user) {
@@ -35,12 +34,12 @@ export default function (bot: Telegraf) {
       }
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/repos', l });
+      log({ ctx, error, __filename, f: '/repos', l });
     }
   });
-  bot.command('/repo', async (ctx) => {
+  bot.command('repo', async (ctx) => {
     try {
-      const { githubModule: _ } = await lang(ctx);
+      const { githubModule: _ } = lang(ctx);
       let message: string[] = ctx.update.message.text.split(' ');
       let user: string = message[1];
       let repo: string = message[2];
@@ -59,12 +58,12 @@ export default function (bot: Telegraf) {
       await getGitRepo(ctx, user, repo);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/repo', l });
+      log({ ctx, error, __filename, f: '/repo', l });
     }
   });
-  bot.command('/clone', async (ctx) => {
+  bot.command('clone', async (ctx) => {
     try {
-      const { githubModule: _ } = await lang(ctx);
+      const { githubModule: _ } = lang(ctx);
       let message: string[] = ctx.update.message.text.split(' ');
       let user: string = message[1];
       let repo: string = message[2];
@@ -83,7 +82,7 @@ export default function (bot: Telegraf) {
       await getRepository(ctx, user, repo);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/clone', l });
+      log({ ctx, error, __filename, f: '/clone', l });
     }
   });
 }

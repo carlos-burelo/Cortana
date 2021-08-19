@@ -1,5 +1,5 @@
 import { Context } from 'telegraf';
-import { errorHandler } from '../libs/messages';
+import { log } from '../libs/messages';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 const sh = promisify(exec);
@@ -8,7 +8,7 @@ import { lang } from '../../database';
 
 export async function exectBash(ctx: Context, cmd: string) {
   try {
-    const { nodeModule: _ } = await lang(ctx);
+    const { nodeModule: _ } = lang(ctx);
     if (cmd.includes('sudo') || cmd.includes('rm')) {
       return ctx.reply(_.cmdDenied);
     }
@@ -19,12 +19,12 @@ export async function exectBash(ctx: Context, cmd: string) {
     return ctx.reply(stdout);
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'exectBash()', l });
+    log({ ctx, error, __filename, f: 'exectBash()', l });
   }
 }
 export async function fetch(ctx: Context, url: string) {
   try {
-    const _ = await lang(ctx);
+    const _ = lang(ctx);
     const res = await axios.get(url);
     if (res.data.length >= 4000) {
       return ctx.reply(_.nodeModule.limitResponse);
@@ -34,6 +34,6 @@ export async function fetch(ctx: Context, url: string) {
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'fetch()', l });
+    log({ ctx, error, __filename, f: 'fetch()', l });
   }
 }

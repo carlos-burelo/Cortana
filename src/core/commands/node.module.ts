@@ -1,12 +1,12 @@
 import { Telegraf } from 'telegraf';
 import os from 'os';
-import { errorHandler } from '../libs/messages';
-import { _owner } from '../../config';
+import { log } from '../libs/messages';
+import { OWNER_ID } from '../../config';
 import { lang } from '../../database';
 import { exectBash, fetch } from '../controllers/node.controller';
 
 export default function (bot: Telegraf) {
-  bot.command('/os', async (ctx) => {
+  bot.command('os', async (ctx) => {
     try {
       ctx.replyWithHTML(
         `<b>Platform:</b>  <i>${os.platform()}</i>\n` +
@@ -20,13 +20,13 @@ export default function (bot: Telegraf) {
       );
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/os', l });
+      log({ ctx, error, __filename, f: '/os', l });
     }
   });
-  bot.command('/sh', async (ctx) => {
+  bot.command('sh', async (ctx) => {
     try {
-      const _ = await lang(ctx);
-      if (ctx.message.from.id !== _owner.id) {
+      const _ = lang(ctx);
+      if (ctx.message.from.id !== OWNER_ID) {
         return ctx.reply(_.global.permissionsDenied);
       }
       let cmd = ctx.message.text.replace(/\/sh\s?/, '');
@@ -36,12 +36,12 @@ export default function (bot: Telegraf) {
       await exectBash(ctx, cmd);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/sh', l });
+      log({ ctx, error, __filename, f: '/sh', l });
     }
   });
-  bot.command('/fetch', async (ctx) => {
+  bot.command('fetch', async (ctx) => {
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       let url: string = ctx.message.text.replace(/\/fetch\s?/, '');
       if (url.length == 0) {
         return ctx.reply(_.nodeModule.noUrl);
@@ -53,8 +53,8 @@ export default function (bot: Telegraf) {
       await fetch(ctx, url);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/fetch', l });
+      log({ ctx, error, __filename, f: '/fetch', l });
     }
   });
-  bot.command('/download', async (ctx) => {});
+  bot.command('download', async (ctx) => {});
 }

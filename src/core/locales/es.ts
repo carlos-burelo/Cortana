@@ -1,27 +1,27 @@
-import { _bot, _owner } from '../../config';
-import { ButtonI, LanguageI, ModulesI } from '../interfaces';
+import { BOT_NAME, BOT_USERNAME, OWNER_USERNAME } from '../../config';
+import { ButtonI } from '../types';
+import { LanguageI } from '../types/locales';
 
 const id = 'Español 🇲🇽';
 const startButtons: ButtonI[] = [
   {
-    text: '📌 Comandos',
-    callback: 'help_back'
+    text: '📌 Commandos',
+    callback: 'help'
   },
   {
     text: '🇲🇽 Idiomas',
-    callback: 'set_lang'
+    callback: 'setLanguage'
   },
   {
     text: '➕ Añadir a un grupo',
-    url: `http://t.me/${_bot.username}?startgroup=true`
+    url: `http://t.me/${BOT_USERNAME}?startgroup=true`
   },
   {
     text: '📄 Documentacion',
     url: 'http://github.com/carlos-burelo/CortanaTS'
   }
 ];
-
-export const modules: ModulesI[] = [
+export const modules = [
   {
     text: 'Administrador',
     callback: 'help_admin',
@@ -31,27 +31,20 @@ export const modules: ModulesI[] = [
       `Retorna la lista de los administradores\n\n` +
       `<b>/promote (replymessage)</b>\n` +
       `Promueve a un miembro o administrador\n\n` +
-      `<b>/promoteme</b>\n` +
-      `Promueve al propietario a administrador\n\n` +
       `<b>/demote (replymessage)</b>\n` +
       `Degrada a un miembro o administrador\n\n` +
       `<b>/link</b>\n` +
       `Retorna el link del grupo si este esta disponible\n\n` +
-      `<b>/backup</b>\n` +
-      `Descarga una copia de la base de datos del grupo o usuario\n\n` +
       `<b>/perms (replymessage)</b>\n` +
       `Retorna los permisos del grupo\n\n` +
-      `<b>/prefs</b>\n` +
-      `Retorna las configuraciones actuales de el grupo.\n\n` +
       `<b>/setperms</b>\n` +
       `Establece permisos optimios para el buen funcionamiento del bot\n\n` +
       `<b>/pin (replymessage) | (message)</b>\n` +
       `Ancla una nota al chat\n\n` +
-      `<b>/unpin &all</b>\n` +
+      `<b>/unpin -all</b>\n` +
       `Desancla la nota actual o todas las notas.\n\n`
   },
   {
-    // Owner.module
     text: 'Propietario',
     callback: 'help_owner',
     content:
@@ -69,7 +62,6 @@ export const modules: ModulesI[] = [
       `Envia un mensage a todos los grupos en la base de datos\n`
   },
   {
-    // Owner.module
     text: 'Antiflood',
     callback: 'help_antiflood',
     content:
@@ -86,7 +78,6 @@ export const modules: ModulesI[] = [
 					<pre><code class="language-python">pre-formatted fixed-width code block written in the Python programming language</code></pre>\n`
   },
   {
-    // Spam.module
     text: 'Antispam',
     callback: 'help_antispam',
     content: `Comandos en el modulo: AntiSpam\n\n` + `MODULO NO DISPONIBLE POR AHORA \n`
@@ -112,7 +103,7 @@ export const modules: ModulesI[] = [
       `Establece una biografia al usuario\n\n` +
       `<b>/bio (replymessage)</b>\n` +
       `Obtiene la biografia del usuario\n\n` +
-      `<b>/bio (replymessage) &rm</b>\n` +
+      `<b>/bio (replymessage) -rm</b>\n` +
       `Elimina la biogradia del usuario\n\n` +
       `<b>/info (replymessage)</b>\n` +
       `Obtiene la informacion de un usuario\n\n`
@@ -164,8 +155,8 @@ export const modules: ModulesI[] = [
       `Obtiene todas las notas guardadas.\n\n` +
       `<b>/add | /save  (replymessage) | (message)</b>\n` +
       `Agrega una nota a la base de datos\n\n` +
-      `<b>#notename &rm</b>\n` +
-      `Obtiene una nota en especifico o borra la nota con el atributo "&rm"\n\n`
+      `<b>#notename -rm</b>\n` +
+      `Obtiene una nota en especifico o borra la nota con el atributo "-rm"\n\n`
   },
   {
     text: 'Reglas',
@@ -202,7 +193,6 @@ export const modules: ModulesI[] = [
       `Retorna solo el id del usuario|grupo\n`
   },
   {
-    // Wanr.module
     text: 'Advertencias',
     callback: 'help_warns',
     content:
@@ -210,9 +200,9 @@ export const modules: ModulesI[] = [
       `<b>/warn</b>\n` +
       `Añade una advertencia al contador del usuario,\n` +
       `si el contador llega a (3) el usuario sera baneado\n\n` +
-      `<b>/warns</b>\n` +
+      `<b>/warn -info</b>\n` +
       `Retorna los detalles del contador de advertencias del usuario\n\n` +
-      `<b>/warn &rm</b>\n` +
+      `<b>/warn -rm</b>\n` +
       `Borra una advertencia del contador del usuario\n`
   },
   {
@@ -274,10 +264,14 @@ export const modules: ModulesI[] = [
 ];
 const lang: LanguageI = {
   global: {
-    requestApproved: 'Solicitud aprovada, ahora cortana esta disponible en su chat.',
-    requestDenied: 'Solicitud denegada, lamentablemente no se cumple con los terminos de uso.',
-    pendingRequest: 'Su solicitud sera revisada personalmente por mi propietario, por favor espere a que este en linea.',
-    noUsePerms: 'Esta cuenta no tiene acceso a ' + _bot.first_name + ' puede solicitar acceso usando el comando /join',
+    requestApproved: 'Request approved, now Cortana is available un your chat.',
+    requestDenied: 'Request denied, unfortunately the terms of use are not met.',
+    pendingRequest:
+      'Your request will be personally reviewed by my owner, please wait until it is online.',
+    noUsePerms:
+      'This account does not have access to ' +
+      BOT_NAME +
+      ' you can request access using the /join command',
     noReplyMessage: 'Responda al mensaje para continuar.',
     onlyOwner: 'Este comando solo esta disponible para el propietario del bot.',
     preventBot: 'Comando anulado, integridad del bot en riesgo.',
@@ -325,9 +319,9 @@ const lang: LanguageI = {
     is_anonymous: (p) => `${p ? '✅' : '❌'} | *Ser anomimo:* `
   },
   startModule: {
-    message:
-      `Hola mi nombres es ${_bot.first_name}, un bot administrador de grupos y gestor ` +
-      `de informacion desarrollado en typescript por @${_owner.username}.\n` +
+    message: (name) =>
+      `Hola *${name}*, mi nombres es ${BOT_NAME}, soy un bot administrador de grupos y gestor ` +
+      `de informacion desarrollado en typescript por @${OWNER_USERNAME}.\n` +
       `A continuacion le muestro una serie de opciones que actualmente tengo disponibles.\n`,
     buttons: startButtons
   },
@@ -340,10 +334,10 @@ const lang: LanguageI = {
     unPinError: 'El mensaje no ha podido ser desanclado',
     unPinAllError: 'Los mensajes no han podido ser desanclados',
     unPinSuggestion: 'Use `$all` para desanclar todos los mensajes',
-    prefTitle: (pref) => `\nConfiguracion en ${pref}\n`,
-    stat: (s) => `_Estado:_ \`${s}\`\t\t|\t\t`,
-    type: (t) => `_Tipo:_ \`${t}\`\n`,
-    sanction: (s) => `_Sanción:_ \`${s}\`\n`
+    prefTitle: (pref) => `\nPreferences in ${pref}`,
+    stat: (s) => `*Status:* \`${s}\`\t\t|\t\t`,
+    type: (t) => `*Type:* \`${t}\`\n`,
+    sanction: (s) => `*Sanction:* \`${s}\`\n`
   },
   androidModule: {
     noModel: 'Porfavor coloque algun modelo',
@@ -381,9 +375,9 @@ const lang: LanguageI = {
       `Puedes acceder a los modulos usando\n\n/help <modulename>`
   },
   herokuModule: {
-    title: 'Uso de Dynos mensual',
-    usageText: (name) => `Horas de uso por ${name}:`,
-    remainigText: `Horas restantes este mes:`,
+    title: 'Uso de Dynos este mes',
+    usageText: (name) => `Uso de dynos por ${name}:`,
+    remainigText: `Horas dyno restantes este mes:`,
     time: (h, m, p) => `•\t${h} Horas, ${m} minutos\t-\t${p}%`,
     process: [
       '`Obteniendo informacion de la cuenta...`',
@@ -407,11 +401,11 @@ const lang: LanguageI = {
     secondWarn: 'Ultima advertencia',
     lastWarn: 'Por ahora no puedo banear, por ahora...',
     warnInfo: ({ first_name, id, count, username }) =>
-      `<b>Usuario:</b> ${first_name}\n` +
-      `<b>Id:</b> <code>${id}</code>\n` +
-      `<b>Nickname:</b> @${username}\n` +
-      `<b>Advertencias:</b> ${count}/3\n` +
-      `<b>Razones:</b>\n`,
+      `*Usuario:* ${first_name}\n` +
+      `*Id:* \`${id}\`\n` +
+      `*Nickname:* @${username}\n` +
+      `*Advertencias:* ${count}/3\n` +
+      `*Razones:*\n`,
     warnRemoved: '1 advertencia removida.',
     allWarnsRemoved: 'Todas las advertencias fueron removidas',
     noWarns: (name) => `${name} no cuenta con advertencias.`
@@ -506,14 +500,14 @@ const lang: LanguageI = {
   }
 };
 const w = {
-  ban: 'banear',
-  demote: 'degradar',
-  promote: 'promover',
-  mute: 'silenciar',
-  banned: 'baneado(a)',
-  unbanned: 'desbaneado(a)',
-  demoted: 'degradado(a)',
-  promoted: 'promovido(a)',
-  warn: 'advertir'
+  ban: 'ban',
+  demote: 'demote',
+  promote: 'promote',
+  mute: 'mute',
+  banned: 'banned',
+  unbanned: 'unbannned',
+  demoted: 'demoted',
+  promoted: 'promoted',
+  warn: 'warn'
 };
 export default lang;

@@ -1,9 +1,9 @@
 import { Context } from 'telegraf';
 import { ChatMember } from 'typegram';
-import { _bot, _owner } from '../../config';
+import { BOT_ID, OWNER_ID } from '../../config';
 import { db, lang } from '../../database';
-import { ChatUserI, WarnI } from '../interfaces';
-import { errorHandler } from '../libs/messages';
+import { ChatUserI, WarnI } from '../types';
+import { log } from '../libs/messages';
 
 export async function getWarn(ctx: Context, id: number): Promise<WarnI> {
   try {
@@ -15,19 +15,19 @@ export async function getWarn(ctx: Context, id: number): Promise<WarnI> {
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getWarn()', l });
+    log({ ctx, error, __filename, f: 'getWarn()', l });
   }
 }
 export async function setWarn(ctx: Context, A: ChatMember, B: ChatMember, reason: string) {
-  const _ = await lang(ctx);
+  const _ = lang(ctx);
   try {
     if (B.status == 'creator') {
       return ctx.reply(_.helpers.anyActionCreator('warn'));
     }
-    if (B.user.id == _bot.id) {
+    if (B.user.id == BOT_ID) {
       return ctx.reply(_.global.preventBot);
     }
-    if (B.user.id == _owner.id) {
+    if (B.user.id == OWNER_ID) {
       return ctx.reply(_.global.preventOwner);
     }
     if (A.status == 'member' && B.status == 'administrator') {
@@ -60,12 +60,12 @@ export async function setWarn(ctx: Context, A: ChatMember, B: ChatMember, reason
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'setWarn()', l });
+    log({ ctx, error, __filename, f: 'setWarn()', l });
   }
 }
 export async function getWarnInfo(ctx: Context, B: ChatUserI) {
   try {
-    const _ = await lang(ctx);
+    const _ = lang(ctx);
     let user: WarnI = await getWarn(ctx, B.id);
     if (user !== undefined) {
       let text = _.warnModule.warnInfo(user);
@@ -76,11 +76,11 @@ export async function getWarnInfo(ctx: Context, B: ChatUserI) {
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getWarnInfo()', l });
+    log({ ctx, error, __filename, f: 'getWarnInfo()', l });
   }
 }
 export async function removeWarn(ctx: Context, A: ChatMember, B: ChatMember) {
-  const _ = await lang(ctx);
+  const _ = lang(ctx);
   try {
     if (A.status == 'member') {
       return ctx.reply(_.global.permissionsDenied);
@@ -103,6 +103,6 @@ export async function removeWarn(ctx: Context, A: ChatMember, B: ChatMember) {
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'removeWarn()', l });
+    log({ ctx, error, __filename, f: 'removeWarn()', l });
   }
 }

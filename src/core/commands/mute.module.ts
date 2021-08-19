@@ -1,15 +1,15 @@
 import { Telegraf } from 'telegraf';
 import { isAllowed, noAccess, lang } from '../../database';
 import { decideMuteUser, decideUnMuteUser } from '../controllers/mute.controller';
-import { errorHandler } from '../libs/messages';
+import { log } from '../libs/messages';
 
 export default function (bot: Telegraf) {
-  bot.command('/mute', async (ctx) => {
+  bot.command('mute', async (ctx) => {
     if (!isAllowed(ctx)) {
       return ctx.replyWithMarkdownV2(noAccess);
     }
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       if (ctx.chat.type == 'private') {
         return ctx.reply(_.global.noPrivateChat);
       }
@@ -21,15 +21,15 @@ export default function (bot: Telegraf) {
       await decideMuteUser(ctx, A, B);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/mute', l });
+      log({ ctx, error, __filename, f: '/mute', l });
     }
   });
-  bot.command('/unmute', async (ctx) => {
+  bot.command('unmute', async (ctx) => {
     if (!isAllowed(ctx)) {
       return ctx.replyWithMarkdownV2(noAccess);
     }
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       if (ctx.chat.type == 'private') {
         return ctx.reply(_.global.noPrivateChat);
       }
@@ -41,12 +41,12 @@ export default function (bot: Telegraf) {
       await decideUnMuteUser(ctx, A, B);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/unmute', l });
+      log({ ctx, error, __filename, f: '/unmute', l });
     }
   });
-  // bot.command('/mute', async (ctx) => {
+  // bot.command('mute', async (ctx) => {
   //   try {
-  //     const _ = await lang(ctx);
+  //     const _ = lang(ctx)
   //     if (ctx.chat.type == 'private') {
   //       return ctx.reply(_.global.noPrivateChat);
   //     }
@@ -59,12 +59,12 @@ export default function (bot: Telegraf) {
   //     return setMute(ctx, A, B, arg);
   //   } catch (error) {
   //     const [l] = error.stack.match(/(\d+):(\d+)/);
-  //     errorHandler({ ctx, error, __filename, f: '/mute', l });
+  //    log({ ctx, error, __filename, f: '/mute', l });
   //   }
   // });
-  // bot.command('/unmute', async (ctx) => {
+  // bot.command('unmute', async (ctx) => {
   //   try {
-  //     const _ = await lang(ctx);
+  //     const _ = lang(ctx)
   //     if (ctx.chat.type == 'private') {
   //       return ctx.reply(_.global.noPrivateChat);
   //     }
@@ -77,7 +77,7 @@ export default function (bot: Telegraf) {
   //     return decideUnmute(ctx, A, B, arg);
   //   } catch (error) {
   //     const [l] = error.stack.match(/(\d+):(\d+)/);
-  //     errorHandler({ ctx, error, __filename, f: '/unmute', l });
+  //    log({ ctx, error, __filename, f: '/unmute', l });
   //   }
   // });
 }

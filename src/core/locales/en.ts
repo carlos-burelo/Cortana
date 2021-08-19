@@ -1,7 +1,9 @@
-import { _bot, _owner } from '../../config';
-import { ButtonI, LanguageI } from '../interfaces';
+import { BOT_NAME, BOT_USERNAME, OWNER_USERNAME } from '../../config';
+import { ButtonI } from '../types';
+import { LanguageI } from '../types/locales';
 
 const id = 'Español 🇲🇽';
+
 const startButtons: ButtonI[] = [
   {
     text: '📌 Commandos',
@@ -13,13 +15,14 @@ const startButtons: ButtonI[] = [
   },
   {
     text: '➕ Añadir a un grupo',
-    url: `http://t.me/${_bot.username}?startgroup=true`
+    url: `https://t.me/${BOT_USERNAME}?startgroup=true`
   },
   {
     text: '📄 Documentacion',
-    url: 'http://github.com/carlos-burelo/CortanaTS'
+    url: 'https://github.com/carlos-burelo/CortanaTS'
   }
 ];
+
 export const modules = [
   {
     text: 'Administrador',
@@ -197,8 +200,8 @@ export const modules = [
     content:
       `Comandos en el modulo: Advertencias\n\n` +
       `<b>/warn</b>\n` +
-      `Añade una advertencia al contador del usuario,
-					si el contador llega a (3) el usuario sera baneado\n\n` +
+      `Añade una advertencia al contador del usuario,\n` +
+      `si el contador llega a (3) el usuario sera baneado\n\n` +
       `<b>/warn -info</b>\n` +
       `Retorna los detalles del contador de advertencias del usuario\n\n` +
       `<b>/warn -rm</b>\n` +
@@ -261,12 +264,17 @@ export const modules = [
       `Retorna la ultima compilacion de los firmwares de samsung \n`
   }
 ];
+
 const lang: LanguageI = {
   global: {
     requestApproved: 'Request approved, now Cortana is available un your chat.',
     requestDenied: 'Request denied, unfortunately the terms of use are not met.',
-    pendingRequest: 'Your request will be personally reviewed by my owner, please wait until it is online.',
-    noUsePerms: 'This account does not have access to ' + _bot.first_name + ' you can request access using the /join command',
+    pendingRequest:
+      'Your request will be personally reviewed by my owner, please wait until it is online.',
+    noUsePerms:
+      'This account does not have access to ' +
+      BOT_NAME +
+      ' you can request access using the /join command',
     noReplyMessage: 'Responda al mensaje para continuar.',
     onlyOwner: 'Este comando solo esta disponible para el propietario del bot.',
     preventBot: 'Comando anulado, integridad del bot en riesgo.',
@@ -314,9 +322,9 @@ const lang: LanguageI = {
     is_anonymous: (p) => `${p ? '✅' : '❌'} | *Ser anomimo:* `
   },
   startModule: {
-    message:
-      `Hola mi nombres es ${_bot.first_name}, un bot administrador de grupos y gestor ` +
-      `de informacion desarrollado en typescript por @${_owner.username}.\n` +
+    message: (name) =>
+      `Hola *${name}*, mi nombres es ${BOT_NAME}, soy un bot administrador de grupos y gestor ` +
+      `de informacion desarrollado en typescript por @${OWNER_USERNAME}.\n` +
       `A continuacion le muestro una serie de opciones que actualmente tengo disponibles.\n`,
     buttons: startButtons
   },
@@ -494,6 +502,7 @@ const lang: LanguageI = {
     noUnMuted: (u) => `No se ha podido remover el silencio de ${u}`
   }
 };
+
 const w = {
   ban: 'ban',
   demote: 'demote',

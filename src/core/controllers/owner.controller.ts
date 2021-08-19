@@ -1,13 +1,13 @@
 import { Context } from 'telegraf';
-import { _owner } from '../../config';
-import { db, getDatabases } from '../../database';
-import { ChatUserI, DBModel, SudoI } from '../interfaces';
-import { matchMessage, errorHandler, sendMessage } from '../libs/messages';
+import { OWNER_ID } from '../../config';
+import { getDatabases, main } from '../../database';
+import { ChatUserI, DBModel, SudoI } from '../types';
+import { matchMessage, log, sendMessage } from '../libs/messages';
 import { isSudo, lang } from '../../database';
 
 export async function sendMessageTo(ctx: Context, user: ChatUserI, msg: any, id: number) {
   try {
-    if (user.id == _owner.id) {
+    if (user.id == OWNER_ID) {
       let message = matchMessage(msg);
       await sendMessage({ ctx, msg: message, id });
     }
@@ -17,13 +17,13 @@ export async function sendMessageTo(ctx: Context, user: ChatUserI, msg: any, id:
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'sendMessageTo()', l });
+    log({ ctx, error, __filename, f: 'sendMessageTo()', l });
   }
 }
 
 export async function getGroups(ctx: Context, id: number) {
   try {
-    if (id == _owner.id || isSudo(id)) {
+    if (id == OWNER_ID || isSudo(id)) {
       let dbs: DBModel[] = getDatabases();
       let text = '<b>Groups in db</b>\n\n';
 
@@ -43,14 +43,14 @@ export async function getGroups(ctx: Context, id: number) {
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getGroups()', l });
+    log({ ctx, error, __filename, f: 'getGroups()', l });
   }
 }
 
 export async function getSudos(ctx: Context) {
-  const _ = await lang(ctx);
+  const _ = lang(ctx);
   try {
-    let sudos = db().get('sudos').value();
+    let sudos = main().get('sudos').value();
     if (sudos.length == 0) {
       return ctx.reply(_.ownerModule.noSudos);
     }
@@ -64,13 +64,13 @@ export async function getSudos(ctx: Context) {
     return ctx.replyWithHTML(text);
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getSudos()', l });
+    log({ ctx, error, __filename, f: 'getSudos()', l });
   }
 }
 export async function setSudo(ctx: Context, user: ChatUserI, role: string) {
-  const _ = await lang(ctx);
+  const _ = lang(ctx);
   try {
-    let sudo = db().get('sudos').find({ id: user.id }).value();
+    let sudo = main().get('sudos').find({ id: user.id }).value();
     let sudoI: SudoI = {
       id: user.id,
       first_name: user.first_name,
@@ -78,28 +78,28 @@ export async function setSudo(ctx: Context, user: ChatUserI, role: string) {
       username: user.username
     };
     if (!sudo || sudo == undefined) {
-      db().get('sudos').push(sudoI).write();
+      main().get('sudos').push(sudoI).write();
       return ctx.reply(_.ownerModule.sudoAdd(user.first_name));
     } else {
-      db().get('sudos').find({ id: sudo.id }).assign(sudoI).write();
+      main().get('sudos').find({ id: sudo.id }).assign(sudoI).write();
       return ctx.reply(_.ownerModule.sudoUpdate(user.first_name));
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'setSudo()', l });
+    log({ ctx, error, __filename, f: 'setSudo()', l });
   }
 }
 export async function delSudo(ctx: Context, user: ChatUserI) {
-  const _ = await lang(ctx);
+  const _ = lang(ctx);
   try {
-    let sudo = db().get('sudos').find({ id: user.id }).value();
+    let sudo = main().get('sudos').find({ id: user.id }).value();
     if (!sudo || sudo == undefined) {
       return ctx.reply(_.ownerModule.noSudo(user.first_name));
     }
-    db().get('sudos').remove({ id: user.id }).write();
+    main().get('sudos').remove({ id: user.id }).write();
     return ctx.reply(_.ownerModule.delSudo(user.first_name));
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'delSudo()', l });
+    log({ ctx, error, __filename, f: 'delSudo()', l });
   }
 }

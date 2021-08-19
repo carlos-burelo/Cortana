@@ -2,7 +2,7 @@ import { Context } from 'telegraf';
 import { lang } from '../../database';
 
 export async function getInfo(ctx: Context, res: any): Promise<string> {
-  const { usersModule: _ } = await lang(ctx);
+  const { usersModule: _ } = lang(ctx);
   let Info: string = '';
   if (res.id || res.id !== undefined) {
     Info += _.id(res.id);
@@ -32,7 +32,7 @@ export async function getInfo(ctx: Context, res: any): Promise<string> {
 }
 
 export async function getGroupInfo(ctx: Context, chat: any): Promise<string> {
-  const { usersModule: _ } = await lang(ctx);
+  const { usersModule: _ } = lang(ctx);
   let chatinfo: string =
     _.groupInfo +
     _.id(chat.id) +

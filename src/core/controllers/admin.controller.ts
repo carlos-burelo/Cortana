@@ -2,21 +2,21 @@ import { readdirSync } from 'fs';
 import { resolve } from 'path';
 import { Context } from 'telegraf';
 import { ChatMember } from 'telegraf/typings/core/types/typegram';
-import { rootDir, _bot, _owner } from '../../config';
+import { BOT_ID, OWNER_ID, rootDir } from '../../config';
 import { db, lang } from '../../database';
-import { ChatUserI } from '../interfaces';
-import { errorHandler } from '../libs/messages';
+import { ChatUserI } from '../types';
+import { log } from '../libs/messages';
 
 export async function decidePromote(ctx: Context, A: ChatMember, B: ChatMember) {
   try {
-    const _ = await lang(ctx);
+    const _ = lang(ctx);
     if (B.status == 'creator') {
       return ctx.reply(_.helpers.anyActionCreator('promote'));
     }
-    if (A.status == 'creator' && B.user.id == _bot.id) {
+    if (A.status == 'creator' && B.user.id == BOT_ID) {
       return promoteUser(ctx, A.user, B.user);
     }
-    if (A.user.id == _owner.id) {
+    if (A.user.id == OWNER_ID) {
       return promoteUser(ctx, A.user, B.user);
     }
     if (A.user.id == B.user.id) {
@@ -31,19 +31,19 @@ export async function decidePromote(ctx: Context, A: ChatMember, B: ChatMember) 
     return promoteUser(ctx, A.user, B.user);
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'decidePromote()', l });
+    log({ ctx, error, __filename, f: 'decidePromote()', l });
   }
 }
 export async function decideDemote(ctx: Context, A: ChatMember, B: ChatMember) {
   try {
-    const _ = await lang(ctx);
+    const _ = lang(ctx);
     if (B.status == 'creator') {
       return ctx.reply(_.helpers.anyActionCreator('promote'));
     }
-    if (A.status == 'creator' && B.user.id == _bot.id) {
+    if (A.status == 'creator' && B.user.id == BOT_ID) {
       return promoteUser(ctx, A.user, B.user);
     }
-    if (A.user.id == _owner.id) {
+    if (A.user.id == OWNER_ID) {
       return promoteUser(ctx, A.user, B.user);
     }
     if (A.user.id == B.user.id) {
@@ -58,12 +58,12 @@ export async function decideDemote(ctx: Context, A: ChatMember, B: ChatMember) {
     return promoteUser(ctx, A.user, B.user);
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'decideDemote()', l });
+    log({ ctx, error, __filename, f: 'decideDemote()', l });
   }
 }
 export async function promoteUser(ctx: Context, A: ChatUserI, B: ChatUserI) {
   try {
-    const _ = await lang(ctx);
+    const _ = lang(ctx);
     ctx.promoteChatMember(B.id, {
       can_change_info: true,
       can_delete_messages: true,
@@ -76,12 +76,12 @@ export async function promoteUser(ctx: Context, A: ChatUserI, B: ChatUserI) {
     return ctx.reply(_.helpers.anyActionSuccess('promoted', A.first_name, B.first_name));
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'promoteUser()', l });
+    log({ ctx, error, __filename, f: 'promoteUser()', l });
   }
 }
 export async function demoteUser(ctx: Context, A: ChatUserI, B: ChatUserI) {
   try {
-    const _ = await lang(ctx);
+    const _ = lang(ctx);
     ctx.promoteChatMember(B.id, {
       can_change_info: false,
       can_post_messages: false,
@@ -96,7 +96,7 @@ export async function demoteUser(ctx: Context, A: ChatUserI, B: ChatUserI) {
     return ctx.reply(_.helpers.anyActionSuccess('demote', A.first_name, B.first_name));
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'demoteUser()', l });
+    log({ ctx, error, __filename, f: 'demoteUser()', l });
   }
 }
 export async function promoteMe(ctx: Context) {
@@ -112,14 +112,14 @@ export async function promoteMe(ctx: Context) {
     });
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'promoteMe()', l });
+    log({ ctx, error, __filename, f: 'promoteMe()', l });
   }
 }
 
 // GET ADMIN LIST
 export async function getAdminList(ctx: Context) {
   try {
-    const _ = await lang(ctx);
+    const _ = lang(ctx);
     let admins: ChatMember[] = await ctx.getChatAdministrators();
     let adminlist = `*${_.adminModule.adminList}*\n\n`;
     admins.map((admin) => {
@@ -132,24 +132,24 @@ export async function getAdminList(ctx: Context) {
     return ctx.replyWithMarkdown(adminlist);
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getAdminList()', l });
+    log({ ctx, error, __filename, f: 'getAdminList()', l });
   }
 }
 export async function pinMessage(ctx: Context, message_id: number, arg?: '-s' | string) {
   try {
-    const _ = await lang(ctx);
+    const _ = lang(ctx);
     ctx.pinChatMessage(message_id, {
       disable_notification: arg == '-s' ? true : false
     });
     ctx.reply(_.adminModule.pinSuccess);
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'pinMessage()', l });
+    log({ ctx, error, __filename, f: 'pinMessage()', l });
   }
 }
 export async function unPinMessage(ctx: Context, message_id?: number) {
   try {
-    const _ = await lang(ctx);
+    const _ = lang(ctx);
     if (!message_id) {
       ctx.unpinAllChatMessages();
       return ctx.reply(_.adminModule.unPinAllSuccess);
@@ -159,12 +159,12 @@ export async function unPinMessage(ctx: Context, message_id?: number) {
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'unPinMessage()', l });
+    log({ ctx, error, __filename, f: 'unPinMessage()', l });
   }
 }
 export async function getChatPerms(ctx: Context, p: any, title) {
   try {
-    const { permissions: _ } = await lang(ctx);
+    const { permissions: _ } = lang(ctx);
     let text = `${_.title(title)}\n\n`;
     text += `${_.can_send_messages(p['can_send_messages'])}\n`;
     text += `${_.can_send_media_messages(p['can_send_media_messages'])}\n`;
@@ -177,13 +177,13 @@ export async function getChatPerms(ctx: Context, p: any, title) {
     return ctx.replyWithMarkdown(text);
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getChatPerms()', l });
+    log({ ctx, error, __filename, f: 'getChatPerms()', l });
   }
 }
 export async function getUserPerms(ctx: Context, userId: number) {
   try {
     let p = await ctx.getChatMember(userId);
-    const { permissions: _ } = await lang(ctx);
+    const { permissions: _ } = lang(ctx);
     let text = `${_.title(p.user.first_name)}\n\n`;
     text += `${_.can_be_edited(p['can_send_messages'])}\n`;
     text += `${_.can_change_info(p['can_change_info'])}\n`;
@@ -198,7 +198,7 @@ export async function getUserPerms(ctx: Context, userId: number) {
     return ctx.replyWithMarkdown(text);
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getUserPerms()', l });
+    log({ ctx, error, __filename, f: 'getUserPerms()', l });
   }
 }
 export async function getBackup(ctx: Context) {
@@ -221,12 +221,12 @@ export async function getBackup(ctx: Context) {
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getBackup()', l });
+    log({ ctx, error, __filename, f: 'getBackup()', l });
   }
 }
 export async function getPrefs(ctx: Context) {
   try {
-    const { adminModule: _ } = await lang(ctx);
+    const { adminModule: _ } = lang(ctx);
     let p = db(ctx.chat).get('prefs').value();
     const { title }: any = await ctx.getChat();
     let msg = async (p) => {
@@ -242,6 +242,6 @@ export async function getPrefs(ctx: Context) {
     return ctx.replyWithMarkdown(await msg(p));
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getPrefs()', l });
+    log({ ctx, error, __filename, f: 'getPrefs()', l });
   }
 }

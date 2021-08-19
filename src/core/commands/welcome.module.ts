@@ -5,10 +5,10 @@ import {
   setGreetins,
   welcomeOwner
 } from '../controllers/welcome.controller';
-import { _owner, _bot } from '../../config';
-import { ChatUserI } from '../interfaces';
+import { OWNER_ID, OWNER_NAME } from '../../config';
+import { ChatUserI } from '../types';
 import { lang } from '../../database';
-import { matchMessage, errorHandler } from '../libs/messages';
+import { matchMessage, log } from '../libs/messages';
 
 export default function (bot: Telegraf) {
   bot.on('new_chat_members', async (ctx) => {
@@ -16,18 +16,18 @@ export default function (bot: Telegraf) {
       let {
         message: { new_chat_member: member }
       }: ChatUserI | any = ctx.update;
-      if (member.id == _owner.id) {
-        return welcomeOwner(ctx, _owner);
+      if (member.id == OWNER_ID) {
+        return welcomeOwner(ctx, { first_name: OWNER_NAME, id: OWNER_ID });
       }
       return sendGreetings(ctx, member, 'welcome');
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: 'new_chat_members', l });
+      log({ ctx, error, __filename, f: 'new_chat_members', l });
     }
   });
-  bot.command('/welcome', async (ctx) => {
+  bot.command('welcome', async (ctx) => {
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       if (ctx.chat.type == 'private') {
         return ctx.reply(_.global.noPrivateChat);
       }
@@ -45,7 +45,7 @@ export default function (bot: Telegraf) {
       }
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/welcome', l });
+      log({ ctx, error, __filename, f: '/welcome', l });
     }
   });
   bot.on('left_chat_member', async (ctx) => {
@@ -56,12 +56,12 @@ export default function (bot: Telegraf) {
       return sendGreetings(ctx, member, 'goodbye');
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: 'left_chat_member', l });
+      log({ ctx, error, __filename, f: 'left_chat_member', l });
     }
   });
-  bot.command('/goodbye', async (ctx) => {
+  bot.command('goodbye', async (ctx) => {
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       if (ctx.chat.type == 'private') {
         return ctx.reply(_.global.noPrivateChat);
       }
@@ -79,7 +79,7 @@ export default function (bot: Telegraf) {
       }
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/goodbye', l });
+      log({ ctx, error, __filename, f: '/goodbye', l });
     }
   });
 }

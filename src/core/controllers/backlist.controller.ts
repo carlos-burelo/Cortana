@@ -1,5 +1,5 @@
 import { Context } from 'telegraf';
-import { errorHandler } from '../libs/messages';
+import { log } from '../libs/messages';
 // import DB from '../db/backlist.db'
 
 export async function getBlackList(ctx: Context) {
@@ -8,6 +8,6 @@ export async function getBlackList(ctx: Context) {
     // db.get()
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getBlackList()', l });
+    log({ ctx, error, __filename, f: 'getBlackList()', l });
   }
 }

@@ -3,16 +3,16 @@ import { resolve } from 'path';
 import { unlinkSync } from 'fs';
 import { Context } from 'telegraf';
 import { StickerSet } from 'telegraf/typings/core/types/typegram';
-import { downloadDir, _apis, _bot } from '../../config';
+import { BOT_USERNAME, CURRENCY_API, downloadDir } from '../../config';
 import { lang } from '../../database';
-import { ChatUserI, MsgI } from '../interfaces';
+import { ChatUserI, MsgI } from '../types';
 import { downloadFile, resizeImage } from '../libs/files';
-import { matchMessage, editMessage, errorHandler } from '../libs/messages';
+import { matchMessage, editMessage, log } from '../libs/messages';
 import { createButtons, extractButtons } from '../libs/buttons';
 
 export async function getIdFromFile(ctx: Context | any) {
   try {
-    const _ = await lang(ctx);
+    const _ = lang(ctx);
     let reply = ctx.message.reply_to_message;
     let { content, type } = matchMessage(reply);
     if (type == 'text') {
@@ -22,14 +22,14 @@ export async function getIdFromFile(ctx: Context | any) {
     return ctx.replyWithMarkdown(formated);
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getIdFromId()', l });
+    log({ ctx, error, __filename, f: 'getIdFromId()', l });
   }
 }
 
 export async function getCurrency(ctx: Context, orig: string, dest: string, base: number) {
   try {
     try {
-      const res = await axios.get(_apis.currency({ orig, dest }));
+      const res = await axios.get(CURRENCY_API({ orig, dest }));
       let response: number = res.data['Realtime Currency Exchange Rate']['5. Exchange Rate'];
       let current_date: number = Math.round(response * base);
       ctx.replyWithMarkdown(`${base} ${orig} = ${current_date.toString()} ${dest}`, {
@@ -40,24 +40,25 @@ export async function getCurrency(ctx: Context, orig: string, dest: string, base
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getCurrency()', l });
+    log({ ctx, error, __filename, f: 'getCurrency()', l });
   }
 }
 
 export async function kangSticker(ctx: Context, user: ChatUserI, reply: MsgI, emoji?: string) {
-  const { extrasModule: _ } = await lang(ctx);
+  const { extrasModule: _ } = lang(ctx);
   try {
     let packNumber: number = 1;
-    let packName: string = `${user.first_name}_v${packNumber}_by_${_bot.username}`;
+    let packName: string = `${user.first_name}_v${packNumber}_by_${BOT_USERNAME}`;
     let PackTitle = `${user.first_name} Kang Pack V${packNumber}`;
     let fileId: string = reply.content;
     let maxStickers = 120;
     let existPack: StickerSet;
     let isAnimated: boolean = false;
     try {
-      let pack = await ctx.getStickerSet(packName);
+      // let pack = await ctx.getStickerSet(packName);
+      let pack = await ctx.telegram.getStickerSet(packName);
       if (pack.stickers.length == maxStickers) {
-        packName = `${user.first_name}_v${packNumber++}_by_${_bot.username}`;
+        packName = `${user.first_name}_v${packNumber++}_by_${BOT_USERNAME}`;
       } else {
         existPack = pack;
       }
@@ -119,18 +120,18 @@ export async function kangSticker(ctx: Context, user: ChatUserI, reply: MsgI, em
     await editMessage(msg);
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'kangSticker()', l });
+    log({ ctx, error, __filename, f: 'kangSticker()', l });
   }
 }
 
 export async function deleteSticker(ctx: Context, id: string) {
   try {
-    const _ = await lang(ctx);
+    const _ = lang(ctx);
     await ctx.telegram.deleteStickerFromSet(id);
     return ctx.reply(_.extrasModule.deleteSticker);
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'deleteSticker()', l });
+    log({ ctx, error, __filename, f: 'deleteSticker()', l });
   }
 }
 
@@ -156,6 +157,6 @@ export async function parseMarkdown(ctx: Context, text: string, preview: boolean
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'parseMarkdown()', l });
+    log({ ctx, error, __filename, f: 'parseMarkdown()', l });
   }
 }

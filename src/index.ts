@@ -1,13 +1,14 @@
 import 'dotenv/config';
 import { Telegraf } from 'telegraf';
-import { enviromentConfig } from './app';
+import { BOT_TOKEN, enviroment } from './config';
 import { modules } from './bot';
-const bot = new Telegraf(process.env.TOKEN);
 
 async function init() {
-  enviromentConfig();
+  enviroment();
+  const bot = new Telegraf(BOT_TOKEN);
   modules(bot);
   if (process.env.NODE_ENV === 'production') {
+    console.clear();
     await bot.launch({
       webhook: {
         domain: process.env.URL,
@@ -15,6 +16,7 @@ async function init() {
       }
     });
   } else {
+    console.clear();
     await bot.launch();
   }
   console.clear();

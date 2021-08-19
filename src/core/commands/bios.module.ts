@@ -1,13 +1,13 @@
 import { Telegraf } from 'telegraf';
 import { lang } from '../../database';
 import { decideBio, delBio, getBio } from '../controllers/bios.controller';
-import { BioI } from '../interfaces';
-import { errorHandler } from '../libs/messages';
+import { BioI } from '../types';
+import { log } from '../libs/messages';
 
 export default function (bot: Telegraf) {
-  bot.command('/bio', async (ctx) => {
+  bot.command('bio', async (ctx) => {
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       if (ctx.chat.type == 'private') {
         return ctx.reply(_.global.noPrivateChat);
       }
@@ -23,12 +23,12 @@ export default function (bot: Telegraf) {
       await getBio(ctx, ctx.message.reply_to_message.from);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/bio', l });
+      log({ ctx, error, __filename, f: '/bio', l });
     }
   });
-  bot.command('/setbio', async (ctx) => {
+  bot.command('setbio', async (ctx) => {
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       if (ctx.chat.type == 'private') {
         return ctx.reply(_.global.noPrivateChat);
       }
@@ -49,12 +49,12 @@ export default function (bot: Telegraf) {
       await decideBio(ctx, A, B, Bio);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/setbio', l });
+      log({ ctx, error, __filename, f: '/setbio', l });
     }
   });
-  bot.command('/delbio', async (ctx) => {
+  bot.command('delbio', async (ctx) => {
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       if (ctx.chat.type == 'private') {
         return ctx.reply(_.global.noPrivateChat);
       }
@@ -75,7 +75,7 @@ export default function (bot: Telegraf) {
       await decideBio(ctx, A, B, Bio);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/delbio', l });
+      log({ ctx, error, __filename, f: '/delbio', l });
     }
   });
 }

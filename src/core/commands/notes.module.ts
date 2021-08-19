@@ -1,15 +1,15 @@
 import { Telegraf } from 'telegraf';
 import { addOrUpdateNote, deleteNote, getNote, getNotes } from '../controllers/notes.controller';
-import { MsgI } from '../interfaces';
-import { matchMessage, errorHandler } from '../libs/messages';
+import { MsgI } from '../types';
+import { matchMessage, log } from '../libs/messages';
 
 export default function (bot: Telegraf) {
-  bot.command('/notes', async (ctx) => {
+  bot.command('notes', async (ctx) => {
     try {
       await getNotes(ctx);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/notes', l });
+      log({ ctx, error, __filename, f: '/notes', l });
     }
   });
   bot.hears(/^#[^\s]+/, async (ctx) => {
@@ -23,7 +23,7 @@ export default function (bot: Telegraf) {
       await getNote(ctx, MsgId);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/#note/', l });
+      log({ ctx, error, __filename, f: '/#note/', l });
     }
   });
   bot.command(['/add', '/save'], async (ctx) => {
@@ -65,7 +65,7 @@ export default function (bot: Telegraf) {
       }
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/add|/save', l });
+      log({ ctx, error, __filename, f: '/add|/save', l });
     }
   });
 }

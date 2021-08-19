@@ -1,8 +1,9 @@
 import day from 'dayjs';
 import { Context } from 'telegraf';
-import { Message } from 'telegraf/typings/core/types/typegram';
-import { _bot } from '../../config';
-import { ChatUserI, editMessageI, logErrorI, MsgI, sendMessageI } from '../interfaces';
+import { Message, Update } from 'telegraf/typings/core/types/typegram';
+import { argRegex, BOT_REPO } from '../../config';
+import { ChatUserI, editMessageI, logErrorI, MsgI, sendMessageI } from '../types';
+import { argumentsI, cleanText } from '../types';
 
 /**
  * Iterate over the properties of the object,
@@ -86,6 +87,13 @@ export function matchMessage(message: any, id?: string): MsgI {
     return undefined;
   }
 }
+/**
+ * @param {ChatUserI} variables
+ * @param {string} text
+ * Recibe un mensaje con variables como la siguiente:
+ * `{example}` que seran remplazadas con el objeto
+ * proveniente del context
+ */
 export function parseVars(variables: ChatUserI | any, text: string): string {
   const keys: string[] = Object.keys(variables);
   keys.map((a: string) => {
@@ -93,15 +101,34 @@ export function parseVars(variables: ChatUserI | any, text: string): string {
   });
   return text;
 }
-export function editMessage(msg: editMessageI) {
-  let { ctx, id, text, keyboard, mode } = msg;
-  let id2 = ctx.chat.id;
-  if (!mode) mode = 'Markdown';
-  return ctx.telegram.editMessageText(id2, id, id2.toString(), text, {
+/**
+ * @param {editMessageI} msg
+ * Recibe un objeto que contiene el contexto: `ctx`,
+ * id del mensage: `id`, el mensaje: `text` y los parametros
+ * opcionales como el formato de parsing `mode`, este por
+ * defecto es *`Markdown`* y el `keyboard` que es un conjunto
+ * de botones, estos ultimos 2 son opcionales
+ */
+export function editMessage(
+  msg: editMessageI
+): Promise<true | (Update.Edited & Message.TextMessage)> {
+  let { ctx, id, text, keyboard, mode = 'Markdown' } = msg;
+  let chatId = ctx.chat.id;
+  return ctx.telegram.editMessageText(chatId, id, chatId.toString(), text, {
     reply_markup: keyboard,
     parse_mode: mode
   });
 }
+/**
+ *
+ * @param {sendMessageI} message
+ * @returns {Promise<Message}
+ * Recibe un formato de tipo `sendMessageI`
+ * que contiene el contexto: `ctx`, el mensage `msg`,
+ * el id del chat `id`, por defecto es el chat actual,
+ * y las variables para reemplazar en el message `vars`,
+ * estos 2 ultimos son opcionales
+ */
 export function sendMessage(message: sendMessageI): Promise<Message> {
   const { ctx, msg, id = ctx.chat.id, vars } = message;
   try {
@@ -172,34 +199,106 @@ export function sendMessage(message: sendMessageI): Promise<Message> {
     });
   }
 }
-export function clean(text: string, pattern?: string[] | RegExp): string {
+
+/**
+ * @example
+ * ```ts
+ * console.log(ctx.msg.text)// /example param1 param2 ...etc
+ * let text = cleanText(ctx.msg.text, null, 'array') // ['param1', 'param2']
+ * let text = cleanText(ctx.msg.text, null, 'string') // param1 param2
+ * ```
+ * @param {string} text
+ * cadena de texto con comandos
+ * @param { string[] | RegExp } [pattern]
+ * Expresion regular o arreglo de strings para borrar del texto principal
+ * @param {string} out
+ * formato de salida del comando: `string` o `array`
+ */
+export function cleanText(
+  text: string,
+  pattern: string[] | RegExp = argRegex,
+  out: string = 'string'
+): string | string[] {
   if (pattern) {
     if (pattern instanceof RegExp) {
-      return (text = text.replace(pattern, '').trim());
+      text = text.replace(pattern, '').trim();
     } else {
       pattern.map((i) => {
         text = text.replace(i, '');
       });
-      return text.trim();
+      text = text.trim();
     }
+  }
+  text = text.replace(/\/\w+\s?/g, '').trim();
+  if (out == 'array') {
+    return text.split(' ');
   } else {
-    return (text = text.replace(/\&\w+:?(\w|\S)*\W?|\/\w+\s?/g, '').trim());
+    return text;
   }
 }
-export function getArguments(text: string) {
-  let matched: string[] = text.match(/&\w+:?\w+/g);
-  if (matched == null || matched == undefined) {
+/**
+ *
+ * @param {string} text
+ * @param {RegExp} [regex]
+ * Recibe el texto del mensage y una expresion regular
+ * para extraer el codigo de idioma a travez de el primer
+ * argumento, por defecto la expresion regular es
+ * __`argRegex`__ = `--key:value` que esta entre las constantes
+ * de la configuracion.
+ * @example
+ * `/warn --rm some text`
+ * // extrae el argumento `ES` y retorna ['--rm']
+ */
+export function getArgs(text: string, regex: RegExp = argRegex): string[] {
+  try {
+    let matched: string[] = text.match(regex);
+    if (matched == null || matched == undefined) {
+      return undefined;
+    }
+    return matched;
+  } catch (error) {
     return undefined;
   }
-  return matched;
 }
-export async function errorHandler({ ctx, error, __filename, l, f }: logErrorI) {
+/**
+ *
+ * @param {string} text
+ * @param {RegExp} [regex]
+ * Recibe el texto del mensage y una expresion regular
+ * para extraer el codigo de idioma a travez de el primer
+ * argumento, por defecto la expresion regular es
+ * __`argRegex`__ = `--key:value` que esta entre las constantes
+ * de la configuracion.
+ * @example
+ * `/login --user:Carlos --pass:12345 some text`
+ * // extrae los argumentos y los retorna como un objeto `{user:"Carlos", pass:"12345"}`
+ */
+export function getArgsV2(text: string, pattern: RegExp): argumentsI | undefined {
+  try {
+    let matches = text.match(pattern);
+    if (matches == null) return undefined;
+    let object = {};
+    matches.forEach((i) => {
+      let key = i.split(':')[0].replace(/\W/g, '');
+      let value = i.split(':')[1];
+      if (value.includes('_')) {
+        value = value.replace(/_/g, ' ');
+      }
+      object[key] = value;
+    });
+    return object;
+  } catch (error) {
+    return undefined;
+  }
+}
+
+export async function log({ ctx, error, __filename, l, f }: logErrorI) {
   const name = __filename.split(/[\\/]/).pop();
   let [link] = __filename.match(/\\\w+\\\w+\.\w+\.ts/g);
   link = link.replace(/\\/g, '/');
   let root = '/blob/master/src/core';
   let line = `${l.split(':')[0]}`;
-  let url = `${_bot.repository}${root}${link}\#L${line}`;
+  let url = `${BOT_REPO}${root}${link}\#L${line}`;
   const msg =
     `<b>Error in:</b> <b><a href="${url}">${name}</a></b>\n\n` +
     `<b>Hour:</b> ${day().hour()}:${day().minute()}\n` +

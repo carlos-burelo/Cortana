@@ -1,12 +1,12 @@
 import { Context } from 'telegraf';
 import axios from 'axios';
 import cheerio from 'cheerio';
-import { ButtonI } from '../interfaces';
+import { ButtonI } from '../types';
 import { createButtons } from '../libs/buttons';
 import { lang } from '../../database';
 
 export async function searchModule(ctx: Context, query: string) {
-  const _ = await lang(ctx);
+  const _ = lang(ctx);
   try {
     let header = {
       headers: {
@@ -63,7 +63,7 @@ export async function searchModule(ctx: Context, query: string) {
 }
 
 export async function getModule(ctx: Context, query: string) {
-  const _ = await lang(ctx);
+  const _ = lang(ctx);
   try {
     let header = {
       headers: {

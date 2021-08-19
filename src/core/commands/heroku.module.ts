@@ -2,15 +2,15 @@ import { Telegraf } from 'telegraf';
 import axios from 'axios';
 import Heroku from 'heroku-client';
 import { isAllowed, noAccess, lang } from '../../database';
-import { editMessage, errorHandler } from '../libs/messages';
+import { editMessage, log } from '../libs/messages';
 
 export default function (bot: Telegraf) {
-  bot.command('/usage', async (ctx) => {
+  bot.command('usage', async (ctx) => {
     if (!isAllowed(ctx)) {
       return ctx.replyWithMarkdownV2(noAccess);
     }
     try {
-      const { herokuModule: _, global: $ } = await lang(ctx);
+      const { herokuModule: _, global: $ } = lang(ctx);
       const token = 'f188baef-b272-4cc5-9cf9-1cb5140789e5';
       if (!token || token == undefined) {
         return ctx.reply($.envNotFound(token));
@@ -68,7 +68,7 @@ export default function (bot: Telegraf) {
       return editMessage({ ctx, id, text, mode: 'HTML' });
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/', l });
+      log({ ctx, error, __filename, f: '/', l });
     }
   });
 }

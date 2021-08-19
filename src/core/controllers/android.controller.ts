@@ -1,21 +1,21 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 import { Context } from 'telegraf';
-import { _apis } from '../../config';
+import { MAGISK_API, SAMSUNG_API, TWRP_API } from '../../config';
 import { lang } from '../../database';
-import { ButtonI } from '../interfaces/index';
+import { ButtonI } from '../types';
 import { createButtons } from '../libs/buttons';
-import { errorHandler } from '../libs/messages';
+import { log } from '../libs/messages';
 
 export async function getMagisk(ctx: Context) {
   try {
-    const { androidModule: _ } = await lang(ctx);
+    const { androidModule: _ } = lang(ctx);
     const {
       data: { magisk: stable }
-    } = await axios.get(`${_apis.magisk}/stable.json`);
+    } = await axios.get(`${MAGISK_API}/stable.json`);
     const {
       data: { magisk: canary }
-    } = await axios.get(`${_apis.magisk}/stable.json`);
+    } = await axios.get(`${MAGISK_API}/stable.json`);
     let response =
       _.titleMagisk +
       `_Stable_\n` +
@@ -29,13 +29,13 @@ export async function getMagisk(ctx: Context) {
     return ctx.replyWithMarkdown(response);
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getMagisk()', l });
+    log({ ctx, error, __filename, f: 'getMagisk()', l });
   }
 }
 export async function getFirmware(ctx: Context, model: string, csc: string) {
   try {
-    const { androidModule: _ } = await lang(ctx);
-    let { data } = await axios.get(`${_apis.samsung}/${csc}/SM-${model}/version.xml`);
+    const { androidModule: _ } = lang(ctx);
+    let { data } = await axios.get(`${SAMSUNG_API}/${csc}/SM-${model}/version.xml`);
     const $ = cheerio.load(data);
     let fw: string[] = $('version latest').text().split('/');
     let build: number = parseInt($('version latest').attr('o'));
@@ -68,7 +68,7 @@ export async function getFirmware(ctx: Context, model: string, csc: string) {
     });
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getFirmware()', l });
+    log({ ctx, error, __filename, f: 'getFirmware()', l });
   }
 }
 export function getMask(build: number): string {
@@ -88,8 +88,8 @@ export function getMask(build: number): string {
 }
 export async function getTWRP(ctx: Context, device: string) {
   try {
-    const { androidModule: _ } = await lang(ctx);
-    const { data } = await axios.get(`${_apis.twrp}/${device}/`);
+    const { androidModule: _ } = lang(ctx);
+    const { data } = await axios.get(`${TWRP_API}/${device}/`);
     const $ = cheerio.load(data);
     let res: string = _.titleTwrp(device);
     $('table tr').each((i, e) => {
@@ -101,11 +101,11 @@ export async function getTWRP(ctx: Context, device: string) {
       res += _.name(name);
       res += _.size(size);
       res += _.release(date);
-      res += _.link(`${_apis.twrp}${url}`, name);
+      res += _.link(`${TWRP_API}${url}`, name);
     });
     return ctx.replyWithHTML(res);
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getTWRP()', l });
+    log({ ctx, error, __filename, f: 'getTWRP()', l });
   }
 }

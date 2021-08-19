@@ -1,6 +1,6 @@
 import { Telegraf } from 'telegraf';
 import { ChatMember } from 'typegram';
-import { _owner } from '../../config';
+import { OWNER_ID } from '../../config';
 import {
   decideDemote,
   decidePromote,
@@ -14,15 +14,15 @@ import {
   unPinMessage
 } from '../controllers/admin.controller';
 import { isAllowed, noAccess, lang } from '../../database';
-import { errorHandler } from '../libs/messages';
+import { log } from '../libs/messages';
 
 export default function (bot: Telegraf) {
-  bot.command('/promote', async (ctx) => {
+  bot.command('promote', async (ctx) => {
     if (!isAllowed(ctx)) {
       return ctx.replyWithMarkdownV2(noAccess);
     }
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       if (ctx.chat.type == 'private') {
         return ctx.reply(_.global.noPrivateChat);
       }
@@ -34,15 +34,15 @@ export default function (bot: Telegraf) {
       await decidePromote(ctx, emisor, receptor);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/promote', l });
+      log({ ctx, error, __filename, f: '/promote', l });
     }
   });
-  bot.command('/demote', async (ctx) => {
+  bot.command('demote', async (ctx) => {
     if (!isAllowed(ctx)) {
       return ctx.replyWithMarkdownV2(noAccess);
     }
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       if (ctx.chat.type == 'private') {
         return ctx.reply(_.global.noPrivateChat);
       }
@@ -54,25 +54,25 @@ export default function (bot: Telegraf) {
       await decideDemote(ctx, emisor, receptor);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/demote', l });
+      log({ ctx, error, __filename, f: '/demote', l });
     }
   });
-  bot.command('/promoteme', async (ctx) => {
+  bot.command('promoteme', async (ctx) => {
     if (!isAllowed(ctx)) {
       return ctx.replyWithMarkdownV2(noAccess);
     }
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       if (ctx.chat.type == 'private') {
         return ctx.reply(_.global.noPrivateChat);
       }
-      if (ctx.message.from.id !== _owner.id) {
+      if (ctx.message.from.id !== OWNER_ID) {
         return ctx.reply(_.global.onlyOwner);
       }
       await promoteMe(ctx);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/promoteme', l });
+      log({ ctx, error, __filename, f: '/promoteme', l });
     }
   });
   bot.command(['/admins', '/adminlist'], async (ctx) => {
@@ -80,19 +80,19 @@ export default function (bot: Telegraf) {
       return ctx.replyWithMarkdownV2(noAccess);
     }
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       await getAdminList(ctx);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: "['/admins','/adminlist']", l });
+      log({ ctx, error, __filename, f: "['/admins','/adminlist']", l });
     }
   });
-  bot.command('/link', async (ctx) => {
+  bot.command('link', async (ctx) => {
     if (!isAllowed(ctx)) {
       return ctx.replyWithMarkdownV2(noAccess);
     }
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       if (ctx.chat.type == 'private') {
         return ctx.reply(_.global.noPrivateChat);
       }
@@ -103,15 +103,15 @@ export default function (bot: Telegraf) {
       });
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/link', l });
+      log({ ctx, error, __filename, f: '/link', l });
     }
   });
-  bot.command('/pin', async (ctx) => {
+  bot.command('pin', async (ctx) => {
     if (!isAllowed(ctx)) {
       return ctx.replyWithMarkdownV2(noAccess);
     }
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       let msgId: number;
       let arg: '&s' | string;
       if (ctx.chat.type == 'private') {
@@ -127,15 +127,15 @@ export default function (bot: Telegraf) {
       pinMessage(ctx, msgId, arg);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/pin', l });
+      log({ ctx, error, __filename, f: '/pin', l });
     }
   });
-  bot.command('/unpin', async (ctx) => {
+  bot.command('unpin', async (ctx) => {
     if (!isAllowed(ctx)) {
       return ctx.replyWithMarkdownV2(noAccess);
     }
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       let msgId: number;
       let arg: '&all' | string;
       if (ctx.chat.type == 'private') {
@@ -148,15 +148,15 @@ export default function (bot: Telegraf) {
       await unPinMessage(ctx, msgId);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/unpin', l });
+      log({ ctx, error, __filename, f: '/unpin', l });
     }
   });
-  bot.command('/perms', async (ctx) => {
+  bot.command('perms', async (ctx) => {
     if (!isAllowed(ctx)) {
       return ctx.replyWithMarkdownV2(noAccess);
     }
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       if (ctx.chat.type == 'private') {
         return ctx.reply(_.global.noPrivateChat);
       }
@@ -169,15 +169,15 @@ export default function (bot: Telegraf) {
       }
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/perms', l });
+      log({ ctx, error, __filename, f: '/perms', l });
     }
   });
-  bot.command('/serperms', async (ctx) => {
+  bot.command('serperms', async (ctx) => {
     if (!isAllowed(ctx)) {
       return ctx.replyWithMarkdownV2(noAccess);
     }
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       ctx.setChatPermissions({
         can_add_web_page_previews: true,
         can_change_info: true,
@@ -191,31 +191,31 @@ export default function (bot: Telegraf) {
       return ctx.reply(_.permissions.setPermsSuccess);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/serperms', l });
+      log({ ctx, error, __filename, f: '/serperms', l });
     }
   });
-  bot.command('/backup', async (ctx) => {
+  bot.command('backup', async (ctx) => {
     if (!isAllowed(ctx)) {
       return ctx.replyWithMarkdownV2(noAccess);
     }
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       getBackup(ctx);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/backup', l });
+      log({ ctx, error, __filename, f: '/backup', l });
     }
   });
-  bot.command('/prefs', async (ctx) => {
+  bot.command('prefs', async (ctx) => {
     if (!isAllowed(ctx)) {
       return ctx.replyWithMarkdownV2(noAccess);
     }
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       await getPrefs(ctx);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/prefs', l });
+      log({ ctx, error, __filename, f: '/prefs', l });
     }
   });
 }

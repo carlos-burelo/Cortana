@@ -1,68 +1,64 @@
 {
-    "name": "CortanaTS",
-    "description": "Powerfull telegram bot",
-    "keywords": [
-      "bot",
-      "telegram bot",
-      "typescript telegram bot"
-    ],
-    "website": "https://carlosburelo.tk/",
-    "repository": "https://github.com/carlos-burelo/CortanaTS",
-    "env": {
-      "TOKEN": {
-        "description": "TOKEN BOT FROM BOT FATHER",
-        "required": true
-      },
-      "NODE_ENV": {
-        "description": "TOKEN BOT FROM BOT FATHER",
-        "value":"production",
-        "required": true
-      },
-      "URL": {
-        "description": "your host url from heroku",
-        "value":"https://<your app name>.herokuapp.com",
-        "required": true
-      },
-      "PORT": {
-        "description": "your port from heroku",
-        "value":"3000",
-        "required": true
-      },
-      "CURRENCY": {
-        "description": "Currency api key",
-        "required":true
-      },
-      "CHANELID":{
-        "description": "Your chanel for receive logs",
-        "required":true
-      },
-      "OWNERID":{
-        "description": "Your own id",
-        "required":true
-      },
-      "OWNERUSERNAME":{
-        "description": "Your @username",
-        "required":true
-      },
-      "OWNERNAME":{
-        "description": "Your name",
-        "required":true
-      },
-      "BOTID":{
-        "description": "Your bot id",
-        "required":true
-      },
-      "BOTUSERNAME":{
-        "description": "Your bot @username",
-        "required":true
-      },
-      "BOTNAME":{
-        "description": "Your bot username",
-        "required":true
-      },
-      "BOTREPO":{
-        "description": "Bot repository",
-        "required":true
-      }
+  "name": "CortanaTS",
+  "description": "Powerfull telegram bot",
+  "keywords": ["bot", "telegram bot", "typescript telegram bot"],
+  "website": "https://carlosburelo.me/",
+  "repository": "https://github.com/carlos-burelo/CortanaTS",
+  "env": {
+    "BOT_TOKEN": {
+      "description": "TOKEN BOT FROM BOT FATHER",
+      "required": true
+    },
+    "NODE_ENV": {
+      "description": "TOKEN BOT FROM BOT FATHER",
+      "value": "production",
+      "required": true
+    },
+    "URL": {
+      "description": "your host url from heroku",
+      "value": "https://<your app name>.herokuapp.com",
+      "required": true
+    },
+    "PORT": {
+      "description": "your port from heroku",
+      "value": "3000",
+      "required": true
+    },
+    "CURRENCY_KEY": {
+      "description": "Currency api key",
+      "required": true
+    },
+    "LOG_CHANEL": {
+      "description": "Your chanel for receive logs for example @CortanaLogs",
+      "required": true
+    },
+    "OWNER_ID": {
+      "description": "Your own id",
+      "required": true
+    },
+    "OWNER_USERNAME": {
+      "description": "Your @username",
+      "required": true
+    },
+    "OWNER_NAME": {
+      "description": "Your name",
+      "required": true
+    },
+    "BOT_ID": {
+      "description": "Your bot id",
+      "required": true
+    },
+    "BOT_USERNAME": {
+      "description": "Your bot @username",
+      "required": true
+    },
+    "BOT_NAME": {
+      "description": "Your bot username",
+      "required": true
+    },
+    "BOT_REPO": {
+      "description": "Bot repository",
+      "required": true
     }
   }
+}

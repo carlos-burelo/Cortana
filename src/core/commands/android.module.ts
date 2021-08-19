@@ -1,21 +1,20 @@
-import { _apis } from '../../config';
 import { Telegraf } from 'telegraf';
 import { getTWRP, getFirmware, getMagisk } from '../controllers/android.controller';
 import { lang } from '../../database';
-import { errorHandler } from '../libs/messages';
+import { log } from '../libs/messages';
 
 export default function (bot: Telegraf) {
-  bot.command('/magisk', async (ctx) => {
+  bot.command('magisk', async (ctx) => {
     try {
       await getMagisk(ctx);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/magisk', l });
+      log({ ctx, error, __filename, f: '/magisk', l });
     }
   });
-  bot.command('/fw', async (ctx) => {
+  bot.command('fw', async (ctx) => {
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       let msg: string[] = ctx.update.message.text.split(' ');
       let model: string = msg[1];
       if (!model) {
@@ -31,12 +30,12 @@ export default function (bot: Telegraf) {
       await getFirmware(ctx, model, csc);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/fw', l });
+      log({ ctx, error, __filename, f: '/fw', l });
     }
   });
-  bot.command('/twrp', async (ctx) => {
+  bot.command('twrp', async (ctx) => {
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       let device = ctx.message.text.split(' ')[1];
       if (!device) {
         return ctx.reply(_.androidModule.noModel);
@@ -44,7 +43,7 @@ export default function (bot: Telegraf) {
       await getTWRP(ctx, device);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/twrp', l });
+      log({ ctx, error, __filename, f: '/twrp', l });
     }
   });
 }

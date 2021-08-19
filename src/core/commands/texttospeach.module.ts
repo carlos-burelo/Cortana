@@ -1,9 +1,9 @@
 import { getTTS } from '../controllers/texttospeach.controller';
 import { Telegraf } from 'telegraf';
-import { errorHandler } from '../libs/messages';
+import { log } from '../libs/messages';
 
 export default function (bot: Telegraf) {
-  bot.command('/tts', async (ctx) => {
+  bot.command('tts', async (ctx) => {
     try {
       if (!ctx.message.reply_to_message) {
         let lang: string = ctx.message.text.split(' ')[1];
@@ -40,7 +40,7 @@ export default function (bot: Telegraf) {
       }
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/tts', l });
+      log({ ctx, error, __filename, f: '/tts', l });
     }
   });
 }

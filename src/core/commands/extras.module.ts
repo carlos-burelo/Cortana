@@ -9,24 +9,24 @@ import {
   parseMarkdown
 } from '../controllers/extras.controller';
 import { createButtons, extractButtons } from '../libs/buttons';
-import { matchMessage, errorHandler } from '../libs/messages';
+import { matchMessage, log } from '../libs/messages';
 
 export default function (bot: Telegraf) {
-  bot.command('/getid', async (ctx) => {
+  bot.command('getid', async (ctx) => {
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       if (!ctx.message.reply_to_message) {
         return ctx.reply(_.global.noReplyMessage);
       }
       getIdFromFile(ctx);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/getid', l });
+      log({ ctx, error, __filename, f: '/getid', l });
     }
   });
-  bot.command('/cc', async (ctx) => {
+  bot.command('cc', async (ctx) => {
     try {
-      const { extrasModule: _ } = await lang(ctx);
+      const { extrasModule: _ } = lang(ctx);
       let msg: string[] = ctx.message.text.split(' ');
       let base: number = parseInt(msg[1]);
       if (!base) return ctx.reply(_.noBaseFound);
@@ -38,19 +38,19 @@ export default function (bot: Telegraf) {
       await getCurrency(ctx, dest, orig, base);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/cc', l });
+      log({ ctx, error, __filename, f: '/cc', l });
     }
   });
-  bot.command('/loli', async (ctx) => {
+  bot.command('loli', async (ctx) => {
     try {
       return ctx.replyWithSticker(array_lolis[Math.floor(Math.random() * array_lolis.length)]);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/loli', l });
+      log({ ctx, error, __filename, f: '/loli', l });
     }
   });
-  bot.command('/poll', async (ctx) => {
-    const _ = await lang(ctx);
+  bot.command('poll', async (ctx) => {
+    const _ = lang(ctx);
     if (ctx.chat.type == 'private') {
       return ctx.reply(_.global.noPrivateChat);
     }
@@ -78,12 +78,12 @@ export default function (bot: Telegraf) {
     } catch (error) {
       ctx.reply(_.extrasModule.errorFormatPoll);
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/promote', l });
+      log({ ctx, error, __filename, f: '/promote', l });
     }
   });
-  bot.command('/kang', async (ctx) => {
+  bot.command('kang', async (ctx) => {
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       if (!ctx.message.reply_to_message) {
         return ctx.reply(_.global.noReplyMessage);
       }
@@ -113,10 +113,10 @@ export default function (bot: Telegraf) {
       }
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/kang', l });
+      log({ ctx, error, __filename, f: '/kang', l });
     }
   });
-  bot.command('/md', async (ctx) => {
+  bot.command('md', async (ctx) => {
     try {
       let text: string = ctx.message.text.replace('/md', '').trim();
       if (ctx.message.reply_to_message) {
@@ -128,10 +128,10 @@ export default function (bot: Telegraf) {
       parseMarkdown(ctx, text, preview, cols);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/md', l });
+      log({ ctx, error, __filename, f: '/md', l });
     }
   });
-  bot.command('/html', async (ctx) => {
+  bot.command('html', async (ctx) => {
     try {
       const { text, buttons } = extractButtons(ctx.message.text.replace('/html', '').trim());
       ctx.replyWithHTML(text, {
@@ -139,7 +139,7 @@ export default function (bot: Telegraf) {
       });
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/html', l });
+      log({ ctx, error, __filename, f: '/html', l });
     }
   });
 }

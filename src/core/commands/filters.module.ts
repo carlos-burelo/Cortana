@@ -1,13 +1,13 @@
 import { Telegraf } from 'telegraf';
 import { lang } from '../../database';
 import { getFilter, getFilters, setFilter, stopFilter } from '../controllers/fiters.controller';
-import { FilterI } from '../interfaces';
-import { matchMessage, errorHandler } from '../libs/messages';
+import { FilterI } from '../types';
+import { matchMessage, log } from '../libs/messages';
 
 export default async function (bot: Telegraf) {
-  bot.command('/filter', async (ctx) => {
+  bot.command('filter', async (ctx) => {
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       let word: string[] | string = ctx.message.text.match(/![^\s]+/gi);
       if (!word) {
         ctx.reply(_.filterModule.noFilterKey);
@@ -44,12 +44,12 @@ export default async function (bot: Telegraf) {
       }
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/filter', l });
+      log({ ctx, error, __filename, f: '/filter', l });
     }
   });
-  bot.command('/filterinfo', async (ctx) => {
+  bot.command('filterinfo', async (ctx) => {
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       if (ctx.chat.type == 'private') {
         return ctx.reply(_.global.noPrivateChat);
       }
@@ -57,24 +57,24 @@ export default async function (bot: Telegraf) {
       await getFilter(ctx, filter);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/filterinfo', l });
+      log({ ctx, error, __filename, f: '/filterinfo', l });
     }
   });
-  bot.command('/filters', async (ctx) => {
+  bot.command('filters', async (ctx) => {
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       if (ctx.chat.type == 'private') {
         return ctx.reply(_.global.noPrivateChat);
       }
       await getFilters(ctx);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/filters', l });
+      log({ ctx, error, __filename, f: '/filters', l });
     }
   });
-  bot.command('/stop', async (ctx) => {
+  bot.command('stop', async (ctx) => {
     try {
-      const _ = await lang(ctx);
+      const _ = lang(ctx);
       if (ctx.chat.type == 'private') {
         return ctx.reply(_.global.noPrivateChat);
       }
@@ -82,7 +82,7 @@ export default async function (bot: Telegraf) {
       stopFilter(ctx, filter);
     } catch (error) {
       const [l] = error.stack.match(/(\d+):(\d+)/);
-      errorHandler({ ctx, error, __filename, f: '/stop', l });
+      log({ ctx, error, __filename, f: '/stop', l });
     }
   });
 }

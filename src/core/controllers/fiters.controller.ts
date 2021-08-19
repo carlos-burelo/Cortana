@@ -1,11 +1,11 @@
 import { Context } from 'telegraf';
-import { FilterI } from '../../../src/core/interfaces';
+import { FilterI } from '../types';
 import { db } from '../../database';
 import { lang } from '../../database';
-import { errorHandler } from '../libs/messages';
+import { log } from '../libs/messages';
 
 export async function setFilter(ctx: Context, newFilter: FilterI) {
-  const _ = await lang(ctx);
+  const _ = lang(ctx);
   try {
     let data = db(ctx.chat).get('filters').find({ id: newFilter.id }).value();
     if (data == undefined) {
@@ -14,11 +14,11 @@ export async function setFilter(ctx: Context, newFilter: FilterI) {
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'setFilter()', l });
+    log({ ctx, error, __filename, f: 'setFilter()', l });
   }
 }
 export async function stopFilter(ctx: Context, filter: string) {
-  const _ = await lang(ctx);
+  const _ = lang(ctx);
   try {
     let data = db(ctx.chat).get('filters').find({ id: filter }).value();
     if (data == undefined) {
@@ -29,11 +29,11 @@ export async function stopFilter(ctx: Context, filter: string) {
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'stopFilter()', l });
+    log({ ctx, error, __filename, f: 'stopFilter()', l });
   }
 }
 export async function getFilters(ctx: Context) {
-  const _ = await lang(ctx);
+  const _ = lang(ctx);
   try {
     let filters = db(ctx.chat).get('filters').value();
     let { title }: any = await ctx.getChat();
@@ -48,11 +48,11 @@ export async function getFilters(ctx: Context) {
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getFilters()', l });
+    log({ ctx, error, __filename, f: 'getFilters()', l });
   }
 }
 export async function getFilter(ctx: Context, filter: string) {
-  const _ = await lang(ctx);
+  const _ = lang(ctx);
   try {
     let filters: FilterI[] = db(ctx.chat).get('filters').value();
     let search: FilterI | undefined = filters.find(
@@ -75,13 +75,13 @@ export async function getFilter(ctx: Context, filter: string) {
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'getFilter()', l });
+    log({ ctx, error, __filename, f: 'getFilter()', l });
   }
 }
 export async function handleFilter(ctx: Context) {
   try {
     console.log('works');
-    const _ = await lang(ctx);
+    const _ = lang(ctx);
     if (ctx.chat.type == 'private') {
       return;
     }
@@ -114,6 +114,6 @@ export async function handleFilter(ctx: Context) {
     }
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
-    errorHandler({ ctx, error, __filename, f: 'filterHandler()', l });
+    log({ ctx, error, __filename, f: 'filterHandler()', l });
   }
 }

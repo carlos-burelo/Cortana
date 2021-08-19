@@ -3,7 +3,7 @@ import { Telegraf } from 'telegraf';
 import { lang } from '../../database';
 
 export default function (bot: Telegraf) {
-  bot.command('/info', async (ctx) => {
+  bot.command('info', async (ctx) => {
     if (ctx.chat.type == 'private') {
       if (!ctx.message.reply_to_message) {
         ctx.replyWithHTML(await getInfo(ctx, await ctx.getChat()));
@@ -18,8 +18,8 @@ export default function (bot: Telegraf) {
       }
     }
   });
-  bot.command('/id', async (ctx) => {
-    const { usersModule: _ } = await lang(ctx);
+  bot.command('id', async (ctx) => {
+    const { usersModule: _ } = lang(ctx);
     if (ctx.chat.type == 'private') {
       if (!ctx.message.reply_to_message) {
         ctx.replyWithMarkdown(_.youId(ctx.message.from.id));

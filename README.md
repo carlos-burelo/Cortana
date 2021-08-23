@@ -16,7 +16,7 @@ Modular telegram bot written in typescript and running on NodeJs created with th
 
 <p align="left"><a href="https://heroku.com/deploy?template=https://github.com/carlos-burelo/CortanaTs/tree/master"> <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy" /></a></p>
 
-## Documentadion (soon)
+## Documentation (soon)
 
 ```ts
 import 'dotenv/config';

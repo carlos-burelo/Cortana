@@ -2,8 +2,11 @@
  * @module Typings
  */
 
-import { Context } from 'grammy';
+import { Cortana } from '../../client';
 
+/**
+ * Interface de propiedades globales en todos los esquemas
+ */
 export interface GlobalDB {
   /** Id de la cuenta de telegram*/
   id?: number;
@@ -25,25 +28,49 @@ export interface GlobalDB {
    */
   username?: string;
 }
+/**
+ * Interfaz de propiedades unicas de un usuario
+ */
 export interface UserDB extends GlobalDB {
   /** Nombre del usuario proveniente del contexto*/
   first_name?: string;
 }
+/**
+ * Interfaz de propiedades unicas de un grupo
+ */
 export interface GroupDB extends GlobalDB {
+  /** Titulo de el grupo (nombre de la cuenta)*/
   title?: string;
+  /** Objeto que contiene las reglas del grupo*/
   rules?: RulesI;
+  /** Array de notas y mensajes guardados */
   notes?: MsgI[];
+  /** Array de usuarios con advertencias */
   warns?: WarnI[];
+  /** Array de biografias de los usuarios */
   bios?: BioI[];
+  /** Array de palabras restringidas en el grupo */
   blacklist?: BlackListI[];
+  /** Array de palabras destacadas con respuestas programadas */
   filters?: FilterI[];
+  /** Objetos con la configuracion de distintos parametros */
   prefs?: PrefsI;
 }
+/**
+ * Propiedades de la base de datos principal
+ */
 export interface MainDB {
+  /** Array de superusuarios en la base de datos*/
   sudos: SudoI[];
+  /** Array de usuarios baneados globalmente*/
   gbanned: SudoI[];
+  /** Array de id's de grupos y chats permitidos*/
   whitelist: number[];
 }
+/**
+ * Modelo con las propiedades de todos los
+ * esquemas
+ */
 export interface DBModel extends GroupDB, UserDB {}
 
 // EXTRA DATABASE TYPINGS
@@ -90,6 +117,9 @@ export type KeyI =
   | 'promoted'
   | 'warn';
 
+export type ArgsI = {
+  [key: string]: string | boolean;
+};
 export interface BlackListI {
   word: string[];
 }
@@ -136,6 +166,7 @@ export interface MsgI {
   thumb?: any;
   entities?: any;
 }
+// export type MsgType
 export interface WarnI {
   id: number;
   first_name: string;
@@ -194,7 +225,7 @@ export interface OwnerI {
   username: string;
   first_name: string;
 }
-export interface currencyI {
+export interface CurrencyI {
   orig: string;
   dest: string;
 }
@@ -281,7 +312,7 @@ export interface editMessageI {
   mode?: ParseI;
 }
 export interface sendMessageI {
-  ctx: Context;
+  ctx: Cortana;
   msg: MsgI;
   id?: number;
   vars?: ChatUserI;
@@ -311,4 +342,15 @@ export interface cleanText {
   text: string;
   pattern: string[] | RegExp;
   out: cleanOut;
+}
+
+export interface NoteI {
+  id: number;
+  key: string;
+  type: MsgType;
+  content: string;
+  reply_markup?: any;
+  caption?: any;
+  entities?: any;
+  caption_entities?: any;
 }

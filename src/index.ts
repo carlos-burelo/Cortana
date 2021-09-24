@@ -1,27 +1,17 @@
-import 'dotenv/config';
-import { Telegraf } from 'telegraf';
-import { BOT_TOKEN, enviroment } from './config';
+import { Bot } from 'grammy';
+import { BOT_TOKEN } from './config';
 import { modules } from './bot';
+import { Cortana } from './context';
 
-async function init() {
-  enviroment();
-  const bot = new Telegraf(BOT_TOKEN);
+/**
+ * Start the bot
+ * @return {Promise<void>}
+ */
+export async function start(): Promise<void> {
+  const bot = new Bot(BOT_TOKEN, {
+    ContextConstructor: Cortana
+  });
   modules(bot);
-  if (process.env.NODE_ENV === 'production') {
-    console.clear();
-    await bot.launch({
-      webhook: {
-        domain: process.env.URL,
-        port: parseInt(process.env.PORT || '3000')
-      }
-    });
-  } else {
-    console.clear();
-    await bot.launch();
-  }
-  console.clear();
-  console.log(
-    '[Bot is running]----------------------------------------------------------------------------------'
-  );
+  bot.start();
 }
-init();
+start();

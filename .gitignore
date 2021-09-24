@@ -1,6 +1,5 @@
 node_modules
 .env
 dist
-src/databases
-temp
-documentation
+changes
+src/core/types/temp.d.ts

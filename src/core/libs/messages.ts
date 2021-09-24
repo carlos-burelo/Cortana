@@ -1,6 +1,4 @@
-import day from 'dayjs';
-import { Context } from 'telegraf';
-import { Message, Update } from 'telegraf/typings/core/types/typegram';
+import { Message, Update } from 'grammy/out/platform';
 import { argRegex, BOT_REPO } from '../../config';
 import { ChatUserI, editMessageI, logErrorI, MsgI, sendMessageI } from '../types';
 import { argumentsI, cleanText } from '../types';
@@ -88,11 +86,11 @@ export function matchMessage(message: any, id?: string): MsgI {
   }
 }
 /**
+ * Receive a message with variables like the following:
+ * `{Example}` that will be replaced with the object
+ * from the context
  * @param {ChatUserI} variables
  * @param {string} text
- * Recibe un mensaje con variables como la siguiente:
- * `{example}` que seran remplazadas con el objeto
- * proveniente del context
  */
 export function parseVars(variables: ChatUserI | any, text: string): string {
   const keys: string[] = Object.keys(variables);
@@ -102,12 +100,12 @@ export function parseVars(variables: ChatUserI | any, text: string): string {
   return text;
 }
 /**
+ * Receive an object that contains the context: `CTX`,
+ * message ID: `ID`, the message:` text` and the parameters
+ * optional as the PARSING `Mode` format, this by
+ * defect is * `Markdown` * and the` Keyboard` that is a set
+ * of buttons, these last 2 are optional.
  * @param {editMessageI} msg
- * Recibe un objeto que contiene el contexto: `ctx`,
- * id del mensage: `id`, el mensaje: `text` y los parametros
- * opcionales como el formato de parsing `mode`, este por
- * defecto es *`Markdown`* y el `keyboard` que es un conjunto
- * de botones, estos ultimos 2 son opcionales
  */
 export function editMessage(
   msg: editMessageI
@@ -120,14 +118,13 @@ export function editMessage(
   });
 }
 /**
- *
+ * Receive a "SendMessageI" type format`
+ * containing the context: `ctx`, the message` msg`,
+ * the chat id` id`, by default is the current chat,
+ * and the variables to replace in the Message `Vars`,
+ * these last 2 are optional
  * @param {sendMessageI} message
  * @returns {Promise<Message}
- * Recibe un formato de tipo `sendMessageI`
- * que contiene el contexto: `ctx`, el mensage `msg`,
- * el id del chat `id`, por defecto es el chat actual,
- * y las variables para reemplazar en el message `vars`,
- * estos 2 ultimos son opcionales
  */
 export function sendMessage(message: sendMessageI): Promise<Message> {
   const { ctx, msg, id = ctx.chat.id, vars } = message;
@@ -139,7 +136,7 @@ export function sendMessage(message: sendMessageI): Promise<Message> {
       return ctx.telegram.sendMessage(id, msg.content, {
         entities: msg.entities,
         reply_markup: msg.reply_markup,
-        parse_mode: 'Markdown'
+        ...((!msg.entities || !msg.caption_entities) && { parse_mode: 'Markdown' })
       });
     }
     if (msg.type == 'photo') {
@@ -199,99 +196,6 @@ export function sendMessage(message: sendMessageI): Promise<Message> {
     });
   }
 }
-
-/**
- * @example
- * ```ts
- * console.log(ctx.msg.text)// /example param1 param2 ...etc
- * let text = cleanText(ctx.msg.text, null, 'array') // ['param1', 'param2']
- * let text = cleanText(ctx.msg.text, null, 'string') // param1 param2
- * ```
- * @param {string} text
- * cadena de texto con comandos
- * @param { string[] | RegExp } [pattern]
- * Expresion regular o arreglo de strings para borrar del texto principal
- * @param {string} out
- * formato de salida del comando: `string` o `array`
- */
-export function cleanText(
-  text: string,
-  pattern: string[] | RegExp = argRegex,
-  out: string = 'string'
-): string | string[] {
-  if (pattern) {
-    if (pattern instanceof RegExp) {
-      text = text.replace(pattern, '').trim();
-    } else {
-      pattern.map((i) => {
-        text = text.replace(i, '');
-      });
-      text = text.trim();
-    }
-  }
-  text = text.replace(/\/\w+\s?/g, '').trim();
-  if (out == 'array') {
-    return text.split(' ');
-  } else {
-    return text;
-  }
-}
-/**
- *
- * @param {string} text
- * @param {RegExp} [regex]
- * Recibe el texto del mensage y una expresion regular
- * para extraer el codigo de idioma a travez de el primer
- * argumento, por defecto la expresion regular es
- * __`argRegex`__ = `--key:value` que esta entre las constantes
- * de la configuracion.
- * @example
- * `/warn --rm some text`
- * // extrae el argumento `ES` y retorna ['--rm']
- */
-export function getArgs(text: string, regex: RegExp = argRegex): string[] {
-  try {
-    let matched: string[] = text.match(regex);
-    if (matched == null || matched == undefined) {
-      return undefined;
-    }
-    return matched;
-  } catch (error) {
-    return undefined;
-  }
-}
-/**
- *
- * @param {string} text
- * @param {RegExp} [regex]
- * Recibe el texto del mensage y una expresion regular
- * para extraer el codigo de idioma a travez de el primer
- * argumento, por defecto la expresion regular es
- * __`argRegex`__ = `--key:value` que esta entre las constantes
- * de la configuracion.
- * @example
- * `/login --user:Carlos --pass:12345 some text`
- * // extrae los argumentos y los retorna como un objeto `{user:"Carlos", pass:"12345"}`
- */
-export function getArgsV2(text: string, pattern: RegExp): argumentsI | undefined {
-  try {
-    let matches = text.match(pattern);
-    if (matches == null) return undefined;
-    let object = {};
-    matches.forEach((i) => {
-      let key = i.split(':')[0].replace(/\W/g, '');
-      let value = i.split(':')[1];
-      if (value.includes('_')) {
-        value = value.replace(/_/g, ' ');
-      }
-      object[key] = value;
-    });
-    return object;
-  } catch (error) {
-    return undefined;
-  }
-}
-
 export async function log({ ctx, error, __filename, l, f }: logErrorI) {
   const name = __filename.split(/[\\/]/).pop();
   let [link] = __filename.match(/\\\w+\\\w+\.\w+\.ts/g);
@@ -301,7 +205,6 @@ export async function log({ ctx, error, __filename, l, f }: logErrorI) {
   let url = `${BOT_REPO}${root}${link}\#L${line}`;
   const msg =
     `<b>Error in:</b> <b><a href="${url}">${name}</a></b>\n\n` +
-    `<b>Hour:</b> ${day().hour()}:${day().minute()}\n` +
     `<b>Account:</b> <code>${ctx.chat.id}</code>\n` +
     `<b>Location:</b> ${l}\n` +
     `<b>Function:</b> ${f}\n` +
@@ -311,23 +214,11 @@ export async function log({ ctx, error, __filename, l, f }: logErrorI) {
     disable_web_page_preview: true
   });
 }
-export function getTime(ctx: Context, text: string): number {
-  try {
-    const regex = /\d+[mhd]/gi;
-    const match = text.match(regex);
-    if (match !== null) {
-      const time2 = parseInt(match[0].replace(/\D/, ''));
-      if (match[0].includes('m')) {
-        return ctx.message.date + time2 * 60;
-      }
-      if (match[0].includes('h')) {
-        return ctx.message.date + time2 * 60 * 60;
-      }
-      if (match[0].includes('d')) {
-        return ctx.message.date + time2 * 24 * 60 * 60;
-      } else {
-        return ctx.message.date + time2 * 24 * 60 * 60;
-      }
-    }
-  } catch (error) {}
+export function toCode(text: string) {
+  return `\`\`\`${text}\`\`\``;
+}
+
+export function status(value: boolean): '✅' | '❌' {
+  if (value) return '✅';
+  else return '❌';
 }

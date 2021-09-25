@@ -1,13 +1,13 @@
 input: ./static
 output: ./docs
 url: https://carlosburelo.tk/CortanaTs/
+cname: https://carlosburelo.tk/CortanaTs/
 
 branding:
   # logo: /static/retype-logo.svg
   # logoDark: /static/retype-logo-dark.svg
   title: CortanaTS
   label: Docs
-
 meta:
   title: ' | CortanaTS documentation'
 

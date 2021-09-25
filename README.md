@@ -1,6 +1,6 @@
 ![logo](./banner.jpg)
 
-# Hi, I'm Cortana a bot
+# Hi, I'm CortanaTS bot
 
 Modular telegram bot written in typescript and running on NodeJs created with the purpose of managing groups and providing useful functions for users such as image manipulation and integration with API's of interest to developers or common users.
 

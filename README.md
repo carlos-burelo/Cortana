@@ -1,8 +1,8 @@
-![logo](./docs/banner.jpg)
+![logo](./banner.jpg)
 
 # Hi, I'm Cortana a bot
 
-Modular telegram bot written in typescript and running on NodeJs created with the purpose of managing groups and providing useful functions for users such as image manipulation and integration with apis of interest to developers or common users.
+Modular telegram bot written in typescript and running on NodeJs created with the purpose of managing groups and providing useful functions for users such as image manipulation and integration with API's of interest to developers or common users.
 
 ![Language](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![License](https://img.shields.io/github/license/carlos-burelo/CortanaTs?style=for-the-badge)
@@ -16,34 +16,40 @@ Modular telegram bot written in typescript and running on NodeJs created with th
 
 <p align="left"><a href="https://heroku.com/deploy?template=https://github.com/carlos-burelo/CortanaTs/tree/master"> <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy" /></a></p>
 
-## Documentadion (soon)
+## `Clone repo`
 
-```ts
-import 'dotenv/config';
-import { Telegraf } from 'telegraf';
-import { BOT_TOKEN, enviroment } from './config';
-import { modules } from './bot';
+```bash
+ git clone https://github.com/carlos-burelo/CortanaTS
+```
 
-async function init() {
-  enviroment();
-  const bot = new Telegraf(BOT_TOKEN);
-  modules(bot);
-  if (process.env.NODE_ENV === 'production') {
-    console.clear();
-    await bot.launch({
-      webhook: {
-        domain: process.env.URL,
-        port: parseInt(process.env.PORT || '3000')
-      }
-    });
-  } else {
-    console.clear();
-    await bot.launch();
-  }
-  console.clear();
-  console.log(
-    '[Bot is running]----------------------------------------------------------------------------------'
-  );
-}
-init();
+## `Install dependencies`
+
+```bash
+# using yarn
+cd CortanaTS && yarn
+
+# using npm
+cd CortanaTS && npm install
+```
+
+## `Generating modules and commands using CLI`
+
+`Basic method`
+
+```bash
+node cli --module modulename --command commnandname
+```
+
+`Short method`
+
+```bash
+node cli -m modulename -c commandname
+```
+
+`Example`
+
+```bash
+node cli -m admin -c promote
+# CortanaTS\src\core\modules\admin\index.ts --> Main module
+# CortanaTS\src\core\modules\admin\promote.ts --> Command
 ```

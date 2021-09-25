@@ -2,4 +2,4 @@ node_modules
 .env
 dist
 changes
-src/core/types/temp.d.ts
+markdown

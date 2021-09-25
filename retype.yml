@@ -1,6 +1,6 @@
 input: ./static
 output: ./docs
-url: carlosburelo.tk/CortanaTs
+url: https://carlosburelo.tk/CortanaTs/
 
 branding:
   # logo: /static/retype-logo.svg

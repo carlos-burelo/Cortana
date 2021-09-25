@@ -1,6 +1,6 @@
 import { Cortana } from '../../../context';
 import axios, { AxiosResponse } from 'axios';
-import { BOT_ID, GITHUB_API } from '../../../config';
+import { GITHUB_API } from '../../../config';
 import { log } from '../../libs/messages';
 import { mkBtns } from '../../libs/buttons';
 

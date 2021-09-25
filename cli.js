@@ -12,107 +12,74 @@ program.parse(process.argv);
 const _ = program.opts();
 const localesPath = join(__dirname, 'src', 'core', 'locales');
 const modulesPath = join(__dirname, 'src', 'core', 'modules');
-const moduleIndexPath = (name) => join(__dirname, 'src', 'core', 'modules', name, 'index.ts');
-const modulePath = (name) => join(__dirname, 'src', 'core', 'modules', name);
-const commandPath = (module, command) =>
-  join(__dirname, 'src', 'core', 'modules', module, `${command}.ts`);
-const regexGetContentModule = /Bot<Cortana>\)\s{([^]+)}\s\/\/\s\w+\s\w+/;
+const moduleIndexPath = ($module) => join(__dirname, 'src', 'core', 'modules', $module, 'index.ts');
+const modulePath = ($module) => join(__dirname, 'src', 'core', 'modules', $module);
+const commandPath = ($module, $cmd) =>
+  join(__dirname, 'src', 'core', 'modules', $module, `${$cmd}.ts`);
+const regexGetContentModule = /\>\)\s{([^]+?)}?$/;
+const regexImportIndex = /import\s{[^]+}\sfrom\s["'][^]+["'];/;
 
-/**
- * Create module and command(only exist)
- * @param {string} $module Module name
- * @param {string} [$command] Command name [optional]
- */
-const createModule = ($module) => {
-  // si existe algun comando
+const newModuleTemplate = ($module, $cmd) =>
+  `import { Bot } from 'grammy';\n` +
+  `import { Cortana } from '../../../context';\n` +
+  `${$cmd ? newCmdImport($cmd) : ''}\n` +
+  `export default function ${$module}Module(bot: Bot<Cortana>) {${
+    $cmd ? newCmdTemplate($cmd) : ''
+  }}`;
 
-  if (existsSync(moduleIndexPath($module))) {
-    return console.error(`The ${$module} already exists`);
-  }
-  // Creating module folder and index.ts file
-  mkdirSync(modulePath($module), { recursive: true });
-  writeFileSync(moduleIndexPath($module), indexNewFile($module), { encoding: 'utf-8' });
-};
-/**
- * @param {string} $module Module name
- * @param {string} $command Command name [optional]
- */
-const createCommand = ($module, $command) => {
-  if (!existsSync(moduleIndexPath($module)) || !existsSync(modulePath($module))) {
-    createModule($module);
+const newCmdTemplate = ($cmd) =>
+  `\n\tbot.command('${$cmd}', async (ctx) => {\n` +
+  `\t\tif (ctx.help) return ctx.replyWithMarkdownV2(${$cmd}Help);\n` +
+  `\t\t\treturn await ${$cmd}Cmd(ctx);\n` +
+  `\t});\n`;
+const newCmdImport = ($cmd) => `\nimport { ${$cmd}Cmd, ${$cmd}Help } from './${$cmd}';`;
+
+const newCmdFileTemplate = ($cmd) =>
+  `import { Cortana } from '../../../context';\n` +
+  `import { log } from '../../libs/messages';\n` +
+  `\nexport async function ${$cmd}Cmd(ctx: Cortana) {\n` +
+  `\ttry {\n` +
+  `\t} catch (error) {\n` +
+  `\t\tconst [l] = error.stack.match(/(d+):(d+)/);\n` +
+  `\t\tlog({ ctx, error, __filename, l, f: '${$cmd}Cmd()' });\n` +
+  `\t}\n` +
+  `}\n\n` +
+  `export const ${$cmd}Help = \`Help for *${$cmd}* command\`;`;
+
+function createModule($module, $cmd) {
+  if (!existsSync(moduleIndexPath($module))) {
+    mkdirSync(modulePath($module)); // Creating module folder
+    const data = newModuleTemplate($module, $cmd); // Generating index data
+    writeFileSync(moduleIndexPath($module), data, 'utf-8'); // Creating index data
+    const data2 = newCmdFileTemplate($cmd); // Generating module file data
+    writeFileSync(commandPath($module, $cmd), data2, 'utf-8'); // Creating module file
   } else {
-    const currendData = readFileSync(moduleIndexPath($module), 'utf-8');
-    const match = currendData.match(regexGetContentModule);
-    if (!match || match == null) return console.error('ERROR IN MATCH COMMANDS');
-    const currentsCommands = match[1];
-    if (currentsCommands.length < 10) {
-      const newData = insertInEmptyIndex(currendData, $module, $command);
-      writeFileSync(moduleIndexPath($module), newData, 'utf-8');
-    } else {
-      const newCommands = addNewCommand(currentsCommands, $command);
-      const newData = currendData.replace(currentsCommands, newCommands);
-      writeFileSync(moduleIndexPath($module), newData, 'utf-8');
+    const data = readFileSync(moduleIndexPath($module), 'utf-8');
+    const match = data.match(regexImportIndex);
+    let currentImports;
+    if (match !== null) {
+      currentImports = match[0];
+      currentImports += newCmdImport($cmd);
     }
-    writeFileSync(commandPath($module, $command), commandFileTemplate($command), 'utf-8');
+    if (data.includes(`${$cmd}Cmd`)) {
+      return console.log('The command ', $cmd, ' already exists');
+    }
+    const match2 = data.match(regexGetContentModule);
+    let currentsCommands;
+    if (match2 !== null) {
+      currentsCommands = match2[1].replace(/}\);\n?}/, '});');
+      currentsCommands += newCmdTemplate($cmd);
+      currentsCommands += '\n}';
+    }
+    const newData = data.replace(match[0], currentImports).replace(match2[1], currentsCommands);
+    writeFileSync(moduleIndexPath($module), newData, 'utf-8');
+    writeFileSync(commandPath($module, $cmd), newCmdFileTemplate($cmd), 'utf-8');
   }
-};
-const insertInEmptyIndex = (data, $module, $command) => {
-  const newData = data.replace(
-    empytIndexModule($module),
-    empytIndexTemplate($module, commandTemplate($command))
-  );
-  return newData;
-};
-
-// TEMPLATES
-const indexNewFile = (name) =>
-  `
-import { Bot } from 'grammy';
-import { Cortana } from '../../../context';
-import { helpExist } from '../../libs/messages';
-
-export default function ${name}Module(bot: Bot<Cortana>) {\n
-} // ${name} module
-`;
-const empytIndexTemplate = (name, data) =>
-  `export default function ${name}Module(bot: Bot<Cortana>) {\n
-    ${data}
-} // ${name} module`;
-const empytIndexModule = (name) =>
-  `export default function ${name}Module(bot: Bot<Cortana>) {\n
-} // ${name} module`;
-const commandFileTemplate = (cmd) =>
-  `import { Cortana } from "../../../context";
-import { log } from "../../libs/messages";
-export async function ${cmd}Cmd(ctx: Cortana) {
-    try {
-        return ctx.reply('${cmd} Works');
-    } catch (error) {
-        const [l] = error.stack.match(/(\d+):(\d+)/);
-        log({ctx,error,__filename,l, f:''})
-    }
 }
 
-export const ${cmd}Help = \`Help for *${cmd}* command\`
-`;
-const commandTemplate = (cmd) =>
-  `\nbot.command('${cmd}', async (ctx) => {
-const { ${cmd}Cmd, ${cmd}Help } = await import('./${cmd}');
-    if (helpExist(ctx.msg.text)) return ctx.replyWithMarkdownV2(${cmd}Help);
-    return await ${cmd}Cmd(ctx);
-  });`;
-const addNewCommand = (currents, cmd) =>
-  currents.replace(currents, (currents += commandTemplate(cmd)));
-
-if (_.module && _.cmd) {
-  console.log('Generating command and module ...');
-  return createCommand(_.module, _.cmd);
-}
-if (_.cmd && !_.module) {
+if (!_.cmd || !_.module) {
   return console.error('Error module is missing');
-}
-
-if (_.module) {
+} else {
   console.log('Generating module ....');
   return createModule(_.module, _.cmd);
 }

@@ -1,7 +1,12 @@
 import { Message, Update } from 'grammy/out/platform';
-import { argRegex, BOT_REPO } from '../../config';
-import { ChatUserI, editMessageI, logErrorI, MsgI, sendMessageI } from '../types';
-import { argumentsI, cleanText } from '../types';
+import { BOT_REPO } from '../../config';
+import {
+  ChatUserI,
+  editMessageI,
+  logErrorI,
+  MsgI,
+  sendMessageI
+} from '../types';
 
 /**
  * Iterate over the properties of the object,
@@ -112,7 +117,7 @@ export function editMessage(
 ): Promise<true | (Update.Edited & Message.TextMessage)> {
   let { ctx, id, text, keyboard, mode = 'Markdown' } = msg;
   let chatId = ctx.chat.id;
-  return ctx.telegram.editMessageText(chatId, id, chatId.toString(), text, {
+  return ctx.api.editMessageText(chatId, id, chatId.toString(), text, {
     reply_markup: keyboard,
     parse_mode: mode
   });
@@ -133,21 +138,23 @@ export function sendMessage(message: sendMessageI): Promise<Message> {
       msg.content = parseVars(vars, msg.content);
     }
     if (msg.type == 'text') {
-      return ctx.telegram.sendMessage(id, msg.content, {
+      return ctx.api.sendMessage(id, msg.content, {
         entities: msg.entities,
         reply_markup: msg.reply_markup,
-        ...((!msg.entities || !msg.caption_entities) && { parse_mode: 'Markdown' })
+        ...((!msg.entities || !msg.caption_entities) && {
+          parse_mode: 'Markdown'
+        })
       });
     }
     if (msg.type == 'photo') {
-      return ctx.telegram.sendPhoto(id, msg.content, {
+      return ctx.api.sendPhoto(id, msg.content, {
         caption: msg.caption,
         caption_entities: msg.caption_entities,
         reply_markup: msg.reply_markup
       });
     }
     if (msg.type == 'document') {
-      return ctx.telegram.sendDocument(id, msg.content, {
+      return ctx.api.sendDocument(id, msg.content, {
         reply_markup: msg.reply_markup,
         caption: msg.caption,
         caption_entities: msg.caption_entities,
@@ -155,19 +162,19 @@ export function sendMessage(message: sendMessageI): Promise<Message> {
       });
     }
     if (msg.type == 'sticker') {
-      ctx.telegram.sendSticker(id, msg.content, {
+      ctx.api.sendSticker(id, msg.content, {
         reply_markup: msg.reply_markup
       });
     }
     if (msg.type == 'audio') {
-      return ctx.telegram.sendAudio(id, msg.content, {
+      return ctx.api.sendAudio(id, msg.content, {
         caption: msg.caption,
         caption_entities: msg.caption_entities,
         thumb: msg.thumb
       });
     }
     if (msg.type == 'voice') {
-      return ctx.telegram.sendVideo(id, msg.content, {
+      return ctx.api.sendVideo(id, msg.content, {
         caption: msg.caption,
         caption_entities: msg.caption_entities,
         reply_markup: msg.reply_markup,
@@ -175,7 +182,7 @@ export function sendMessage(message: sendMessageI): Promise<Message> {
       });
     }
     if (msg.type == 'video') {
-      return ctx.telegram.sendVideo(id, msg.content, {
+      return ctx.api.sendVideo(id, msg.content, {
         caption: msg.caption,
         caption_entities: msg.caption_entities,
         reply_markup: msg.reply_markup,
@@ -183,20 +190,32 @@ export function sendMessage(message: sendMessageI): Promise<Message> {
       });
     }
     if (msg.type == 'poll') {
-      return ctx.telegram.sendPoll(id, msg.content, msg.options, msg.args);
+      return ctx.api.sendPoll(id, msg.content, msg.options, msg.args);
     } else {
-      return ctx.telegram.sendMessage(id, msg.content, {
+      return ctx.api.sendMessage(id, msg.content, {
         entities: msg.entities,
         reply_markup: msg.reply_markup
       });
     }
   } catch (error) {
-    return ctx.telegram.sendMessage(id, msg.content, {
+    return ctx.api.sendMessage(id, msg.content, {
       parse_mode: 'Markdown'
     });
   }
 }
-export async function log({ ctx, error, __filename, l, f }: logErrorI) {
+
+/**
+ * Describe your function
+ * @param {logErrorI} error
+ * @return {Promise<Message.TextMessage>}
+ */
+export async function log({
+  ctx,
+  error,
+  __filename,
+  l,
+  f
+}: logErrorI): Promise<Message.TextMessage> {
   const name = __filename.split(/[\\/]/).pop();
   let [link] = __filename.match(/\\\w+\\\w+\.\w+\.ts/g);
   link = link.replace(/\\/g, '/');
@@ -209,15 +228,25 @@ export async function log({ ctx, error, __filename, l, f }: logErrorI) {
     `<b>Location:</b> ${l}\n` +
     `<b>Function:</b> ${f}\n` +
     `<b>Description:</b>\n<code>${error.message}</code>`;
-  return ctx.telegram.sendMessage('@CortanaLogs', msg, {
+  return ctx.api.sendMessage('@CortanaLogs', msg, {
     parse_mode: 'HTML',
     disable_web_page_preview: true
   });
 }
-export function toCode(text: string) {
+/**
+ * Describe your function
+ * @param {string} text
+ * @return {string}
+ */
+export function toCode(text: string): string {
   return `\`\`\`${text}\`\`\``;
 }
 
+/**
+ * Describe your function
+ * @param {boolean} value
+ * @return {'✅' | '❌'}
+ */
 export function status(value: boolean): '✅' | '❌' {
   if (value) return '✅';
   else return '❌';

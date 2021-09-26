@@ -4,7 +4,7 @@ export interface LangI {
   /** Generic multipurpose words*/
   utils: UtilsI;
   global: GlobalI;
-  helpers: any;
+  helpers: HelpersI;
   perms: PermsI;
   admin: any;
   github: GitHubI;
@@ -47,6 +47,19 @@ export interface GlobalI {
   formatError: string;
 }
 
+export interface HelpersI {
+  youDontHavePermissions: (a: ActionsI) => string;
+  youCanNot: (a: ActionsI) => string;
+  canNot: (a: ActionsI) => string;
+  memberToAdmin: (a: ActionsI) => string;
+  adminToAdmin: (a: ActionsI) => string;
+  anyToCreator: (a: ActionsI) => string;
+  success: (a: string, b: ActionsI, c: string) => string;
+  youCantAffectMe: (a: ActionsI) => string;
+  error: (a: string) => string;
+  alreadyIsAdmin: (a: string) => string;
+}
+
 export interface PermsI {
   can_send_messages: (a: boolean) => string;
   can_send_media_messages: (a: boolean) => string;
@@ -74,8 +87,22 @@ export interface GitHubI {
    * @param d Description text
    */
   cloneTemplate: (a: string, b: string, c: string, d: string) => string;
-  repoTemplate: (a: string, b: string, c: string, d: string, e: string, f: string) => string;
-  gitTemplate: (a: string, b: string, c: string, d: string, e: string, f: string) => string;
+  repoTemplate: (
+    a: string,
+    b: string,
+    c: string,
+    d: string,
+    e: string,
+    f: string
+  ) => string;
+  gitTemplate: (
+    a: string,
+    b: string,
+    c: string,
+    d: string,
+    e: string,
+    f: string
+  ) => string;
   userNotFound: string;
   profileNotFound: string;
   repoGetError: string;
@@ -85,3 +112,24 @@ export interface GitHubI {
   owner: string;
   viewProfile: string;
 }
+
+export type ActionsI =
+  | 'ban'
+  | 'demote'
+  | 'promote'
+  | 'mute'
+  | 'muted'
+  | 'banned'
+  | 'unbanned'
+  | 'demoted'
+  | 'promoted'
+  | 'warn'
+  | 'warned';
+export type HelperTypes =
+  | 'adminToAdmin'
+  | 'anyToCreator'
+  | 'youCanNot'
+  | 'memberToAdmin'
+  | 'alreadyIsAdmin'
+  | 'youDontHavePermissions'
+  | 'youCantAffectMe';

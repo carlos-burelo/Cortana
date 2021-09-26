@@ -8,7 +8,8 @@ export async function gitCmd(ctx: Cortana) {
   const { github: _ } = await ctx.lang();
   try {
     const match: string[] = ctx.params;
-    if (!match || match.length <= 0) return ctx.replyWithMarkdown(_.userNotFound);
+    if (!match || match.length <= 0)
+      return ctx.replyWithMarkdown(_.userNotFound);
     const [user]: string[] = match;
     let res: AxiosResponse;
     try {
@@ -17,11 +18,21 @@ export async function gitCmd(ctx: Cortana) {
       return ctx.replyWithMarkdown(_.profileNotFound);
     }
     const i = res.data;
-    const template = _.gitTemplate(i.login, i.name, i.type, i.bio, i.public_repos, i.location);
+    const template = _.gitTemplate(
+      i.login,
+      i.name,
+      i.type,
+      i.bio,
+      i.public_repos,
+      i.location
+    );
     const buttons = [
       { text: _.viewProfile, url: i.html_url },
       ...(i.blog ? [{ text: _.website, url: i.blog }] : []),
-      { text: `${_.repository}s`, url: `https://github.com/${i.login}?tab=repositories` }
+      {
+        text: `${_.repository}s`,
+        url: `https://github.com/${i.login}?tab=repositories`
+      }
     ];
     return ctx.replyWithDocument(i.avatar_url, {
       caption: template,

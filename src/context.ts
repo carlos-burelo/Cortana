@@ -1,14 +1,15 @@
-import { Message, Update, UserFromGetMe } from 'grammy/out/platform';
-import { Other } from 'grammy/out/core/api';
-import { getLang } from './core/sql';
-import { argRegex, BOT_TOKEN, localesDir } from './config';
-import { Api, Context, RawApi } from 'grammy';
-import { resolve as join } from 'path';
-import { ArgsI } from './core/types';
 import axios from 'axios';
+import { Api, Context, RawApi } from 'grammy';
+import { Other } from 'grammy/out/core/api';
+import { Message, Update, UserFromGetMe } from 'grammy/out/platform';
+import { resolve as join } from 'path';
+import { argRegex, BOT_TOKEN, localesDir } from './config';
+import { getLang } from './core/sql';
+import { ArgsI } from './core/types';
 import { LangI } from './core/types/locales';
 
-interface MessageParsed extends Omit<Other<RawApi, 'sendMessage', 'text'>, 'parse_mode'> {}
+interface MessageParsed
+  extends Omit<Other<RawApi, 'sendMessage', 'text'>, 'parse_mode'> {}
 
 /**
  * Class extends from Grammy Context

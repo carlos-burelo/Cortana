@@ -1,6 +1,5 @@
 import { Bot } from 'grammy';
 import { Cortana } from '../../../context';
-// Commands import
 import { gitCmd, gitHelp } from './git';
 import { repoCmd, repoHelp } from './repo';
 import { reposCmd, reposHelp } from './repos';

@@ -104,11 +104,13 @@ export function enviroment(): void {
   // mainConnect();
 }
 /** Magisk Repository URL*/
-export const MAGISK_API: string = 'https://raw.githubusercontent.com/topjohnwu/magisk_files/master';
+export const MAGISK_API: string =
+  'https://raw.githubusercontent.com/topjohnwu/magisk_files/master';
 /** Github Public API*/
 export const GITHUB_API: string = 'https://api.github.com';
 /** Samsung Unofficial Published API*/
-export const SAMSUNG_API: string = 'http://fota-cloud-dn.ospserver.net/firmware';
+export const SAMSUNG_API: string =
+  'http://fota-cloud-dn.ospserver.net/firmware';
 /** Twrp Recovery Official API*/
 export const TWRP_API: string = 'https://eu.dl.twrp.me';
 /** Official API by Alphavantage.co*/

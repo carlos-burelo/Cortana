@@ -2,7 +2,7 @@
  * @module Typings
  */
 
-import { Cortana } from '../../client';
+import { Cortana } from '../../context';
 
 /**
  * Interface de propiedades globales en todos los esquemas
@@ -319,7 +319,7 @@ export interface sendMessageI {
 }
 export interface logErrorI {
   /** Contexto global de la API*/
-  ctx: Context;
+  ctx: Cortana;
   /** Descripcion del error registrado en el catch*/
   error: { message: any };
   /** Nombre del archivo */

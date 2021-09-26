@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { promises, renameSync } from 'fs';
-// import Jimp from 'jimp';
 import sharp from 'sharp';
 import { resolve, basename } from 'path';
 import { downloadDir } from '../../config';
@@ -70,7 +69,6 @@ export async function scaleImage(fileDir: string): Promise<string> {
   newWidth = Math.floor(newWidth);
   newHeigth = Math.floor(newHeigth);
 
-  console.log(`Alto:${newHeigth}\nAncho:${newWidth}`);
   await sharp(resolve(fileDir))
     .resize(newWidth, newHeigth, {
       kernel: sharp.kernel.nearest,

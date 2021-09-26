@@ -40,20 +40,24 @@ export const LANG: LangI = {
     formatError: 'Formato incorrecto'
   },
   helpers: {
-    youCanNot: () => ``,
-    canNot: () => ``,
-    memberToAdmin: () => ``,
-    adminToAdmin: () => ``,
-    anyToCreator: () => ``,
-    success: () => ``,
-    error: () => ``
+    youDontHavePermissions: (a) => ``,
+    youCanNot: (a) => ``,
+    canNot: (a) => ``,
+    memberToAdmin: (a) => ``,
+    adminToAdmin: (a) => ``,
+    anyToCreator: (a) => `No puedes ${actions[a]} al propietario del chat.`,
+    youCantAffectMe: (a) => ``,
+    success: (a, b, c) => `${a} ha sido ${actions[b]} por ${c}`,
+    alreadyIsAdmin: (a: string) => `El usuario ya es administrador`,
+    error: (a) => ``
   },
   perms: {
     can_send_messages: (p) => `${status(p)} | *Mensajes* `,
     can_send_media_messages: (p) => `${status(p)} | *Multimedia* `,
     can_send_polls: (p) => `${status(p)} | *Encuestas* `,
     can_send_other_messages: (p) => `${status(p)} | *Otros mensajes* `,
-    can_add_web_page_previews: (p) => `${status(p)} | *Añadir previsualizacion web* `,
+    can_add_web_page_previews: (p) =>
+      `${status(p)} | *Añadir previsualizacion web* `,
     can_change_info: (p) => `${status(p)} | *Cambiar informacion* `,
     can_invite_users: (p) => `${status(p)} | *Invitar usuarios* `,
     can_pin_messages: (p) => `${status(p)} | *Anclar mensajes* `,
@@ -62,15 +66,16 @@ export const LANG: LangI = {
     can_delete_messages: (p) => `${status(p)} | *Borrar mensages:* `,
     can_restrict_members: (p) => `${status(p)} | *Restringir usuarios:* `,
     can_promote_members: (p) => `${status(p)} | *Promover usuarios:* `,
-    can_manage_voice_chats: (p) => `${status(p)} | *Administrar chats de voz:* `,
+    can_manage_voice_chats: (p) =>
+      `${status(p)} | *Administrar chats de voz:* `,
     is_anonymous: (p) => `${status(p)} | *Ser anomimo:* `
   },
   github: {
-    reposTitle: (a) => `*Repositorios: (${a})*\n\n`,
     userNotFound: 'Porfavor ingrese el nombre de usuario',
     profileNotFound: 'Usuario no encontrado',
     repoGetError: 'Ha ocurrido un error al tratar de obtener el repositorio',
     repoNotFound: 'Ingrese el nombre del repositorio',
+    reposTitle: (a) => `*Repositorios: (${a})*\n\n`,
     cloneTemplate: (a, b, c, d) =>
       `*Repositorio:* \`${a}\`\n` +
       `*Propietario:* \`${b}\`\n` +
@@ -99,5 +104,15 @@ export const LANG: LangI = {
 };
 
 const actions = {
-  demote: `degradar`
+  ban: 'expulsar',
+  demote: 'degradar',
+  promote: 'promover',
+  mute: 'silenciar',
+  muted: 'silenciado',
+  banned: 'expulsado',
+  unbanned: 'desbaneado',
+  demoted: 'degradado',
+  promoted: 'promovido',
+  warn: 'advertir',
+  warned: 'advertido'
 };

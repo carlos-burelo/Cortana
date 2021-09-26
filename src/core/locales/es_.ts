@@ -2,7 +2,7 @@ import { BOT_NAME, BOT_USERNAME, OWNER_USERNAME } from '../../config';
 import { ButtonI } from '../types';
 import { LanguageI } from '../types/temp';
 
-const id = 'Español 🇲🇽';
+const id: string = 'Español 🇲🇽';
 const startButtons: ButtonI[] = [
   {
     text: '📌 Commandos',

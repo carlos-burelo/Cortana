@@ -1,4 +1,8 @@
-import { createClient, PostgrestError, SupabaseClient } from '@supabase/supabase-js';
+import {
+  createClient,
+  PostgrestError,
+  SupabaseClient
+} from '@supabase/supabase-js';
 import { SUPABASE_KEY, SUPABASE_URL } from '../../config';
 
 export const sql: SupabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);

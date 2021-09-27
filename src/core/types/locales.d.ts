@@ -7,12 +7,14 @@ export interface LangI {
   helpers: HelpersI;
   perms: PermsI;
   admin: any;
+  android: AndroidI;
   github: GitHubI;
 }
 
 export interface UtilsI {
   id: (a: string | number) => string;
   title: (a: string) => string;
+  name: (a: string) => string;
   lang: (a: string) => string;
   notes: (a: string) => string;
   type: (a: string) => string;
@@ -111,6 +113,29 @@ export interface GitHubI {
   website: string;
   owner: string;
   viewProfile: string;
+}
+
+export interface AndroidI {
+  noModel: string;
+  noCsc: string;
+  noDeviceFound: string;
+  /**
+   * @param a Model
+   * @param b CSC
+   * @param c PDA
+   * @param d PHONE
+   * @param e Build
+   * @param f Mask
+   */
+  fwTemplate: (
+    a: string,
+    b: string,
+    c: string,
+    d: string,
+    e: number,
+    f: string
+  ) => string;
+  magiskTemplate: (a: any, b: any) => string;
 }
 
 export type ActionsI =

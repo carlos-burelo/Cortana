@@ -12,8 +12,10 @@ program.parse(process.argv);
 const _ = program.opts();
 const localesPath = join(__dirname, 'src', 'core', 'locales');
 const modulesPath = join(__dirname, 'src', 'core', 'modules');
-const moduleIndexPath = ($module) => join(__dirname, 'src', 'core', 'modules', $module, 'index.ts');
-const modulePath = ($module) => join(__dirname, 'src', 'core', 'modules', $module);
+const moduleIndexPath = ($module) =>
+  join(__dirname, 'src', 'core', 'modules', $module, 'index.ts');
+const modulePath = ($module) =>
+  join(__dirname, 'src', 'core', 'modules', $module);
 const commandPath = ($module, $cmd) =>
   join(__dirname, 'src', 'core', 'modules', $module, `${$cmd}.ts`);
 const regexGetContentModule = /\>\)\s{([^]+?)}?$/;
@@ -30,9 +32,10 @@ const newModuleTemplate = ($module, $cmd) =>
 const newCmdTemplate = ($cmd) =>
   `\n\tbot.command('${$cmd}', async (ctx) => {\n` +
   `\t\tif (ctx.help) return ctx.replyWithMarkdownV2(${$cmd}Help);\n` +
-  `\t\t\treturn await ${$cmd}Cmd(ctx);\n` +
+  `\t\treturn await ${$cmd}Cmd(ctx);\n` +
   `\t});\n`;
-const newCmdImport = ($cmd) => `\nimport { ${$cmd}Cmd, ${$cmd}Help } from './${$cmd}';`;
+const newCmdImport = ($cmd) =>
+  `\nimport { ${$cmd}Cmd, ${$cmd}Help } from './${$cmd}';`;
 
 const newCmdFileTemplate = ($cmd) =>
   `import { Cortana } from '../../../context';\n` +
@@ -71,9 +74,15 @@ function createModule($module, $cmd) {
       currentsCommands += newCmdTemplate($cmd);
       currentsCommands += '\n}';
     }
-    const newData = data.replace(match[0], currentImports).replace(match2[1], currentsCommands);
+    const newData = data
+      .replace(match[0], currentImports)
+      .replace(match2[1], currentsCommands);
     writeFileSync(moduleIndexPath($module), newData, 'utf-8');
-    writeFileSync(commandPath($module, $cmd), newCmdFileTemplate($cmd), 'utf-8');
+    writeFileSync(
+      commandPath($module, $cmd),
+      newCmdFileTemplate($cmd),
+      'utf-8'
+    );
   }
 }
 

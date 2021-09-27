@@ -253,7 +253,7 @@ export type ButtonType = 'inline' | 'keyboard';
 export interface ButtonI {
   text: string;
   url?: string;
-  callback?: string;
+  callback_url?: string;
 }
 export interface FileI {
   caption?: any;

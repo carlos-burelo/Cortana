@@ -5,18 +5,19 @@ import { LangI } from '../types/locales';
 export const LANG: LangI = {
   id: `Español 🇲🇽`,
   utils: {
-    id: (a) => `*Id: ${a}*`,
-    title: (a) => `*Titulo:* ${a}`,
-    lang: (a) => `*Idioma:* ${a}`,
-    notes: (a) => `*Notas:* ${a}`,
-    type: (a) => `*Tipo:* ${a}`,
-    first_name: (a) => `*Primer nombre:* ${a}`,
-    last_name: (a) => `*Segundo nombre:* ${a}`,
-    username: (a) => `*Nombre de usuario:* ${a} `,
-    size: (a) => `*Tamaño:* ${a}`,
-    status: (a) => `*Estado:* ${a}`,
-    link: (a, b) => `[${a}](${b})`,
-    release: (a) => `*Lanzamiento:* ${a}`
+    id: (a) => `*Id: ${a}*\n`,
+    name: (a) => `*Nombre: ${a}*\n`,
+    title: (a) => `*Titulo:* ${a}\n`,
+    lang: (a) => `*Idioma:* ${a}\n`,
+    notes: (a) => `*Notas:* ${a}\n`,
+    type: (a) => `*Tipo:* ${a}\n`,
+    first_name: (a) => `*Primer nombre:* ${a}\n`,
+    last_name: (a) => `*Segundo nombre:* ${a}\n`,
+    username: (a) => `*Nombre de usuario:* ${a}\n`,
+    size: (a) => `*Tamaño:* ${a}\n`,
+    status: (a) => `*Estado:* ${a}\n`,
+    link: (a, b) => `[${a}](${b})\n`,
+    release: (a) => `*Lanzamiento:* ${a}\n`
   },
   global: {
     preventSudo: (a) => `${a} tiene protection de superusuario`,
@@ -100,7 +101,27 @@ export const LANG: LangI = {
     owner: 'Propietario',
     viewProfile: 'Ver perfil'
   },
-  admin: {}
+  admin: {},
+  android: {
+    noModel: 'Porfavor coloque algun modelo',
+    noCsc: 'Porfavor coloque alguna region',
+    noDeviceFound: 'Dispositivo no encontrado, revise los datos ingresados.',
+    fwTemplate: (model, csc, pda, phone, build, mask) =>
+      `*Ultimo firmware para SM-${model} ${csc}*\n\n` +
+      `*PDA:*  \`${pda}\`\n` +
+      `*CSC:*  \`${csc}\`\n` +
+      `*Phone:*  \`${phone}\`\n` +
+      `*Android:*  _${build} / ${mask}_\n\n`,
+    magiskTemplate: (stable, canary) =>
+      `_Stable_\n` +
+      `*• Version:* _${stable.version}_(${stable.versionCode})\n` +
+      `*• Apk:* [app-release.apk](${stable.link})\n` +
+      `*• Notas:* [magisk-${stable.versionCode}.md](${stable.note})\n\n` +
+      `_Canary_\n` +
+      `*• Version:* _${canary.version}_(${canary.versionCode})\n` +
+      `*• Apk:* [app-release.apk](${canary.link})\n` +
+      `*• Notas:* [magisk-${canary.versionCode}.md](${canary.note})\n\n`
+  }
 };
 
 const actions = {

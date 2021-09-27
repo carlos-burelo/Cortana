@@ -105,7 +105,7 @@ export function enviroment(): void {
 }
 /** Magisk Repository URL*/
 export const MAGISK_API: string =
-  'https://raw.githubusercontent.com/topjohnwu/magisk_files/master';
+  'https://raw.githubusercontent.com/topjohnwu/magisk-files/master';
 /** Github Public API*/
 export const GITHUB_API: string = 'https://api.github.com';
 /** Samsung Unofficial Published API*/

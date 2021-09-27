@@ -1,3 +1,4 @@
+import { InlineKeyboardButton } from 'grammy/out/platform';
 import { ButtonI } from '../types';
 
 /**
@@ -6,9 +7,12 @@ import { ButtonI } from '../types';
  * @param {number} columns = 2
  * @return {ButtonI[][]}
  */
-export function mkBtns(buttons: ButtonI[], columns: number = 2): ButtonI[][] {
+export function mkBtns(
+  buttons: InlineKeyboardButton[],
+  columns: number = 2
+): InlineKeyboardButton[][] {
   const totalRows = Math.ceil(buttons.length / columns);
-  const rows: ButtonI[][] = [];
+  const rows: InlineKeyboardButton[][] = [];
   for (let i = 0; i < totalRows; i++) {
     const slice = buttons.slice(i * columns, (i + 1) * columns);
     rows.push(slice);

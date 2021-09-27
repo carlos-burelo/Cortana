@@ -12,6 +12,13 @@ export async function start(): Promise<void> {
     ContextConstructor: Cortana
   });
   modules(bot);
+  bot.use(async (ctx, next) => {
+    const isAllow = await ctx.login(ctx.chat.id);
+    console.log(isAllow);
+
+    if (isAllow) return next();
+    else return console.log('DENIED');
+  });
   bot.start();
 }
 start();

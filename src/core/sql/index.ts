@@ -12,11 +12,14 @@ export const sql: SupabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
  * @return {Promise<AccountsI[] | PostgrestError>}
  */
 export async function getAccounts(): Promise<AccountsI[] | PostgrestError> {
-  const { data, error } = await sql.from('accounts').select('*');
+  const { data, error } = await sql.from<AccountsI>('accounts').select('*');
   if (error) return error;
   return data;
 }
-
+export async function validate(): Promise<any[]> {
+  const { data } = await sql.from<AccountsI>('accounts').select('id');
+  return data;
+}
 /**
  * Get lang based in your user ID
  * @param {number} id
@@ -31,6 +34,7 @@ export async function getLang(id: number): Promise<string> {
   if (error) return 'es';
   return data.lang;
 }
+
 export interface AccountsI {
   _id: number;
   created_at: string;

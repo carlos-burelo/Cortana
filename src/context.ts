@@ -4,7 +4,7 @@ import { Other } from 'grammy/out/core/api';
 import { Message, Update, UserFromGetMe } from 'grammy/out/platform';
 import { resolve as join } from 'path';
 import { argRegex, BOT_TOKEN, localesDir } from './config';
-import { getLang } from './core/sql';
+import { getLang, validate } from './core/sql';
 import { ArgsI } from './core/types';
 import { LangI } from './core/types/locales';
 
@@ -28,6 +28,16 @@ export class Cortana extends Context {
    */
   constructor(update: Update, api: Api, me: UserFromGetMe) {
     super(update, api, me);
+  }
+  get params() {
+    return this.msg.text.replace(/\/\w+\s?/, '').split(' ');
+  }
+  get help(): boolean {
+    if (this.params.includes('-help')) {
+      return true;
+    } else {
+      return false;
+    }
   }
   /**
    * Generate message with parse_mode in
@@ -87,17 +97,6 @@ export class Cortana extends Context {
     });
   }
   /**
-   * Get specific language of the
-   * user in DB and return the
-   * local correct module.
-   * @return {Promise<LanguageI>}
-   */
-  async lang(): Promise<LangI> {
-    const lang: string = await getLang(this.chat.id);
-    const { LANG } = await import(join(localesDir, lang));
-    return LANG;
-  }
-  /**
    * Remove the commands and any type
    * of arguments
    * @param {RegExp|string[]} [pattern]
@@ -138,8 +137,16 @@ export class Cortana extends Context {
       return undefined;
     }
   }
-  get params() {
-    return this.msg.text.replace(/\/\w+\s?/, '').split(' ');
+  /**
+   * Get specific language of the
+   * user in DB and return the
+   * local correct module.
+   * @return {Promise<LanguageI>}
+   */
+  async lang(): Promise<LangI> {
+    const lang: string = await getLang(this.chat.id);
+    const { LANG } = await import(join(localesDir, lang));
+    return LANG;
   }
   async getLink(file_id: string) {
     const root = 'https://api.telegram.org/bot';
@@ -149,11 +156,8 @@ export class Cortana extends Context {
     const filePath: string = res.data.result.file_path;
     return `https://api.telegram.org/file/bot${BOT_TOKEN}/${filePath}`;
   }
-  get help(): boolean {
-    if (this.params.includes('-help')) {
-      return true;
-    } else {
-      return false;
-    }
+  async login(id: number) {
+    const users = await validate();
+    return users.find((i) => id === i.id);
   }
 }

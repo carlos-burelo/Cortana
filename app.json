@@ -2,7 +2,7 @@
   "name": "CortanaTS",
   "description": "Powerfull telegram bot",
   "keywords": ["bot", "telegram bot", "typescript telegram bot"],
-  "website": "https://carlosburelo.me/",
+  "website": "https://carlosburelo.tk/",
   "repository": "https://github.com/carlos-burelo/CortanaTS",
   "env": {
     "BOT_TOKEN": {
@@ -25,7 +25,7 @@
       "required": true
     },
     "CURRENCY_KEY": {
-      "description": "Currency api key",
+      "description": "Currency api key from  https://www.alphavantage.co",
       "required": true
     },
     "LOG_CHANEL": {
@@ -37,7 +37,7 @@
       "required": true
     },
     "OWNER_USERNAME": {
-      "description": "Your @username",
+    "description": "Your username without \"@\"",
       "required": true
     },
     "OWNER_NAME": {
@@ -58,6 +58,14 @@
     },
     "BOT_REPO": {
       "description": "Bot repository",
+      "required": true
+    },
+    "SUPABASE_URL": {
+      "description": "Database (supabase) Url endpoint",
+      "required": true
+    },
+    "SUPABASE_KEY": {
+      "description": "Database (supabase) access key",
       "required": true
     }
   }

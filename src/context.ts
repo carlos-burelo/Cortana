@@ -29,22 +29,29 @@ export class Cortana extends Context {
   constructor(update: Update, api: Api, me: UserFromGetMe) {
     super(update, api, me);
   }
-  get params() {
+  /**
+   * Return the params of the message
+   * and remove the command for have
+   * clean text
+   * @return {string[]}
+   */
+  get params(): string[] {
     return this.msg.text.replace(/\/\w+\s?/, '').split(' ');
   }
+  /**
+   * Get message and validate if exist
+   * the '-help' word and return a boolean
+   * @return {boolean}
+   */
   get help(): boolean {
-    if (this.params.includes('-help')) {
-      return true;
-    } else {
-      return false;
-    }
+    return this.params.includes('-help');
   }
   /**
    * Generate message with parse_mode in
    * HTML
    * @param {string} text
-   * @param {MessageParsed} other?
-   * @param {AbortSignal} signal?
+   * @param {MessageParsed} [other]
+   * @param {AbortSignal} [signal]
    * @return {Promise<Message.TextMessage>}
    */
   replyWithHTML(
@@ -116,6 +123,12 @@ export class Cortana extends Context {
     text = text.replace(argRegex, '').trim();
     return text.replace(/\/\w+\s?/g, '').trim();
   }
+  /**
+   * Get the arguments in the message and
+   * return object with the all params and
+   * props.
+   * @return {ArgsI | undefined}
+   */
   args(): ArgsI | undefined {
     try {
       const text = this.msg.text;
@@ -148,7 +161,14 @@ export class Cortana extends Context {
     const { LANG } = await import(join(localesDir, lang));
     return LANG;
   }
-  async getLink(file_id: string) {
+
+  /**
+   * Get link in the telegram server
+   * based in file_id of the (photo,sticker,video,audio)
+   * @param {string} file_id
+   * @return {Promise<string>}
+   */
+  async getLink(file_id: string): Promise<string> {
     const root = 'https://api.telegram.org/bot';
     const method = '/getFile?file_id=';
     const apiUrl: string = root + BOT_TOKEN + method + file_id;
@@ -156,11 +176,24 @@ export class Cortana extends Context {
     const filePath: string = res.data.result.file_path;
     return `https://api.telegram.org/file/bot${BOT_TOKEN}/${filePath}`;
   }
-  async login(id: number) {
+  /**
+   * Evaluate the account_id and return
+   * a object from database or undefined if
+   * id not exist
+   * @param {number} id
+   * @return {Promise<{id:number}| undefined>}
+   */
+  async login(id: number): Promise<{ id: number } | undefined> {
     const users = await validate();
     return users.find((i) => id === i.id);
   }
-  async singIn() {
+
+  /**
+   * Add account private or public of
+   * the database.
+   * @return {Promise<void>}
+   */
+  async singIn(): Promise<void> {
     const data: any = await this.getChat();
     const newAccount: AccountsI = {
       id: data.id,
@@ -172,6 +205,5 @@ export class Cortana extends Context {
       ...(data.invite_link && { invite_link: data.invite_link })
     };
     await createAccount(newAccount);
-    console.log(newAccount);
   }
 }

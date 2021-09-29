@@ -35,14 +35,21 @@ export async function getLang(id: number): Promise<string> {
   return data.lang;
 }
 
+export async function createAccount(account: AccountsI) {
+  try {
+    const { data } = await sql.from<AccountsI>('accounts').insert([account]);
+  } catch (error) {}
+}
+
 export interface AccountsI {
-  _id: number;
-  created_at: string;
-  updated_at: string;
+  _id?: number;
+  created_at?: string;
+  updated_at?: string;
   id: number;
-  first_name: string | null;
-  title: string | null;
+  first_name?: string | null;
+  title?: string | null;
   type: 'private' | 'group' | 'supergroup' | null;
-  username: string | null;
+  username?: string | null;
+  invite_link?: string;
   lang: string | null;
 }

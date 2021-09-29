@@ -4,7 +4,7 @@ import { Other } from 'grammy/out/core/api';
 import { Message, Update, UserFromGetMe } from 'grammy/out/platform';
 import { resolve as join } from 'path';
 import { argRegex, BOT_TOKEN, localesDir } from './config';
-import { getLang, validate } from './core/sql';
+import { AccountsI, createAccount, getLang, validate } from './core/sql';
 import { ArgsI } from './core/types';
 import { LangI } from './core/types/locales';
 
@@ -159,5 +159,19 @@ export class Cortana extends Context {
   async login(id: number) {
     const users = await validate();
     return users.find((i) => id === i.id);
+  }
+  async singIn() {
+    const data: any = await this.getChat();
+    const newAccount: AccountsI = {
+      id: data.id,
+      type: data.type,
+      lang: data.language_code || 'es',
+      ...(data.title && { title: data.title }),
+      ...(data.username && { username: data.usename }),
+      ...(data.first_name && { first_name: data.first_name }),
+      ...(data.invite_link && { invite_link: data.invite_link })
+    };
+    await createAccount(newAccount);
+    console.log(newAccount);
   }
 }

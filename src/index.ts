@@ -17,7 +17,7 @@ export async function start(): Promise<void> {
     console.log(isAllow);
 
     if (isAllow) return next();
-    else return console.log('DENIED');
+    else return ctx.singIn();
   });
   bot.start();
 }

@@ -62,7 +62,7 @@ export class Cortana extends Context {
     return this.api.sendMessage(this.chat.id, text, {
       parse_mode: 'HTML',
       ...other,
-      ...signal
+      ...signal,
     });
   }
   /**
@@ -81,7 +81,7 @@ export class Cortana extends Context {
     return this.api.sendMessage(this.chat.id, text, {
       parse_mode: 'Markdown',
       ...other,
-      ...signal
+      ...signal,
     });
   }
   /**
@@ -100,7 +100,7 @@ export class Cortana extends Context {
     return this.api.sendMessage(this.chat.id, text, {
       parse_mode: 'MarkdownV2',
       ...other,
-      ...signal
+      ...signal,
     });
   }
   /**
@@ -161,7 +161,6 @@ export class Cortana extends Context {
     const { LANG } = await import(join(localesDir, lang));
     return LANG;
   }
-
   /**
    * Get link in the telegram server
    * based in file_id of the (photo,sticker,video,audio)
@@ -187,7 +186,6 @@ export class Cortana extends Context {
     const users = await validate();
     return users.find((i) => id === i.id);
   }
-
   /**
    * Add account private or public of
    * the database.
@@ -202,7 +200,7 @@ export class Cortana extends Context {
       ...(data.title && { title: data.title }),
       ...(data.username && { username: data.usename }),
       ...(data.first_name && { first_name: data.first_name }),
-      ...(data.invite_link && { invite_link: data.invite_link })
+      ...(data.invite_link && { invite_link: data.invite_link }),
     };
     await createAccount(newAccount);
   }

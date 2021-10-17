@@ -67,20 +67,20 @@ export async function fwScrapping(csc: string, model: string) {
     let btns = [
       {
         text: `Samfrew`,
-        url: `https://samfrew.com/model/SM-${model}/region/${csc}/`
+        url: `https://samfrew.com/model/SM-${model}/region/${csc}/`,
       },
       {
         text: `Sammobile`,
-        url: `https://www.sammobile.com/samsung/firmware/SM-${model}/${csc}/`
+        url: `https://www.sammobile.com/samsung/firmware/SM-${model}/${csc}/`,
       },
       {
         text: `Sfirmware`,
-        url: `https://sfirmware.com/samsung-sm-${model.toLowerCase()}/#tab=firmwares`
+        url: `https://sfirmware.com/samsung-sm-${model.toLowerCase()}/#tab=firmwares`,
       },
       {
         text: `SamFw`,
-        url: `https://samfw.com/firmware/SM-${model}/${csc}/`
-      }
+        url: `https://samfw.com/firmware/SM-${model}/${csc}/`,
+      },
     ];
     return {
       pda: fw[0],
@@ -89,7 +89,7 @@ export async function fwScrapping(csc: string, model: string) {
       phone: fw[2],
       build,
       mask,
-      btns
+      btns,
     };
   } catch (error) {
     return undefined;
@@ -107,7 +107,7 @@ export async function twrpScrapping(device: string) {
           name: el.find('a').text(),
           url: el.find('a').attr('href'),
           date: el.find('td:nth-child(2) .filesize small').text(),
-          size: el.find('td:nth-child(3) .filesize small em').text()
+          size: el.find('td:nth-child(3) .filesize small em').text(),
         };
       })
       .toArray();

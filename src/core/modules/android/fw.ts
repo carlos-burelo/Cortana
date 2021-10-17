@@ -21,8 +21,8 @@ export async function fwCmd(ctx: Cortana) {
       _.android.fwTemplate(model, csc, pda, phone, build, mask),
       {
         reply_markup: {
-          inline_keyboard: mkBtns(btns)
-        }
+          inline_keyboard: mkBtns(btns),
+        },
       }
     );
   } catch (error) {

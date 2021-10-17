@@ -16,13 +16,13 @@ Modular telegram bot written in typescript and running on NodeJs created with th
 
 <p align="left"><a href="https://heroku.com/deploy?template=https://github.com/carlos-burelo/CortanaTs/tree/master"> <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy" /></a></p>
 
-## `Clone repo`
+## Clone repo
 
 ```bash
  git clone https://github.com/carlos-burelo/CortanaTS
 ```
 
-## `Install dependencies`
+## Install dependencies
 
 ```bash
 # using yarn
@@ -32,7 +32,7 @@ cd CortanaTS && yarn
 cd CortanaTS && npm install
 ```
 
-## `Generating modules and commands using CLI`
+## Generating modules and commands using CLI
 
 `Basic method`
 

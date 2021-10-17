@@ -9,7 +9,7 @@ import { Cortana } from './context';
  */
 export async function start(): Promise<void> {
   const bot = new Bot(BOT_TOKEN, {
-    ContextConstructor: Cortana
+    ContextConstructor: Cortana,
   });
   modules(bot);
   bot.use(async (ctx, next) => {
@@ -18,5 +18,8 @@ export async function start(): Promise<void> {
     else return ctx.singIn();
   });
   bot.start();
+  bot.catch((i) => {
+    console.log(i);
+  });
 }
 start();

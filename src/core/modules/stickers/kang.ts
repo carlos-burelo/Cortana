@@ -39,11 +39,11 @@ export async function kangCmd(ctx: Cortana) {
     }
     if (existPack) {
       await ctx.api.addStickerToSet(user.id, packName, emoji, {
-        png_sticker: new InputFile(imgScaled)
+        png_sticker: new InputFile(imgScaled),
       });
     } else {
       await ctx.api.createNewStickerSet(user.id, packName, packTitle, emoji, {
-        png_sticker: imgScaled
+        png_sticker: imgScaled,
       });
     }
   } catch (e) {

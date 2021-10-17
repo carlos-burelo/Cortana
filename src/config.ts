@@ -93,7 +93,7 @@ export function enviroment(): void {
     'CURRENCY_KEY',
     'LOG_CHANEL',
     'SUPABASE_URL',
-    'SUPABASE_KEY'
+    'SUPABASE_KEY',
   ];
   enVars.forEach((e) => {
     if (!env[e] || env[e].length === 0) {
@@ -136,5 +136,5 @@ export {
   CURRENCY_KEY,
   LOG_CHANEL,
   SUPABASE_URL,
-  SUPABASE_KEY
+  SUPABASE_KEY,
 };

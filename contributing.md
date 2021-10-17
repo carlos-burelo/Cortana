@@ -16,8 +16,8 @@ Starting by stopping using Spanish for commits, I used Spanish because it was a 
 
 Description....
 
-
 `code example`
+
 ```markdown
 **Contribution type**
 
@@ -30,13 +30,13 @@ Description....
 Description....
 ```
 
-
 ### Commit body template
 
 **File added**
 
-|max edited files|3|
-|-----|---|
+| max edited files | 3   |
+| ---------------- | --- |
+
 ```
 [filename.ext] @username 'commit resume'
 ```

@@ -1,7 +1,7 @@
 import {
   createClient,
   PostgrestError,
-  SupabaseClient
+  SupabaseClient,
 } from '@supabase/supabase-js';
 import { SUPABASE_KEY, SUPABASE_URL } from '../../config';
 

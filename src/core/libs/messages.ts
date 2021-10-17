@@ -5,7 +5,7 @@ import {
   editMessageI,
   logErrorI,
   MsgI,
-  sendMessageI
+  sendMessageI,
 } from '../types';
 
 /**
@@ -119,7 +119,7 @@ export function editMessage(
   let chatId = ctx.chat.id;
   return ctx.api.editMessageText(chatId, id, chatId.toString(), text, {
     reply_markup: keyboard,
-    parse_mode: mode
+    parse_mode: mode,
   });
 }
 /**
@@ -142,15 +142,15 @@ export function sendMessage(message: sendMessageI): Promise<Message> {
         entities: msg.entities,
         reply_markup: msg.reply_markup,
         ...((!msg.entities || !msg.caption_entities) && {
-          parse_mode: 'Markdown'
-        })
+          parse_mode: 'Markdown',
+        }),
       });
     }
     if (msg.type == 'photo') {
       return ctx.api.sendPhoto(id, msg.content, {
         caption: msg.caption,
         caption_entities: msg.caption_entities,
-        reply_markup: msg.reply_markup
+        reply_markup: msg.reply_markup,
       });
     }
     if (msg.type == 'document') {
@@ -158,19 +158,19 @@ export function sendMessage(message: sendMessageI): Promise<Message> {
         reply_markup: msg.reply_markup,
         caption: msg.caption,
         caption_entities: msg.caption_entities,
-        thumb: msg.thumb
+        thumb: msg.thumb,
       });
     }
     if (msg.type == 'sticker') {
       ctx.api.sendSticker(id, msg.content, {
-        reply_markup: msg.reply_markup
+        reply_markup: msg.reply_markup,
       });
     }
     if (msg.type == 'audio') {
       return ctx.api.sendAudio(id, msg.content, {
         caption: msg.caption,
         caption_entities: msg.caption_entities,
-        thumb: msg.thumb
+        thumb: msg.thumb,
       });
     }
     if (msg.type == 'voice') {
@@ -178,7 +178,7 @@ export function sendMessage(message: sendMessageI): Promise<Message> {
         caption: msg.caption,
         caption_entities: msg.caption_entities,
         reply_markup: msg.reply_markup,
-        thumb: msg.thumb
+        thumb: msg.thumb,
       });
     }
     if (msg.type == 'video') {
@@ -186,7 +186,7 @@ export function sendMessage(message: sendMessageI): Promise<Message> {
         caption: msg.caption,
         caption_entities: msg.caption_entities,
         reply_markup: msg.reply_markup,
-        thumb: msg.thumb
+        thumb: msg.thumb,
       });
     }
     if (msg.type == 'poll') {
@@ -194,12 +194,12 @@ export function sendMessage(message: sendMessageI): Promise<Message> {
     } else {
       return ctx.api.sendMessage(id, msg.content, {
         entities: msg.entities,
-        reply_markup: msg.reply_markup
+        reply_markup: msg.reply_markup,
       });
     }
   } catch (error) {
     return ctx.api.sendMessage(id, msg.content, {
-      parse_mode: 'Markdown'
+      parse_mode: 'Markdown',
     });
   }
 }
@@ -214,7 +214,7 @@ export async function log({
   error,
   __filename,
   l,
-  f
+  f,
 }: logErrorI): Promise<Message.TextMessage> {
   const name = __filename.split(/[\\/]/).pop();
   let [link] = __filename.match(/\\\w+\\\w+\.\w+\.ts/g);
@@ -230,7 +230,7 @@ export async function log({
     `<b>Description:</b>\n<code>${error.message}</code>`;
   return ctx.api.sendMessage('@CortanaLogs', msg, {
     parse_mode: 'HTML',
-    disable_web_page_preview: true
+    disable_web_page_preview: true,
   });
 }
 /**

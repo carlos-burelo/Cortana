@@ -37,7 +37,7 @@
       "required": true
     },
     "OWNER_USERNAME": {
-    "description": "Your username without \"@\"",
+      "description": "Your username without \"@\"",
       "required": true
     },
     "OWNER_NAME": {

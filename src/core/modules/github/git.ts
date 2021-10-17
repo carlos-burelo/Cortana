@@ -31,15 +31,15 @@ export async function gitCmd(ctx: Cortana) {
       ...(i.blog ? [{ text: _.website, url: i.blog }] : []),
       {
         text: `${_.repository}s`,
-        url: `https://github.com/${i.login}?tab=repositories`
-      }
+        url: `https://github.com/${i.login}?tab=repositories`,
+      },
     ];
     return ctx.replyWithDocument(i.avatar_url, {
       caption: template,
       parse_mode: 'Markdown',
       reply_markup: {
-        inline_keyboard: mkBtns(buttons, 2)
-      }
+        inline_keyboard: mkBtns(buttons, 2),
+      },
     });
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);

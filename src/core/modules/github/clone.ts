@@ -13,7 +13,7 @@ export async function cloneCmd(ctx: Cortana) {
     const info = _.cloneTemplate(repo, user, i.branch, i.description);
     ctx.replyWithDocument(i.download, {
       caption: info,
-      parse_mode: 'Markdown'
+      parse_mode: 'Markdown',
     });
   } catch (error) {
     const { github: _ } = await ctx.lang();

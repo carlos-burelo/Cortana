@@ -1,3 +1,5 @@
+import { InlineKeyboardButton } from 'grammy';
+
 export interface LangI {
   /** Language ID */
   id: string;
@@ -9,9 +11,13 @@ export interface LangI {
   admin: any;
   android: AndroidI;
   github: GitHubI;
+  start: StartI;
+  help: HelpI;
+  modules: ModuleI[];
 }
 
 export interface UtilsI {
+  backBtn: any[];
   id: (a: string | number) => string;
   title: (a: string) => string;
   name: (a: string) => string;
@@ -80,6 +86,18 @@ export interface PermsI {
   is_anonymous: (a: boolean) => string;
 }
 
+export interface HelpI {
+  msg: string;
+}
+
+export interface ModuleI {
+  text: string;
+  callback_data: string;
+  content: string;
+}
+
+// MODULES
+
 export interface GitHubI {
   reposTitle: (a: string) => string;
   /**
@@ -136,6 +154,11 @@ export interface AndroidI {
     f: string
   ) => string;
   magiskTemplate: (a: any, b: any) => string;
+}
+
+export interface StartI {
+  msg: (a: string) => string;
+  btns: InlineKeyboardButton[];
 }
 
 export type ActionsI =

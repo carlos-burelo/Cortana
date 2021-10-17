@@ -28,14 +28,14 @@ export async function repoCmd(ctx: Cortana) {
     const buttons = [
       { text: _.repository, url: i.html_url },
       ...(i.homepage ? [{ text: _.website, url: i.homepage }] : []),
-      { text: _.owner, url: i.owner.html_url }
+      { text: _.owner, url: i.owner.html_url },
     ];
     return ctx.replyWithDocument(i.owner.avatar_url, {
       caption: template,
       parse_mode: 'Markdown',
       reply_markup: {
-        inline_keyboard: mkBtns(buttons, 2)
-      }
+        inline_keyboard: mkBtns(buttons, 2),
+      },
     });
   } catch (error) {
     const [l] = error.stack.match(/(d+):(d+)/);

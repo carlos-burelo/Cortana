@@ -14,9 +14,8 @@ export default function androidModule(bot: Bot<Cortana>) {
     return await twrpCmd(ctx);
   });
 
-	bot.command('magisk', async (ctx) => {
-		if (ctx.help) return ctx.replyWithMarkdownV2(magiskHelp);
-		return await magiskCmd(ctx);
-	});
-
+  bot.command('magisk', async (ctx) => {
+    if (ctx.help) return ctx.replyWithMarkdownV2(magiskHelp);
+    return await magiskCmd(ctx);
+  });
 }

@@ -41,7 +41,7 @@ export async function resizeImage(fileDir: string): Promise<string> {
     .resize(512, 512, {
       kernel: sharp.kernel.nearest,
       fit: 'contain',
-      background: { r: 255, g: 255, b: 255, alpha: 0 }
+      background: { r: 255, g: 255, b: 255, alpha: 0 },
     })
     .toFile(imgScaled);
   return imgScaled;
@@ -73,7 +73,7 @@ export async function scaleImage(fileDir: string): Promise<string> {
     .resize(newWidth, newHeigth, {
       kernel: sharp.kernel.nearest,
       fit: 'contain',
-      background: { r: 255, g: 255, b: 255, alpha: 0 }
+      background: { r: 255, g: 255, b: 255, alpha: 0 },
     })
     .toFile(imgScaled);
   return imgScaled;

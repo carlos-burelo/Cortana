@@ -7,10 +7,10 @@ export async function magiskCmd(ctx: Cortana) {
   try {
     const _ = await ctx.lang();
     const {
-      data: { magisk: s }
+      data: { magisk: s },
     } = await axios.get(`${MAGISK_API}/stable.json`);
     const {
-      data: { magisk: c }
+      data: { magisk: c },
     } = await axios.get(`${MAGISK_API}/canary.json`);
     const message = _.android.magiskTemplate(s, c);
     return ctx.replyWithMarkdown(message);

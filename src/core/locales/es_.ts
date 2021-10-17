@@ -6,20 +6,20 @@ const id: string = 'Español 🇲🇽';
 const startButtons: ButtonI[] = [
   {
     text: '📌 Commandos',
-    callback: 'help'
+    callback: 'help',
   },
   {
     text: '🇲🇽 Idiomas',
-    callback: 'setLanguage'
+    callback: 'setLanguage',
   },
   {
     text: '➕ Añadir a un grupo',
-    url: `http://t.me/${BOT_USERNAME}?startgroup=true`
+    url: `http://t.me/${BOT_USERNAME}?startgroup=true`,
   },
   {
     text: '📄 Documentacion',
-    url: 'http://github.com/carlos-burelo/CortanaTS'
-  }
+    url: 'http://github.com/carlos-burelo/CortanaTS',
+  },
 ];
 export const modules = [
   {
@@ -42,7 +42,7 @@ export const modules = [
       `<b>/pin (replymessage) | (message)</b>\n` +
       `Ancla una nota al chat\n\n` +
       `<b>/unpin -all</b>\n` +
-      `Desancla la nota actual o todas las notas.\n\n`
+      `Desancla la nota actual o todas las notas.\n\n`,
   },
   {
     text: 'Propietario',
@@ -59,7 +59,7 @@ export const modules = [
       `<b>/sudo (replymessage)</b>\n` +
       `Promueve a un usuario a sudo\n\n` +
       `<b>/eco (message)</b>\n` +
-      `Envia un mensage a todos los grupos en la base de datos\n`
+      `Envia un mensage a todos los grupos en la base de datos\n`,
   },
   {
     text: 'Antiflood',
@@ -75,12 +75,14 @@ export const modules = [
 					<a href="tg://user?id=123456789">inline mention of a user</a>
 					<code>inline fixed-width code</code>
 					<pre>pre-formatted fixed-width code block</pre>
-					<pre><code class="language-python">pre-formatted fixed-width code block written in the Python programming language</code></pre>\n`
+					<pre><code class="language-python">pre-formatted fixed-width code block written in the Python programming language</code></pre>\n`,
   },
   {
     text: 'Antispam',
     callback: 'help_antispam',
-    content: `Comandos en el modulo: AntiSpam\n\n` + `MODULO NO DISPONIBLE POR AHORA \n`
+    content:
+      `Comandos en el modulo: AntiSpam\n\n` +
+      `MODULO NO DISPONIBLE POR AHORA \n`,
   },
   {
     text: 'Baneos',
@@ -92,7 +94,7 @@ export const modules = [
       `<b>/unban (replymessage)</b>\n` +
       `Remueve el ban al usuario\n\n` +
       `<b>/setban (replymessage)</b>\n` +
-      `Establece un mensaje para mostrar durante el baneo\n\n`
+      `Establece un mensaje para mostrar durante el baneo\n\n`,
   },
   {
     text: 'Bios',
@@ -106,12 +108,14 @@ export const modules = [
       `<b>/bio (replymessage) -rm</b>\n` +
       `Elimina la biogradia del usuario\n\n` +
       `<b>/info (replymessage)</b>\n` +
-      `Obtiene la informacion de un usuario\n\n`
+      `Obtiene la informacion de un usuario\n\n`,
   },
   {
     text: 'Lista negra',
     callback: 'help_black_list',
-    content: `Comandos en el modulo: BlackList\n\n` + `MODULO NO DISPONIBLE POR AHORA \n`
+    content:
+      `Comandos en el modulo: BlackList\n\n` +
+      `MODULO NO DISPONIBLE POR AHORA \n`,
   },
   {
     text: 'Github',
@@ -125,7 +129,7 @@ export const modules = [
       `<b>/clone (user) (repo) | (url)</b>\n` +
       `Descarga el repositorio con parametros o una url valida\n\n` +
       `<b>/repo (user) (repo)</b>\n` +
-      `Obtiene un repositorio en especifico\n\n`
+      `Obtiene un repositorio en especifico\n\n`,
   },
   {
     text: 'Extras',
@@ -139,12 +143,14 @@ export const modules = [
       `Retorna una loli\n\n` +
       `<b>/poll (question) "1", "2"</b>\n` +
       `❓: <code>/poll (are you ok?) "yes" "no"</code>\n` +
-      `Retorna una encuesta publica de respuestas multiples.\n\n`
+      `Retorna una encuesta publica de respuestas multiples.\n\n`,
   },
   {
     text: 'Silencio',
     callback: 'help_mute',
-    content: `Comandos en el modulo: Silencio\n\n` + `MODULO NO DISPONIBLE POR AHORA \n`
+    content:
+      `Comandos en el modulo: Silencio\n\n` +
+      `MODULO NO DISPONIBLE POR AHORA \n`,
   },
   {
     text: 'Notas',
@@ -156,12 +162,13 @@ export const modules = [
       `<b>/add | /save  (replymessage) | (message)</b>\n` +
       `Agrega una nota a la base de datos\n\n` +
       `<b>#notename -rm</b>\n` +
-      `Obtiene una nota en especifico o borra la nota con el atributo "-rm"\n\n`
+      `Obtiene una nota en especifico o borra la nota con el atributo "-rm"\n\n`,
   },
   {
     text: 'Reglas',
     callback: 'help_rules',
-    content: `Comandos en el modulo: Reglas\n\n` + `MODULO NO DISPONIBLE POR AHORA \n`
+    content:
+      `Comandos en el modulo: Reglas\n\n` + `MODULO NO DISPONIBLE POR AHORA \n`,
   },
   {
     text: 'Stickers',
@@ -171,7 +178,7 @@ export const modules = [
       `<b>/stickerid (replymessage)</b>\n` +
       `Retorna el Id del sticker al que se responde\n\n` +
       `<b>/kang (replymessage)</b>\n` +
-      `Añade como un sticker la imagen o sticker enviado, a su propio StickerPack\n`
+      `Añade como un sticker la imagen o sticker enviado, a su propio StickerPack\n`,
   },
   {
     text: 'Traductor',
@@ -180,7 +187,7 @@ export const modules = [
       `Comandos en el modulo: Traductor\n\n` +
       `<b>/tr (lang) (text) | (replymessage)</b>\n` +
       `Retorna la traduccion del texto escrito o el mensage respondido\n` +
-      `❓: <code>/tr es Hello World</code>\n`
+      `❓: <code>/tr es Hello World</code>\n`,
   },
   {
     text: 'Usuarios',
@@ -190,7 +197,7 @@ export const modules = [
       `<b>/info (replymessage)</b>\n` +
       `Retorna la informacion del usuario o grupo\n\n` +
       `/id (replymessage)\n` +
-      `Retorna solo el id del usuario|grupo\n`
+      `Retorna solo el id del usuario|grupo\n`,
   },
   {
     text: 'Advertencias',
@@ -203,7 +210,7 @@ export const modules = [
       `<b>/warn -info</b>\n` +
       `Retorna los detalles del contador de advertencias del usuario\n\n` +
       `<b>/warn -rm</b>\n` +
-      `Borra una advertencia del contador del usuario\n`
+      `Borra una advertencia del contador del usuario\n`,
   },
   {
     text: 'Bienvenidas',
@@ -221,7 +228,7 @@ export const modules = [
       `<b>/goodbye off | on</b>\n` +
       `Activa/desactiva las despedidas en el chat \n\n` +
       `<b>/setgoodbye</b>\n` +
-      `Establece una despedida personalizada \n`
+      `Establece una despedida personalizada \n`,
   },
   {
     text: 'NPM',
@@ -231,7 +238,7 @@ export const modules = [
       `<b>/npm (packagename)</b>\n` +
       `Retorna informacion del paquete solicitado.\n\n` +
       `<b>/npm ? (packagename)</b>\n` +
-      `Hace una busqueda y retorna las coincidencias del paquete solicitado.\n`
+      `Hace una busqueda y retorna las coincidencias del paquete solicitado.\n`,
   },
   {
     text: 'Node',
@@ -239,7 +246,7 @@ export const modules = [
     content:
       `Comandos en el modulo: Node\n\n` +
       `<b>/os</b>\n` +
-      `Retorna informacion sobre el entorno donde se ejecuta el bot.\n\n`
+      `Retorna informacion sobre el entorno donde se ejecuta el bot.\n\n`,
   },
   {
     text: 'Texto a voz',
@@ -247,7 +254,7 @@ export const modules = [
     content:
       `Comandos en el modulo: Text to speach\n\n` +
       `<b>/tss (lang) (text) | (replymessage)</b>\n` +
-      `Retorna un audio en el lenguaje solicidato \n`
+      `Retorna un audio en el lenguaje solicidato \n`,
   },
   {
     text: 'Android',
@@ -259,13 +266,14 @@ export const modules = [
       `<b>/twrp (device)</b>\n` +
       `Retorna las compilaciones de twrp para el dispositivo solicitado.\n\n` +
       `<b>/fw (model) (csc)</b>\n` +
-      `Retorna la ultima compilacion de los firmwares de samsung \n`
-  }
+      `Retorna la ultima compilacion de los firmwares de samsung \n`,
+  },
 ];
 const lang: LanguageI = {
   global: {
     requestApproved: 'Request approved, now Cortana is available un your chat.',
-    requestDenied: 'Request denied, unfortunately the terms of use are not met.',
+    requestDenied:
+      'Request denied, unfortunately the terms of use are not met.',
     pendingRequest:
       'Your request will be personally reviewed by my owner, please wait until it is online.',
     noUsePerms:
@@ -284,9 +292,11 @@ const lang: LanguageI = {
     argsNotFound: 'Argumento(s) no encontrado(s)',
     formatError: 'Formato incorrecto',
     preventSudo: (N) => `${N} tiene protection de superusuario`,
-    setLanguageSucces: (L) => `Language set to  ${L == 'es' ? id : 'English 🇺🇸'}`,
-    sameLanguage: (L) => `El lenguaje ya esta en  ${L == 'es' ? id : 'English 🇺🇸'}`,
-    envNotFound: (env) => `Variable de entorno ${env} no definida`
+    setLanguageSucces: (L) =>
+      `Language set to  ${L == 'es' ? id : 'English 🇺🇸'}`,
+    sameLanguage: (L) =>
+      `El lenguaje ya esta en  ${L == 'es' ? id : 'English 🇺🇸'}`,
+    envNotFound: (env) => `Variable de entorno ${env} no definida`,
   },
   helpers: {
     anyActionSuccess: (i, A, B) => `${B} ha sido ${w[i]} por ${A}`,
@@ -296,7 +306,7 @@ const lang: LanguageI = {
     anyActionOwner: (i) => `No puedes ${w[i]} a mi propietario`,
     noYourAutoAction: (i) => `No te puedes auto${w[i]}`,
     noAutoAction: (i) => `No puedo auto${w[i]}me`,
-    actionError: (i) => `Ha ocurrido un error al intentar ${w[i]} al usuario`
+    actionError: (i) => `Ha ocurrido un error al intentar ${w[i]} al usuario`,
   },
   permissions: {
     setPermsSuccess: 'Permisos establecidos',
@@ -306,7 +316,8 @@ const lang: LanguageI = {
     can_send_media_messages: (p) => `${p ? '✅' : '❌'} | *Multimedia* `,
     can_send_polls: (p) => `${p ? '✅' : '❌'} | *Encuestas* `,
     can_send_other_messages: (p) => `${p ? '✅' : '❌'} | *Otros mensajes* `,
-    can_add_web_page_previews: (p) => `${p ? '✅' : '❌'} | *Añadir previsualizacion web* `,
+    can_add_web_page_previews: (p) =>
+      `${p ? '✅' : '❌'} | *Añadir previsualizacion web* `,
     can_change_info: (p) => `${p ? '✅' : '❌'} | *Cambiar informacion* `,
     can_invite_users: (p) => `${p ? '✅' : '❌'} | *Invitar usuarios* `,
     can_pin_messages: (p) => `${p ? '✅' : '❌'} | *Anclar mensajes* `,
@@ -315,15 +326,16 @@ const lang: LanguageI = {
     can_delete_messages: (p) => `${p ? '✅' : '❌'} | *Borrar mensages:* `,
     can_restrict_members: (p) => `${p ? '✅' : '❌'} | *Restringir usuarios:* `,
     can_promote_members: (p) => `${p ? '✅' : '❌'} | *Promover usuarios:* `,
-    can_manage_voice_chats: (p) => `${p ? '✅' : '❌'} | *Administrar chats de voz:* `,
-    is_anonymous: (p) => `${p ? '✅' : '❌'} | *Ser anomimo:* `
+    can_manage_voice_chats: (p) =>
+      `${p ? '✅' : '❌'} | *Administrar chats de voz:* `,
+    is_anonymous: (p) => `${p ? '✅' : '❌'} | *Ser anomimo:* `,
   },
   startModule: {
     message: (name) =>
       `Hola *${name}*, mi nombres es ${BOT_NAME}, soy un bot administrador de grupos y gestor ` +
       `de informacion desarrollado en typescript por @${OWNER_USERNAME}.\n` +
       `A continuacion le muestro una serie de opciones que actualmente tengo disponibles.\n`,
-    buttons: startButtons
+    buttons: startButtons,
   },
   adminModule: {
     adminList: `Lista de adminstradores`,
@@ -337,7 +349,7 @@ const lang: LanguageI = {
     prefTitle: (pref) => `\nPreferences in ${pref}`,
     stat: (s) => `*Status:* \`${s}\`\t\t|\t\t`,
     type: (t) => `*Type:* \`${t}\`\n`,
-    sanction: (s) => `*Sanction:* \`${s}\`\n`
+    sanction: (s) => `*Sanction:* \`${s}\`\n`,
   },
   androidModule: {
     noModel: 'Porfavor coloque algun modelo',
@@ -348,31 +360,31 @@ const lang: LanguageI = {
     name: (a) => `*Nombre:* ${a}\n`,
     size: (a) => `*Tamaño:* ${a}\n`,
     release: (a) => `*Lanzamiento:* ${a}\n`,
-    link: (url, name) => `[${name}](${url})\n\n`
+    link: (url, name) => `[${name}](${url})\n\n`,
   },
   banModule: {
     unBanSuccess: 'El baneo ha sido removido',
-    setBanSuccess: 'Mensaje de baneo establecido'
+    setBanSuccess: 'Mensaje de baneo establecido',
   },
   nodeModule: {
     cmdError: 'Porfavor escriba un comando para proseguir',
     cmdDenied: 'El comando incluye acciones no permitidas',
     limitResponse: 'La respuesta supera el limite de caracteres permitidos.',
     invalidUrl: 'La url proporcionada no es valida.',
-    noUrl: 'Escriba alguna Url.'
+    noUrl: 'Escriba alguna Url.',
   },
   bioModule: {
     notFound: (name) => `${name} no cuenta con una biografia`,
     setBioSuccess: 'Biografia establecida satisfactoriamente',
     updateBioSuccess: 'Biografia actualizada satisfactoriamente',
     deleteBioSuccess: 'Biografia eliminada satisfactoriamente',
-    emptyBiography: `Biografía vacía, agregue al menos 2 caracteres.`
+    emptyBiography: `Biografía vacía, agregue al menos 2 caracteres.`,
   },
   helpModule: {
     modules: modules,
     message:
       `Aqui te presento algunos de los modulos que actualmente tengo disponibles.\n` +
-      `Puedes acceder a los modulos usando\n\n/help <modulename>`
+      `Puedes acceder a los modulos usando\n\n/help <modulename>`,
   },
   herokuModule: {
     title: 'Uso de Dynos este mes',
@@ -382,8 +394,8 @@ const lang: LanguageI = {
     process: [
       '`Obteniendo informacion de la cuenta...`',
       '`Conectando a heroku...`',
-      '`Obteniendo infomacion del projecto...`'
-    ]
+      '`Obteniendo infomacion del projecto...`',
+    ],
   },
   notesModule: {
     noteNotFound: 'La nota no existe.',
@@ -393,7 +405,7 @@ const lang: LanguageI = {
     updateNote: (note) => `\`#${note}\` se ha actualizado.`,
     noteAdded: (note) => `\`#${note}\` se ha añadido a las *notas*`,
     deleteNote: (note) => `_#${note}_ se ha eliminado de las *notas*`,
-    noteSuggest: '\nPara obtener use: `#name`'
+    noteSuggest: '\nPara obtener use: `#name`',
   },
   warnModule: {
     reason: 'Razon?...',
@@ -408,26 +420,27 @@ const lang: LanguageI = {
       `*Razones:*\n`,
     warnRemoved: '1 advertencia removida.',
     allWarnsRemoved: 'Todas las advertencias fueron removidas',
-    noWarns: (name) => `${name} no cuenta con advertencias.`
+    noWarns: (name) => `${name} no cuenta con advertencias.`,
   },
   filterModule: {
     noFilterKey: 'Establezca una palabra para el filtro',
     setRespFilter: 'Establezca respuestas para el filtro',
     filterSaved: (id) => `\`${id}\` ha sido añadido a los *filtros*`,
-    noFoundFilter: (filter) => `El filtro \`${filter}\` no existe en mi base de datos`,
+    noFoundFilter: (filter) =>
+      `El filtro \`${filter}\` no existe en mi base de datos`,
     removedFilter: (filter) => `El filtro: \`${filter}\` fue removido`,
     title: (title) => `Filtros en *${title}*\n\n`,
     noFiltersFound: `No ahy filtros en este chat`,
     filterDesc: (filter) => `Descripcion del *filtro*: \`${filter}\` \n\n`,
     type: (type) => `*Tipo:*  _${type}_\n`,
-    resp: `*Respuestas:* \n`
+    resp: `*Respuestas:* \n`,
   },
   githubModule: {
     noUserFound: 'Ingrese el nombre del usuario',
     noRepoFound: 'Ingrese el nombre del repositorio',
     reposTitle: (a) => `*Repositorios: (${a})*\n\n`,
     profileNotFound: 'Usuario no encontrado',
-    repoGetError: 'Ha ocurrido un error al tratar de obtener el repositorio'
+    repoGetError: 'Ha ocurrido un error al tratar de obtener el repositorio',
   },
   extrasModule: {
     noBaseFound: 'Escriba un valor base',
@@ -443,13 +456,15 @@ const lang: LanguageI = {
       '`Obteniendo url...`',
       '`Descargando archivo...`',
       '`Procesando imagen...`',
-      '`Agregando al paquete...`'
+      '`Agregando al paquete...`',
     ],
     errorCreatePack: '`Hubo un error al crear el paquete`',
     errorAddPack: '`Hubo un error al añadir el sticker al paquete`',
-    finish: (name) => `Sticker añadido satisfactoriamente [aqui](t.me/addstickers/${name})`,
+    finish: (name) =>
+      `Sticker añadido satisfactoriamente [aqui](t.me/addstickers/${name})`,
     deleteSticker: 'Sticker eliminado satisfactoriamente',
-    tgsFormatError: 'Por el momento no tengo compatibilidad con stickers animados.'
+    tgsFormatError:
+      'Por el momento no tengo compatibilidad con stickers animados.',
   },
   ownerModule: {
     invalidID: 'El ID no es valido',
@@ -457,25 +472,27 @@ const lang: LanguageI = {
     sudoAdd: (sudo) => `${sudo} ha sido añadido a los sudos.`,
     sudoUpdate: (sudo) => `Se han actualizado loa valores de ${sudo}.`,
     delSudo: (sudo) => `${sudo} ha sido eliminado de los sudos`,
-    noSudo: (sudo) => `${sudo} no es un sudo.`
+    noSudo: (sudo) => `${sudo} no es un sudo.`,
   },
   npmModule: {
     titleSearch: 'Principales modulos npm encontrados',
-    title: (query) => `Informacion del modulo ${query}`
+    title: (query) => `Informacion del modulo ${query}`,
   },
   welcomeModule: {
     ownerProcess: [
       'Bienvenido propietario',
       'Estableciedndo permisos...',
       'Error al establecer permisos.',
-      'Permisos establecidos correctamente.'
+      'Permisos establecidos correctamente.',
     ],
     prefRepeat: (a) => `El valor ya esta establecido en ${a}`,
     prefSuccess: (a) =>
-      `Preferencias de ${a == 'welcome' ? 'bienvenida' : 'despedida'} establecidas.`
+      `Preferencias de ${
+        a == 'welcome' ? 'bienvenida' : 'despedida'
+      } establecidas.`,
   },
   trasnlatorModule: {
-    limit: 'El mensaje sobrepasa el limite de caracteres permitido (200)'
+    limit: 'El mensaje sobrepasa el limite de caracteres permitido (200)',
   },
   usersModule: {
     youId: (id) => `Tu ID es: \`${id}\``,
@@ -493,12 +510,13 @@ const lang: LanguageI = {
     groupInfo: '<b>Informacion de grupo</b>\n\n',
     userInfo: '<b>Informacion de usuario</b>\n\n',
     title: (title) => `<b>Titulo:</b> <i>${title}</i>\n`,
-    inviteLink: (link, name) => `<b>Link de invitacion:</b> <a href="${link}">@${name}</a>\n`
+    inviteLink: (link, name) =>
+      `<b>Link de invitacion:</b> <a href="${link}">@${name}</a>\n`,
   },
   muteModule: {
     unMuted: (u) => `${u} ahora puede volver a hablar`,
-    noUnMuted: (u) => `No se ha podido remover el silencio de ${u}`
-  }
+    noUnMuted: (u) => `No se ha podido remover el silencio de ${u}`,
+  },
 };
 const w = {
   ban: 'ban',
@@ -509,6 +527,6 @@ const w = {
   unbanned: 'unbannned',
   demoted: 'demoted',
   promoted: 'promoted',
-  warn: 'warn'
+  warn: 'warn',
 };
 export default lang;

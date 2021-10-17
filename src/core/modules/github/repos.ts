@@ -21,7 +21,7 @@ export async function reposCmd(ctx: Cortana) {
         repositories += `*${indice}:* [${repo.name}](${repo.html_url})\n`;
       });
       return ctx.replyWithMarkdown(repositories, {
-        disable_web_page_preview: true
+        disable_web_page_preview: true,
       });
     } else {
       return ctx.reply(_.profileNotFound);

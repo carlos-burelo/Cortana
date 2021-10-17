@@ -19,6 +19,18 @@ export function mkBtns(
   }
   return rows;
 }
+export function buttonBuilder(
+  buttons: InlineKeyboardButton[],
+  columns: number = 2
+): { inline_keyboard: InlineKeyboardButton[][] } {
+  const totalRows = Math.ceil(buttons.length / columns);
+  const rows: InlineKeyboardButton[][] = [];
+  for (let i = 0; i < totalRows; i++) {
+    const slice = buttons.slice(i * columns, (i + 1) * columns);
+    rows.push(slice);
+  }
+  return { inline_keyboard: rows };
+}
 /**
  * Describe your function
  * @param {string} text
@@ -44,6 +56,6 @@ export function extractButtons(
   });
   return {
     text,
-    buttons
+    buttons,
   };
 }

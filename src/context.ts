@@ -9,7 +9,7 @@ import { ArgsI } from './core/types';
 import { LangI } from './core/types/locales';
 
 interface MessageParsed
-  extends Omit<Other<RawApi, 'sendMessage', 'text'>, 'parse_mode'> {}
+  extends Omit<Other<RawApi, 'sendMessage', 'text'>, 'parse_mode'> { }
 
 /**
  * Class extends from Grammy Context
@@ -191,7 +191,7 @@ export class Cortana extends Context {
    * the database.
    * @return {Promise<void>}
    */
-  async singIn(): Promise<void> {
+  async signIn(): Promise<void> {
     const data: any = await this.getChat();
     const newAccount: AccountsI = {
       id: data.id,

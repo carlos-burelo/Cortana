@@ -15,7 +15,7 @@ export async function start(): Promise<void> {
   bot.use(async (ctx, next) => {
     const isAllow = await ctx.login(ctx.chat.id);
     if (isAllow) return next();
-    else return ctx.singIn();
+    else return ctx.signIn();
   });
   await bot.start();
 }

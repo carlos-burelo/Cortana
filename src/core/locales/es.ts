@@ -103,7 +103,9 @@ export const LANG: LangI = {
     owner: 'Propietario',
     viewProfile: 'Ver perfil',
   },
-  admin: {},
+  admin: {
+    adminList: `Lista de adminstradores`,
+  },
   android: {
     noModel: 'Porfavor coloque algun modelo',
     noCsc: 'Porfavor coloque alguna region',
@@ -132,7 +134,7 @@ export const LANG: LangI = {
     btns: [
       {
         text: '📌 Comandos',
-        callback_data: 'help',
+        callback_data: 'back_help',
       },
       {
         text: '🇲🇽 Idiomas',

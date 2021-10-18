@@ -254,11 +254,11 @@ export function status(value: boolean): '✅' | '❌' {
 
 export function escapeMd(text: string) {
   text = text
-    .replaceAll('_', '\\_')
-    .replaceAll('*', '\\*')
-    .replaceAll('[', '\\[')
-    .replaceAll(']', '\\]')
-    .replaceAll('(', '\\(')
-    .replaceAll(')', '\\)')
+    .replace(/\_/g, '\_')
+    .replace(/\*/g, '\*')
+    .replace(/\[/g, '\[')
+    .replace(/\]/g, '\]')
+    .replace(/\(/g, '\(')
+    .replace(/\)/g, '\)')
   return text
 }

@@ -1,25 +1,21 @@
 import { Bot } from 'grammy';
 import { Cortana } from '../../../context';
-import { gitCmd, gitHelp } from './git';
-import { repoCmd, repoHelp } from './repo';
-import { reposCmd, reposHelp } from './repos';
-import { cloneCmd, cloneHelp } from './clone';
 
 export default function githubModule(bot: Bot<Cortana>) {
   bot.command('git', async (ctx) => {
-    if (ctx.help) return ctx.replyWithMarkdownV2(gitHelp);
+    const { gitCmd } = await import('./git');
     return await gitCmd(ctx);
   });
   bot.command('repo', async (ctx) => {
-    if (ctx.help) return ctx.replyWithMarkdown(repoHelp);
+    const { repoCmd } = await import('./repo');
     return await repoCmd(ctx);
   });
   bot.command('repos', async (ctx) => {
-    if (ctx.help) return ctx.replyWithMarkdown(reposHelp);
+    const { reposCmd } = await import('./repos');
     return await reposCmd(ctx);
   });
   bot.command('clone', async (ctx) => {
-    if (ctx.help) return ctx.replyWithMarkdown(cloneHelp);
+    const { cloneCmd } = await import('./clone');
     return await cloneCmd(ctx);
   });
 }

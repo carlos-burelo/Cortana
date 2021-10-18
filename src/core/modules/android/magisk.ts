@@ -19,5 +19,3 @@ export async function magiskCmd(ctx: Cortana) {
     log({ ctx, error, __filename, l, f: 'magiskCmd()' });
   }
 }
-
-export const magiskHelp = `Help for *magisk* command`;

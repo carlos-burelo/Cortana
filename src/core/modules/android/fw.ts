@@ -1,5 +1,5 @@
 import { Cortana } from '../../../context';
-import { mkBtns } from '../../libs/buttons';
+import { buttonBuilder } from '../../libs/buttons';
 import { log } from '../../libs/messages';
 import { fwScrapping } from '../../libs/scraping';
 
@@ -20,9 +20,7 @@ export async function fwCmd(ctx: Cortana) {
     return ctx.replyWithMarkdown(
       _.android.fwTemplate(model, csc, pda, phone, build, mask),
       {
-        reply_markup: {
-          inline_keyboard: mkBtns(btns),
-        },
+        reply_markup: buttonBuilder(btns),
       }
     );
   } catch (error) {
@@ -30,5 +28,3 @@ export async function fwCmd(ctx: Cortana) {
     log({ ctx, error, __filename, l, f: 'fwCmd()' });
   }
 }
-
-export const fwHelp = `Help for *fw* command`;

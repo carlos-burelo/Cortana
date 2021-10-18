@@ -13,5 +13,3 @@ export async function startCmd(ctx: Cortana) {
     log({ ctx, error, __filename, l, f: 'startCmd()' });
   }
 }
-
-export const startHelp = `Help for *start* command`;

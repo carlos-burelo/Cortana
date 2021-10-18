@@ -9,5 +9,3 @@ export async function joinCmd(ctx: Cortana) {
     log({ ctx, error, __filename, l, f: 'joinCmd()' });
   }
 }
-
-export const joinHelp = `Help for *join* command`;

@@ -54,6 +54,7 @@ export const LANG: LangI = {
     error: (a) => ``,
   },
   perms: {
+    title: (a, i) => `Permisos ${i ? 'en' : 'de'} ${a}`,
     can_send_messages: (p) => `${status(p)} | *Mensajes* `,
     can_send_media_messages: (p) => `${status(p)} | *Multimedia* `,
     can_send_polls: (p) => `${status(p)} | *Encuestas* `,

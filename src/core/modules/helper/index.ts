@@ -1,20 +1,17 @@
 import { Bot } from 'grammy';
 import { Cortana } from '../../../context';
-import { helpCmd, helpHelp } from './help';
-import { helpmoduleCmd, helpmoduleHelp } from './helpmodule';
-import { backhelpCmd, backhelpHelp } from './backhelp';
 
 export default function helperModule(bot: Bot<Cortana>) {
   bot.command('help', async (ctx) => {
-    if (ctx.help) return ctx.replyWithMarkdownV2(helpHelp);
+    const { helpCmd } = await import('./help');
     return await helpCmd(ctx);
   });
   bot.callbackQuery(/help_./, async (ctx) => {
-    if (ctx.help) return ctx.replyWithMarkdownV2(helpmoduleHelp);
+    const { helpmoduleCmd } = await import('./helpmodule');
     return await helpmoduleCmd(ctx);
   });
   bot.callbackQuery('back_help', async (ctx) => {
-    if (ctx.help) return ctx.replyWithMarkdownV2(backhelpHelp);
+    const { backhelpCmd } = await import('./backhelp');
     return await backhelpCmd(ctx);
   });
 }

@@ -2,7 +2,7 @@ import { Cortana } from '../../../context';
 import axios, { AxiosResponse } from 'axios';
 import { GITHUB_API } from '../../../config';
 import { log } from '../../libs/messages';
-import { mkBtns } from '../../libs/buttons';
+import { buttonBuilder } from '../../libs/buttons';
 
 export async function gitCmd(ctx: Cortana) {
   const { github: _ } = await ctx.lang();
@@ -37,14 +37,10 @@ export async function gitCmd(ctx: Cortana) {
     return ctx.replyWithDocument(i.avatar_url, {
       caption: template,
       parse_mode: 'Markdown',
-      reply_markup: {
-        inline_keyboard: mkBtns(buttons, 2),
-      },
+      reply_markup: buttonBuilder(buttons, 2),
     });
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: 'gitCommand()' });
   }
 }
-
-export const gitHelp = 'Help for git command';

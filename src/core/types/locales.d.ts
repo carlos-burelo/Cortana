@@ -69,6 +69,7 @@ export interface HelpersI {
 }
 
 export interface PermsI {
+  title: (a: string, i: boolean) => string;
   can_send_messages: (a: boolean) => string;
   can_send_media_messages: (a: boolean) => string;
   can_send_polls: (a: boolean) => string;

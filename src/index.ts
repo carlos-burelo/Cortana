@@ -17,9 +17,6 @@ export async function start(): Promise<void> {
     if (isAllow) return next();
     else return ctx.singIn();
   });
-  bot.start();
-  bot.catch((i) => {
-    console.log(i);
-  });
+  await bot.start();
 }
 start();

@@ -8,5 +8,3 @@ export async function setlangCmd(ctx: Cortana) {
     log({ ctx, error, __filename, l, f: 'setlangCmd()' });
   }
 }
-
-export const setlangHelp = `Help for *setlang* command`;

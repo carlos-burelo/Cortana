@@ -20,5 +20,3 @@ export async function cloneCmd(ctx: Cortana) {
     return ctx.reply(_.repoGetError);
   }
 }
-
-export const cloneHelp = `Help for *clone* command`;

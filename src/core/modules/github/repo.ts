@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { Cortana } from '../../../context';
 import { GITHUB_API } from '../../../config';
-import { mkBtns } from '../../libs/buttons';
+import { buttonBuilder } from '../../libs/buttons';
 import { log } from '../../libs/messages';
 
 export async function repoCmd(ctx: Cortana) {
@@ -33,14 +33,10 @@ export async function repoCmd(ctx: Cortana) {
     return ctx.replyWithDocument(i.owner.avatar_url, {
       caption: template,
       parse_mode: 'Markdown',
-      reply_markup: {
-        inline_keyboard: mkBtns(buttons, 2),
-      },
+      reply_markup: buttonBuilder(buttons, 2),
     });
   } catch (error) {
     const [l] = error.stack.match(/(d+):(d+)/);
     log({ ctx, error, __filename, l, f: '' });
   }
 }
-
-export const repoHelp = `Help for *repo*`;

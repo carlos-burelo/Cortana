@@ -34,18 +34,6 @@ export function renameFile(dir: string, Old: string, New: string): string {
  * to an optimum measure for a sticker
  * @param {string} fileDir Directory of the image to be modified
  */
-export async function resizeImage(fileDir: string): Promise<string> {
-  let fileName: string = basename(fileDir).replace(/\.(jpg|png|jpeg)/, '');
-  let imgScaled: string = resolve(downloadDir, `new-${fileName}.png`);
-  await sharp(resolve(fileDir))
-    .resize(512, 512, {
-      kernel: sharp.kernel.nearest,
-      fit: 'contain',
-      background: { r: 255, g: 255, b: 255, alpha: 0 },
-    })
-    .toFile(imgScaled);
-  return imgScaled;
-}
 export async function scaleImage(fileDir: string): Promise<string> {
   let fileName: string = basename(fileDir).replace(/\.(jpg|png|jpeg)/, '');
   let imgScaled: string = resolve(downloadDir, `new-${fileName}.png`);

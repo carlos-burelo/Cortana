@@ -24,5 +24,3 @@ export async function promoteCmd(ctx: Cortana) {
     log({ ctx, error, __filename, l, f: 'promoteCmd()' });
   }
 }
-
-export const promoteHelp = `Help for *promote* command`;

@@ -37,8 +37,10 @@ export async function getLang(id: number): Promise<string> {
 
 export async function createAccount(account: AccountsI) {
   try {
-    const { data } = await sql.from<AccountsI>('accounts').insert([account]);
-  } catch (error) {}
+    return await sql.from<AccountsI>('accounts').insert([account]);
+  } catch (error) {
+    return undefined;
+  }
 }
 
 export interface AccountsI {

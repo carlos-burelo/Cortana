@@ -1,3 +1,4 @@
-template="#########  OPEN IN DEV MODE #########"
-
-echo $template && export DEBUG="grammy*" && yarn dev
+echo "#########  OPEN IN DEV MODE #########"
+export DEBUG="grammy*"
+echo "Loading all modules, please wait..."
+npx nodemon -q

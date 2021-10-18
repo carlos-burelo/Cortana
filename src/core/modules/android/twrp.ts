@@ -21,5 +21,3 @@ export async function twrpCmd(ctx: Cortana) {
     log({ ctx, error, __filename, l, f: 'twrpCmd()' });
   }
 }
-
-export const twrpHelp = `Help for *twrp* command`;

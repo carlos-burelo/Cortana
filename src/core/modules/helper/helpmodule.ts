@@ -16,5 +16,3 @@ export async function helpmoduleCmd(ctx: Cortana) {
     log({ ctx, error, __filename, l, f: 'helpmoduleCmd()' });
   }
 }
-
-export const helpmoduleHelp = `Help for *helpmodule* command`;

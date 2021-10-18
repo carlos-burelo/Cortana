@@ -31,5 +31,3 @@ export async function reposCmd(ctx: Cortana) {
     log({ ctx, error, __filename, l, f: '' });
   }
 }
-
-export const reposHelp = `Help for *repos* command`;

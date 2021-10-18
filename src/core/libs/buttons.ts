@@ -1,61 +1,47 @@
 import { InlineKeyboardButton } from 'grammy/out/platform';
-import { ButtonI } from '../types';
 
 /**
- * Describe your function
- * @param {ButtonI[]} buttons
- * @param {number} columns = 2
- * @return {ButtonI[][]}
+ * Create buttons and columns from simple array
+ * @param {InlineKeyboardButton[]} buttons
+ * @param {number} columns
+ * @return {InlineButtons}
  */
-export function mkBtns(
-  buttons: InlineKeyboardButton[],
-  columns: number = 2
-): InlineKeyboardButton[][] {
-  const totalRows = Math.ceil(buttons.length / columns);
-  const rows: InlineKeyboardButton[][] = [];
-  for (let i = 0; i < totalRows; i++) {
-    const slice = buttons.slice(i * columns, (i + 1) * columns);
-    rows.push(slice);
-  }
-  return rows;
-}
 export function buttonBuilder(
   buttons: InlineKeyboardButton[],
   columns: number = 2
-): { inline_keyboard: InlineKeyboardButton[][] } {
+): InlineButtons {
   const totalRows = Math.ceil(buttons.length / columns);
   const rows: InlineKeyboardButton[][] = [];
   for (let i = 0; i < totalRows; i++) {
     const slice = buttons.slice(i * columns, (i + 1) * columns);
     rows.push(slice);
-  }
+  };
   return { inline_keyboard: rows };
 }
-/**
- * Describe your function
- * @param {string} text
- * @return {{ text: string; buttons: ButtonI[] } | undefined}
- */
 
-export function extractButtons(
-  text: string
-): { text: string; buttons: ButtonI[] } | undefined {
-  let regex: RegExp = /\[.+?\s?&\s?http[s]?:\/\/.+?\]/gim;
-  let buttonsArr: string[] = text.match(regex);
-  if (buttonsArr == null || buttonsArr == undefined) {
-    return undefined;
-  }
-  buttonsArr.map((a) => {
-    text = text.replace(a, '');
+/**
+ * Extract buttons in text message an clean message
+ * @param {string} text
+ * @return {InTextButtons | undefined}
+ */
+export function getButtons(text: string): InTextButtons | undefined {
+  const regex = /\[.+?\s?\|\s?http[s]?:\/\/.+?\]/gim;
+  const res: string[] | null = text.match(regex);
+  if (res == null) return undefined
+  const btns = res.map(i => {
+    const [text, url] = i.replace(/[\]\[]/g, '').trim().split('|');
+    return { text, url }
   });
-  let buttons = buttonsArr.map((a) => {
-    let arr = a.split('&');
-    let text: string = arr[0].replace(/\[/g, '');
-    let url: string = arr[1].replace(/\]/g, '');
-    return { text, url };
+  res.forEach(i => {
+    text = text.replace(i, '').replace(/\s\s/g, ' ')
   });
-  return {
-    text,
-    buttons,
-  };
+  const buttons = buttonBuilder(btns)
+  return { buttons, text }
 }
+
+interface InTextButtons {
+  buttons: InlineButtons;
+  text: string;
+}
+interface InlineButtons { inline_keyboard: InlineKeyboardButton[][] }
+

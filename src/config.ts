@@ -74,6 +74,28 @@ let SUPABASE_URL: string = process.env.SUPABASE_URL;
 /** Secret key for your bot project*/
 let SUPABASE_KEY: string = process.env.SUPABASE_KEY;
 
+
+/** Magisk Repository URL*/
+export const MAGISK_API: string =
+  'https://raw.githubusercontent.com/topjohnwu/magisk-files/master';
+/** Github Public API*/
+export const GITHUB_API: string = 'https://api.github.com';
+/** Samsung Unofficial Published API*/
+export const SAMSUNG_API: string =
+  'http://fota-cloud-dn.ospserver.net/firmware';
+/** Twrp Recovery Official API*/
+export const TWRP_API: string = 'https://eu.dl.twrp.me';
+/** Official API by Alphavantage.co*/
+export const CURRENCY_API = ({ orig, dest }: CurrencyI): string =>
+  `https://www.alphavantage.co/query` +
+  `?function=CURRENCY_EXCHANGE_RATE` +
+  `&from_currency=${orig}` +
+  `&to_currency=${dest}` +
+  `&apikey=${CURRENCY_KEY}`;
+
+/** Regular expression for get simple or special params*/
+export const argRegex = /--\w+:?\w+/gi;
+
 /**
  * Function looking for variables
  * Environment in the .env file or
@@ -100,29 +122,7 @@ export function enviroment(): void {
       return noEnv(env[e]);
     }
   });
-  // makeDirs();
-  // mainConnect();
 }
-/** Magisk Repository URL*/
-export const MAGISK_API: string =
-  'https://raw.githubusercontent.com/topjohnwu/magisk-files/master';
-/** Github Public API*/
-export const GITHUB_API: string = 'https://api.github.com';
-/** Samsung Unofficial Published API*/
-export const SAMSUNG_API: string =
-  'http://fota-cloud-dn.ospserver.net/firmware';
-/** Twrp Recovery Official API*/
-export const TWRP_API: string = 'https://eu.dl.twrp.me';
-/** Official API by Alphavantage.co*/
-export const CURRENCY_API = ({ orig, dest }: CurrencyI): string =>
-  `https://www.alphavantage.co/query` +
-  `?function=CURRENCY_EXCHANGE_RATE` +
-  `&from_currency=${orig}` +
-  `&to_currency=${dest}` +
-  `&apikey=${CURRENCY_KEY}`;
-
-/** Regular expression for get simple or special params*/
-export const argRegex = /--\w+:?\w+/gi;
 
 export {
   BOT_TOKEN,

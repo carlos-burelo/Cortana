@@ -1,28 +1,21 @@
 import { Bot } from 'grammy';
 import { Cortana } from '../../../context';
-import { startCmd, startHelp } from './start';
-import { joinCmd, joinHelp } from './join';
-import { langCmd, langHelp } from './lang';
-import { setlangCmd, setlangHelp } from './setlang';
 
 export default function startModule(bot: Bot<Cortana>) {
   bot.command('start', async (ctx) => {
-    if (ctx.help) return ctx.replyWithMarkdownV2(startHelp);
+    const { startCmd } = await import('./start');
     return await startCmd(ctx);
   });
-
   bot.command('join', async (ctx) => {
-    if (ctx.help) return ctx.replyWithMarkdownV2(joinHelp);
+    const { joinCmd } = await import('./join');
     return await joinCmd(ctx);
   });
-
   bot.command('lang', async (ctx) => {
-    if (ctx.help) return ctx.replyWithMarkdownV2(langHelp);
+    const { langCmd } = await import('./lang');
     return await langCmd(ctx);
   });
-
   bot.command('setlang', async (ctx) => {
-    if (ctx.help) return ctx.replyWithMarkdownV2(setlangHelp);
+    const { setlangCmd } = await import('./setlang');
     return await setlangCmd(ctx);
   });
 }

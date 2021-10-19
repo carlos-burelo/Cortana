@@ -1,6 +1,6 @@
 import { Cortana } from "../../../context";
 
-export async function md2helpCmd(ctx: Cortana) {
+export async function mdv2helpCmd(ctx: Cortana) {
     const mdv2Help =
         `*Bold*\n` +
         `\`Inline code\`\n` +

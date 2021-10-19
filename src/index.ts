@@ -18,5 +18,6 @@ export async function start(): Promise<void> {
     else return ctx.signIn();
   });
   await bot.start();
+  console.log('Bot is runing')
 }
 start();

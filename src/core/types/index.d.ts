@@ -8,7 +8,9 @@ import { Cortana } from '../../context';
  * Interface de propiedades globales en todos los esquemas
  */
 export interface GlobalDB {
-  /** Id de la cuenta de telegram*/
+  /** Id de la cuenta de telegram
+   * @example 1234567890
+  */
   id?: number;
   /**
    * Codigo de lenguaje establecido en
@@ -71,7 +73,7 @@ export interface MainDB {
  * Modelo con las propiedades de todos los
  * esquemas
  */
-export interface DBModel extends GroupDB, UserDB {}
+export interface DBModel extends GroupDB, UserDB { }
 
 // EXTRA DATABASE TYPINGS
 

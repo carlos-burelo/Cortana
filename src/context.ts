@@ -4,9 +4,10 @@ import { Other } from 'grammy/out/core/api';
 import { Message, Update, UserFromGetMe } from 'grammy/out/platform';
 import { resolve as join } from 'path';
 import { argRegex, BOT_TOKEN, localesDir } from './config';
-import { AccountsI, createAccount, getLang, validate } from './core/sql';
+import { createAccount, getLang, validate } from './core/sql';
 import { ArgsI } from './core/types';
 import { LangI } from './core/types/locales';
+import { AccountsTable } from './core/types/sql';
 
 interface MessageParsed
   extends Omit<Other<RawApi, 'sendMessage', 'text'>, 'parse_mode'> { }
@@ -193,7 +194,7 @@ export class Cortana extends Context {
    */
   async signIn(): Promise<void> {
     const data: any = await this.getChat();
-    const newAccount: AccountsI = {
+    const newAccount: AccountsTable = {
       id: data.id,
       type: data.type,
       lang: data.language_code || 'es',

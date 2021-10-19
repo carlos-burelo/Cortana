@@ -5,9 +5,7 @@ import { escapeMd, log } from "../../libs/messages";
 export async function adminlistCmd(ctx: Cortana) {
     try {
         const _ = await ctx.lang();
-        if (ctx.chat.type == 'private') {
-            return ctx.replyWithMarkdown(_.global.noPrivateChat)
-        }
+        if (ctx.chat.type == 'private') return ctx.reply(_.global.noPrivateChat)
         const res: ChatMember[] = await ctx.getChatAdministrators();
         let adminlist = `*${_.admin.adminList}*\n\n`;
         const admins: ChatMember[] = res.filter(i => i.status === 'administrator');

@@ -1,9 +1,9 @@
 import { BOT_NAME, BOT_USERNAME, OWNER_USERNAME } from '../../config';
 import { ButtonI } from '../types';
-import { LanguageI } from '../types/temp';
+// import { LanguageI } from '../types/temp';
 
 const id: string = 'Español 🇲🇽';
-const startButtons: ButtonI[] = [
+const startButtons = [
   {
     text: '📌 Commandos',
     callback: 'help',
@@ -269,7 +269,7 @@ export const modules = [
       `Retorna la ultima compilacion de los firmwares de samsung \n`,
   },
 ];
-const lang: LanguageI = {
+const lang = {
   global: {
     requestApproved: 'Request approved, now Cortana is available un your chat.',
     requestDenied:
@@ -487,8 +487,7 @@ const lang: LanguageI = {
     ],
     prefRepeat: (a) => `El valor ya esta establecido en ${a}`,
     prefSuccess: (a) =>
-      `Preferencias de ${
-        a == 'welcome' ? 'bienvenida' : 'despedida'
+      `Preferencias de ${a == 'welcome' ? 'bienvenida' : 'despedida'
       } establecidas.`,
   },
   trasnlatorModule: {

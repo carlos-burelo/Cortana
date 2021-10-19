@@ -13,19 +13,19 @@ export async function kangCmd(ctx: Cortana) {
   const limit: number = 120;
   let packName: string = `a${user.id}_by_${BOT_USERNAME}`;
   let packTitle: string = `${user.first_name} Sticker set v${packNum}`;
-  while (packNameFound == false) {
-    try {
-      const stickerSet = await ctx.api.getStickerSet(packName);
-      if (stickerSet.stickers.length == limit) {
-        packNum++;
-        packName = `a_${packNum}_${user.id}_by_${BOT_USERNAME}`;
-      } else {
-        packNameFound = true;
-      }
-    } catch (error) {
-      if (error.message == 'Stickerset_invalid') packNameFound = true;
+  // while (packNameFound == false) {
+  try {
+    const stickerSet = await ctx.api.getStickerSet(packName);
+    if (stickerSet.stickers.length == limit) {
+      packNum++;
+      packName = `a_${packNum}_${user.id}_by_${BOT_USERNAME}`;
+    } else {
+      packNameFound = true;
     }
+  } catch (error) {
+    if (error.message == 'Stickerset_invalid') packNameFound = true;
   }
+  // }
   let kangSticker: string = `${Date.now()}.png`;
   let sticker: string;
   if (type == 'photo') {

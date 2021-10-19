@@ -4,20 +4,21 @@ import {
   SupabaseClient,
 } from '@supabase/supabase-js';
 import { SUPABASE_KEY, SUPABASE_URL } from '../../config';
+import { AccountsTable } from '../types/sql';
 
 export const sql: SupabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 /**
  * Get all accounts in DB
- * @return {Promise<AccountsI[] | PostgrestError>}
+ * @return {Promise<AccountsTable[] | PostgrestError>}
  */
-export async function getAccounts(): Promise<AccountsI[] | PostgrestError> {
-  const { data, error } = await sql.from<AccountsI>('accounts').select('*');
+export async function getAccounts(): Promise<AccountsTable[] | PostgrestError> {
+  const { data, error } = await sql.from<AccountsTable>('accounts').select('*');
   if (error) return error;
   return data;
 }
 export async function validate(): Promise<any[]> {
-  const { data } = await sql.from<AccountsI>('accounts').select('id');
+  const { data } = await sql.from<AccountsTable>('accounts').select('id');
   return data;
 }
 /**
@@ -27,7 +28,7 @@ export async function validate(): Promise<any[]> {
  */
 export async function getLang(id: number): Promise<string> {
   const { data, error } = await sql
-    .from<AccountsI>('accounts')
+    .from<AccountsTable>('accounts')
     .select('lang')
     .eq('id', id)
     .single();
@@ -35,23 +36,11 @@ export async function getLang(id: number): Promise<string> {
   return data.lang;
 }
 
-export async function createAccount(account: AccountsI) {
+export async function createAccount(account: AccountsTable) {
   try {
-    return await sql.from<AccountsI>('accounts').insert([account]);
+    return await sql.from<AccountsTable>('accounts').insert([account]);
   } catch (error) {
     return undefined;
   }
 }
 
-export interface AccountsI {
-  _id?: number;
-  created_at?: string;
-  updated_at?: string;
-  id: number;
-  first_name?: string | null;
-  title?: string | null;
-  type: 'private' | 'group' | 'supergroup' | null;
-  username?: string | null;
-  invite_link?: string;
-  lang: string | null;
-}

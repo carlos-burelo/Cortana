@@ -245,7 +245,7 @@ export function toCode(text: string): string {
 /**
  * Describe your function
  * @param {boolean} value
- * @return {'✅' | '❌'}
+ * @return {'✅'|'❌'}
  */
 export function status(value: boolean): '✅' | '❌' {
   if (value) return '✅';
@@ -260,5 +260,30 @@ export function escapeMd(text: string) {
     .replace(/\]/g, '\]')
     .replace(/\(/g, '\(')
     .replace(/\)/g, '\)')
+  return text
+}
+
+const mdTags: Record<string, string> = {
+  '*': '\\*',
+  '#': '\\#',
+  '(': '\\(',
+  ')': '\\)',
+  '[': '\\[',
+  ']': '\\]',
+  _: '\\_',
+  '\\': '\\\\',
+  '+': '\\+',
+  '-': '\\-',
+  '`': '\\`',
+  '<': '&lt;',
+  '>': '&gt;',
+  '&': '&amp;',
+};
+
+export const escMd = (string: string) => string.replace(/[\*\(\)\[\]\+\-\\_`#<>]/g, (m) => mdTags[m]);
+
+
+export function escapeHTML(text: string) {
+  text = text.replace(/\</g, '\<').replace(/\>/g, '\>')
   return text
 }

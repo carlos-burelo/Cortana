@@ -1,8 +1,5 @@
-import { BOT_NAME, BOT_USERNAME, OWNER_USERNAME } from '../../config';
-import { ButtonI } from '../types';
-// import { LanguageI } from '../types/temp';
-
-const id: string = 'Español 🇲🇽';
+import { BOT_NAME, BOT_USERNAME, OWNER_USERNAME } from '@config'
+const id: string = 'Español 🇲🇽'
 const startButtons = [
   {
     text: '📌 Commandos',
@@ -20,7 +17,7 @@ const startButtons = [
     text: '📄 Documentacion',
     url: 'http://github.com/carlos-burelo/CortanaTS',
   },
-];
+]
 export const modules = [
   {
     text: 'Administrador',
@@ -80,9 +77,7 @@ export const modules = [
   {
     text: 'Antispam',
     callback: 'help_antispam',
-    content:
-      `Comandos en el modulo: AntiSpam\n\n` +
-      `MODULO NO DISPONIBLE POR AHORA \n`,
+    content: `Comandos en el modulo: AntiSpam\n\n` + `MODULO NO DISPONIBLE POR AHORA \n`,
   },
   {
     text: 'Baneos',
@@ -113,9 +108,7 @@ export const modules = [
   {
     text: 'Lista negra',
     callback: 'help_black_list',
-    content:
-      `Comandos en el modulo: BlackList\n\n` +
-      `MODULO NO DISPONIBLE POR AHORA \n`,
+    content: `Comandos en el modulo: BlackList\n\n` + `MODULO NO DISPONIBLE POR AHORA \n`,
   },
   {
     text: 'Github',
@@ -148,9 +141,7 @@ export const modules = [
   {
     text: 'Silencio',
     callback: 'help_mute',
-    content:
-      `Comandos en el modulo: Silencio\n\n` +
-      `MODULO NO DISPONIBLE POR AHORA \n`,
+    content: `Comandos en el modulo: Silencio\n\n` + `MODULO NO DISPONIBLE POR AHORA \n`,
   },
   {
     text: 'Notas',
@@ -167,8 +158,7 @@ export const modules = [
   {
     text: 'Reglas',
     callback: 'help_rules',
-    content:
-      `Comandos en el modulo: Reglas\n\n` + `MODULO NO DISPONIBLE POR AHORA \n`,
+    content: `Comandos en el modulo: Reglas\n\n` + `MODULO NO DISPONIBLE POR AHORA \n`,
   },
   {
     text: 'Stickers',
@@ -268,12 +258,11 @@ export const modules = [
       `<b>/fw (model) (csc)</b>\n` +
       `Retorna la ultima compilacion de los firmwares de samsung \n`,
   },
-];
+]
 const lang = {
   global: {
     requestApproved: 'Request approved, now Cortana is available un your chat.',
-    requestDenied:
-      'Request denied, unfortunately the terms of use are not met.',
+    requestDenied: 'Request denied, unfortunately the terms of use are not met.',
     pendingRequest:
       'Your request will be personally reviewed by my owner, please wait until it is online.',
     noUsePerms:
@@ -292,10 +281,8 @@ const lang = {
     argsNotFound: 'Argumento(s) no encontrado(s)',
     formatError: 'Formato incorrecto',
     preventSudo: (N) => `${N} tiene protection de superusuario`,
-    setLanguageSucces: (L) =>
-      `Language set to  ${L == 'es' ? id : 'English 🇺🇸'}`,
-    sameLanguage: (L) =>
-      `El lenguaje ya esta en  ${L == 'es' ? id : 'English 🇺🇸'}`,
+    setLanguageSucces: (L) => `Language set to  ${L == 'es' ? id : 'English 🇺🇸'}`,
+    sameLanguage: (L) => `El lenguaje ya esta en  ${L == 'es' ? id : 'English 🇺🇸'}`,
     envNotFound: (env) => `Variable de entorno ${env} no definida`,
   },
   helpers: {
@@ -316,8 +303,7 @@ const lang = {
     can_send_media_messages: (p) => `${p ? '✅' : '❌'} | *Multimedia* `,
     can_send_polls: (p) => `${p ? '✅' : '❌'} | *Encuestas* `,
     can_send_other_messages: (p) => `${p ? '✅' : '❌'} | *Otros mensajes* `,
-    can_add_web_page_previews: (p) =>
-      `${p ? '✅' : '❌'} | *Añadir previsualizacion web* `,
+    can_add_web_page_previews: (p) => `${p ? '✅' : '❌'} | *Añadir previsualizacion web* `,
     can_change_info: (p) => `${p ? '✅' : '❌'} | *Cambiar informacion* `,
     can_invite_users: (p) => `${p ? '✅' : '❌'} | *Invitar usuarios* `,
     can_pin_messages: (p) => `${p ? '✅' : '❌'} | *Anclar mensajes* `,
@@ -326,8 +312,7 @@ const lang = {
     can_delete_messages: (p) => `${p ? '✅' : '❌'} | *Borrar mensages:* `,
     can_restrict_members: (p) => `${p ? '✅' : '❌'} | *Restringir usuarios:* `,
     can_promote_members: (p) => `${p ? '✅' : '❌'} | *Promover usuarios:* `,
-    can_manage_voice_chats: (p) =>
-      `${p ? '✅' : '❌'} | *Administrar chats de voz:* `,
+    can_manage_voice_chats: (p) => `${p ? '✅' : '❌'} | *Administrar chats de voz:* `,
     is_anonymous: (p) => `${p ? '✅' : '❌'} | *Ser anomimo:* `,
   },
   startModule: {
@@ -426,8 +411,7 @@ const lang = {
     noFilterKey: 'Establezca una palabra para el filtro',
     setRespFilter: 'Establezca respuestas para el filtro',
     filterSaved: (id) => `\`${id}\` ha sido añadido a los *filtros*`,
-    noFoundFilter: (filter) =>
-      `El filtro \`${filter}\` no existe en mi base de datos`,
+    noFoundFilter: (filter) => `El filtro \`${filter}\` no existe en mi base de datos`,
     removedFilter: (filter) => `El filtro: \`${filter}\` fue removido`,
     title: (title) => `Filtros en *${title}*\n\n`,
     noFiltersFound: `No ahy filtros en este chat`,
@@ -460,11 +444,9 @@ const lang = {
     ],
     errorCreatePack: '`Hubo un error al crear el paquete`',
     errorAddPack: '`Hubo un error al añadir el sticker al paquete`',
-    finish: (name) =>
-      `Sticker añadido satisfactoriamente [aqui](t.me/addstickers/${name})`,
+    finish: (name) => `Sticker añadido satisfactoriamente [aqui](t.me/addstickers/${name})`,
     deleteSticker: 'Sticker eliminado satisfactoriamente',
-    tgsFormatError:
-      'Por el momento no tengo compatibilidad con stickers animados.',
+    tgsFormatError: 'Por el momento no tengo compatibilidad con stickers animados.',
   },
   ownerModule: {
     invalidID: 'El ID no es valido',
@@ -487,8 +469,7 @@ const lang = {
     ],
     prefRepeat: (a) => `El valor ya esta establecido en ${a}`,
     prefSuccess: (a) =>
-      `Preferencias de ${a == 'welcome' ? 'bienvenida' : 'despedida'
-      } establecidas.`,
+      `Preferencias de ${a == 'welcome' ? 'bienvenida' : 'despedida'} establecidas.`,
   },
   trasnlatorModule: {
     limit: 'El mensaje sobrepasa el limite de caracteres permitido (200)',
@@ -509,14 +490,13 @@ const lang = {
     groupInfo: '<b>Informacion de grupo</b>\n\n',
     userInfo: '<b>Informacion de usuario</b>\n\n',
     title: (title) => `<b>Titulo:</b> <i>${title}</i>\n`,
-    inviteLink: (link, name) =>
-      `<b>Link de invitacion:</b> <a href="${link}">@${name}</a>\n`,
+    inviteLink: (link, name) => `<b>Link de invitacion:</b> <a href="${link}">@${name}</a>\n`,
   },
   muteModule: {
     unMuted: (u) => `${u} ahora puede volver a hablar`,
     noUnMuted: (u) => `No se ha podido remover el silencio de ${u}`,
   },
-};
+}
 const w = {
   ban: 'ban',
   demote: 'demote',
@@ -527,5 +507,5 @@ const w = {
   demoted: 'demoted',
   promoted: 'promoted',
   warn: 'warn',
-};
-export default lang;
+}
+export default lang

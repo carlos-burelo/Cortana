@@ -1,16 +1,15 @@
-import axios from 'axios';
-import { Api, Context, RawApi } from 'grammy';
-import { Other } from 'grammy/out/core/api';
-import { Message, Update, UserFromGetMe } from 'grammy/out/platform';
-import { resolve as join } from 'path';
-import { argRegex, BOT_TOKEN, localesDir } from './config';
-import { createAccount, getLang, validate } from './core/sql';
-import { ArgsI } from './core/types';
-import { LangI } from './core/types/locales';
-import { AccountsTable } from './core/types/sql';
+import { argRegex, BOT_TOKEN, localesDir } from '@config'
+import { LangI } from '@interfaces/locales'
+import { AccountsTable } from '@interfaces/sql'
+import { request } from '@libs/request'
+import { createAccount, getLang, validate } from '@SQL'
+import { ArgsI } from '@typings'
+import { Api, Context, RawApi } from 'grammy'
+import { Other } from 'grammy/out/core/api'
+import { Message, Update, UserFromGetMe } from 'grammy/out/platform'
+import { resolve as join } from 'path'
 
-interface MessageParsed
-  extends Omit<Other<RawApi, 'sendMessage', 'text'>, 'parse_mode'> { }
+interface MessageParsed extends Omit<Other<RawApi, 'sendMessage', 'text'>, 'parse_mode'> { }
 
 /**
  * Class extends from Grammy Context
@@ -28,7 +27,7 @@ export class Cortana extends Context {
    * @param {UserFromGetMe} me
    */
   constructor(update: Update, api: Api, me: UserFromGetMe) {
-    super(update, api, me);
+    super(update, api, me)
   }
   /**
    * Return the params of the message
@@ -37,7 +36,7 @@ export class Cortana extends Context {
    * @return {string[]}
    */
   get params(): string[] {
-    return this.msg.text.replace(/\/\w+\s?/, '').split(' ');
+    return this.msg.text.replace(/\/\w+\s?/, '').split(' ')
   }
   /**
    * Get message and validate if exist
@@ -45,7 +44,7 @@ export class Cortana extends Context {
    * @return {boolean}
    */
   get help(): boolean {
-    return this.params.includes('-help');
+    return this.params.includes('-help')
   }
   /**
    * Generate message with parse_mode in
@@ -64,7 +63,7 @@ export class Cortana extends Context {
       parse_mode: 'HTML',
       ...other,
       ...signal,
-    });
+    })
   }
   /**
    * Generate message with parse_mode in
@@ -83,7 +82,7 @@ export class Cortana extends Context {
       parse_mode: 'Markdown',
       ...other,
       ...signal,
-    });
+    })
   }
   /**
    * Generate message with parse_mode in
@@ -102,7 +101,7 @@ export class Cortana extends Context {
       parse_mode: 'MarkdownV2',
       ...other,
       ...signal,
-    });
+    })
   }
   /**
    * Remove the commands and any type
@@ -110,19 +109,19 @@ export class Cortana extends Context {
    * @param {RegExp|string[]} [pattern]
    */
   clean(pattern?: RegExp | string[]): string {
-    let text: string = this.msg.text;
+    let text: string = this.msg.text
     if (pattern) {
       if (pattern instanceof RegExp) {
-        text = text.replace(pattern, '').trim();
+        text = text.replace(pattern, '').trim()
       } else {
         pattern.map((i) => {
-          text = text.replace(i, '');
-        });
-        text = text.trim();
+          text = text.replace(i, '')
+        })
+        text = text.trim()
       }
     }
-    text = text.replace(argRegex, '').trim();
-    return text.replace(/\/\w+\s?/g, '').trim();
+    text = text.replace(argRegex, '').trim()
+    return text.replace(/\/\w+\s?/g, '').trim()
   }
   /**
    * Get the arguments in the message and
@@ -132,23 +131,23 @@ export class Cortana extends Context {
    */
   args(): ArgsI | undefined {
     try {
-      const text = this.msg.text;
-      const keys = text.match(argRegex);
-      if (keys == null) return undefined;
-      let obj: ArgsI = {};
+      const text = this.msg.text
+      const keys = text.match(argRegex)
+      if (keys == null) return undefined
+      let obj: ArgsI = {}
       keys.forEach((i) => {
         if (i.includes(':')) {
-          let value: string = i.split(':')[1];
-          let key: string = i.split(':')[0].replace(/\W/g, '');
-          key.length !== 0 ? (obj[key] = value) : (obj[key] = false);
+          let value: string = i.split(':')[1]
+          let key: string = i.split(':')[0].replace(/\W/g, '')
+          key.length !== 0 ? (obj[key] = value) : (obj[key] = false)
         } else {
-          let key: string = i.replace(/\W+/, '');
-          obj[key] = true;
+          let key: string = i.replace(/\W+/, '')
+          obj[key] = true
         }
-      });
-      return obj;
+      })
+      return obj
     } catch (error) {
-      return undefined;
+      return undefined
     }
   }
   /**
@@ -158,9 +157,9 @@ export class Cortana extends Context {
    * @return {Promise<LanguageI>}
    */
   async lang(): Promise<LangI> {
-    const lang: string = await getLang(this.chat.id);
-    const { LANG } = await import(join(localesDir, lang));
-    return LANG;
+    const lang: string = await getLang(this.chat.id)
+    const { LANG } = await import(join(localesDir, lang))
+    return LANG
   }
   /**
    * Get link in the telegram server
@@ -169,12 +168,13 @@ export class Cortana extends Context {
    * @return {Promise<string>}
    */
   async getLink(file_id: string): Promise<string> {
-    const root = 'https://api.telegram.org/bot';
-    const method = '/getFile?file_id=';
-    const apiUrl: string = root + BOT_TOKEN + method + file_id;
-    const res = await axios.get(apiUrl);
-    const filePath: string = res.data.result.file_path;
-    return `https://api.telegram.org/file/bot${BOT_TOKEN}/${filePath}`;
+    const root = 'https://api.telegram.org/bot'
+    const method = '/getFile?file_id='
+    const apiUrl: string = root + BOT_TOKEN + method + file_id
+    // const res = await axios.get()
+    const res = await request<any>(apiUrl)
+    const filePath: string = res.result.file_path
+    return `https://api.telegram.org/file/bot${BOT_TOKEN}/${filePath}`
   }
   /**
    * Evaluate the account_id and return
@@ -184,8 +184,8 @@ export class Cortana extends Context {
    * @return {Promise<{id:number}| undefined>}
    */
   async login(id: number): Promise<{ id: number } | undefined> {
-    const users = await validate();
-    return users.find((i) => id === i.id);
+    const users = await validate()
+    return users.find((i) => id === i.id)
   }
   /**
    * Add account private or public of
@@ -193,7 +193,7 @@ export class Cortana extends Context {
    * @return {Promise<void>}
    */
   async signIn(): Promise<void> {
-    const data: any = await this.getChat();
+    const data: any = await this.getChat()
     const newAccount: AccountsTable = {
       id: data.id,
       type: data.type,
@@ -202,7 +202,7 @@ export class Cortana extends Context {
       ...(data.username && { username: data.usename }),
       ...(data.first_name && { first_name: data.first_name }),
       ...(data.invite_link && { invite_link: data.invite_link }),
-    };
-    await createAccount(newAccount);
+    }
+    await createAccount(newAccount)
   }
 }

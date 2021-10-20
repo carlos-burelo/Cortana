@@ -1,6 +1,6 @@
-import { BOT_NAME, BOT_REPO, BOT_USERNAME, OWNER_USERNAME } from '../../config';
-import { status } from '../libs/messages';
-import { LangI } from '../types/locales';
+import { BOT_NAME, BOT_REPO, BOT_USERNAME, OWNER_USERNAME } from '@config'
+import { status } from '@libs/messages'
+import { LangI } from '@interfaces/locales'
 
 export const LANG: LangI = {
   id: `Español 🇲🇽`,
@@ -43,24 +43,23 @@ export const LANG: LangI = {
   },
   helpers: {
     youDontHavePermissions: (a) => ``,
-    youCanNot: (a) => ``,
+    youCanNot: (a) => `No puedes auto${actions[a]}te`,
     canNot: (a) => ``,
     memberToAdmin: (a) => ``,
     adminToAdmin: (a) => ``,
     anyToCreator: (a) => `No puedes ${actions[a]} al propietario del chat.`,
-    youCantAffectMe: (a) => ``,
+    youCantAffectMe: (a) => `No puedes ${actions[a]}me`,
     success: (a, b, c) => `${a} ha sido ${actions[b]} por ${c}`,
-    alreadyIsAdmin: (a: string) => `El usuario ya es administrador`,
-    error: (a) => ``,
+    alreadyIsAdmin: (a: string) => `${a} ya es administrador`,
+    error: (a) => `A ocurrido un error al tratar de ${actions[a]} al usuario`,
   },
   perms: {
-    title: (a, i) => `Permisos ${i ? 'en' : 'de'} ${a}`,
+    title: (a, i) => `Permisos ${!i ? 'en' : 'de'} ${a}`,
     can_send_messages: (p) => `${status(p)} | *Mensajes* `,
     can_send_media_messages: (p) => `${status(p)} | *Multimedia* `,
     can_send_polls: (p) => `${status(p)} | *Encuestas* `,
     can_send_other_messages: (p) => `${status(p)} | *Otros mensajes* `,
-    can_add_web_page_previews: (p) =>
-      `${status(p)} | *Añadir previsualizacion web* `,
+    can_add_web_page_previews: (p) => `${status(p)} | *Añadir previsualizacion web* `,
     can_change_info: (p) => `${status(p)} | *Cambiar informacion* `,
     can_invite_users: (p) => `${status(p)} | *Invitar usuarios* `,
     can_pin_messages: (p) => `${status(p)} | *Anclar mensajes* `,
@@ -69,8 +68,7 @@ export const LANG: LangI = {
     can_delete_messages: (p) => `${status(p)} | *Borrar mensages:* `,
     can_restrict_members: (p) => `${status(p)} | *Restringir usuarios:* `,
     can_promote_members: (p) => `${status(p)} | *Promover usuarios:* `,
-    can_manage_voice_chats: (p) =>
-      `${status(p)} | *Administrar chats de voz:* `,
+    can_manage_voice_chats: (p) => `${status(p)} | *Administrar chats de voz:* `,
     is_anonymous: (p) => `${status(p)} | *Ser anomimo:* `,
   },
   github: {
@@ -153,7 +151,7 @@ export const LANG: LangI = {
   help: {
     msg:
       `Aqui te presento algunos de los modulos que actualmente tengo disponibles.\n` +
-      `Puedes acceder a los modulos usando\n\n/help <modulename>`,
+      `Puedes acceder a los modulos usando\n\n*/help modulename*`,
   },
   modules: [
     {
@@ -214,9 +212,7 @@ export const LANG: LangI = {
     {
       text: 'Antispam',
       callback_data: 'help_antispam',
-      content:
-        `Comandos en el modulo: AntiSpam\n\n` +
-        `MODULO NO DISPONIBLE POR AHORA \n`,
+      content: `Comandos en el modulo: AntiSpam\n\n` + `MODULO NO DISPONIBLE POR AHORA \n`,
     },
     {
       text: 'Baneos',
@@ -247,9 +243,7 @@ export const LANG: LangI = {
     {
       text: 'Lista negra',
       callback_data: 'help_black_list',
-      content:
-        `Comandos en el modulo: BlackList\n\n` +
-        `MODULO NO DISPONIBLE POR AHORA \n`,
+      content: `Comandos en el modulo: BlackList\n\n` + `MODULO NO DISPONIBLE POR AHORA \n`,
     },
     {
       text: 'Github',
@@ -282,9 +276,7 @@ export const LANG: LangI = {
     {
       text: 'Silencio',
       callback_data: 'help_mute',
-      content:
-        `Comandos en el modulo: Silencio\n\n` +
-        `MODULO NO DISPONIBLE POR AHORA \n`,
+      content: `Comandos en el modulo: Silencio\n\n` + `MODULO NO DISPONIBLE POR AHORA \n`,
     },
     {
       text: 'Notas',
@@ -301,9 +293,7 @@ export const LANG: LangI = {
     {
       text: 'Reglas',
       callback_data: 'help_rules',
-      content:
-        `Comandos en el modulo: Reglas\n\n` +
-        `MODULO NO DISPONIBLE POR AHORA \n`,
+      content: `Comandos en el modulo: Reglas\n\n` + `MODULO NO DISPONIBLE POR AHORA \n`,
     },
     {
       text: 'Stickers',
@@ -404,7 +394,7 @@ export const LANG: LangI = {
         `Retorna la ultima compilacion de los firmwares de samsung \n`,
     },
   ],
-};
+}
 
 const actions = {
   ban: 'expulsar',
@@ -418,4 +408,4 @@ const actions = {
   promoted: 'promovido',
   warn: 'advertir',
   warned: 'advertido',
-};
+}

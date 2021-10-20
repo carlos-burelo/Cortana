@@ -1,6 +1,6 @@
-import { BOT_NAME, BOT_REPO, BOT_USERNAME, OWNER_USERNAME } from '@config'
-import { status } from '@libs/messages'
-import { LangI } from '@interfaces/locales'
+import { BOT_NAME, BOT_REPO, BOT_USERNAME, OWNER_USERNAME } from '@config';
+import { status } from '@libs/messages';
+import { LangI } from '@interfaces/locales';
 
 export const LANG: LangI = {
   id: `Español 🇲🇽`,
@@ -394,7 +394,7 @@ export const LANG: LangI = {
         `Retorna la ultima compilacion de los firmwares de samsung \n`,
     },
   ],
-}
+};
 
 const actions = {
   ban: 'expulsar',
@@ -408,4 +408,4 @@ const actions = {
   promoted: 'promovido',
   warn: 'advertir',
   warned: 'advertido',
-}
+};

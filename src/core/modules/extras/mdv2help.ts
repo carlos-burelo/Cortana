@@ -1,4 +1,4 @@
-import { Cortana } from '@context'
+import { Cortana } from '@context';
 
 export async function mdv2helpCmd(ctx: Cortana) {
   const mdv2Help =
@@ -10,6 +10,6 @@ export async function mdv2helpCmd(ctx: Cortana) {
     `[URL](http://www.example.com/) \\| *[URL bold](http://www.example.com/)*\n` +
     `\`\`\`typescript` +
     `import { Cortana } from '@context';` +
-    `\`\`\``
-  return ctx.replyWithMarkdownV2(mdv2Help)
+    `\`\`\``;
+  return ctx.replyWithMarkdownV2(mdv2Help);
 }

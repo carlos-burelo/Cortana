@@ -1,5 +1,5 @@
-import { BOT_NAME, BOT_USERNAME, OWNER_USERNAME } from '@config'
-const id: string = 'Español 🇲🇽'
+import { BOT_NAME, BOT_USERNAME, OWNER_USERNAME } from '@config';
+const id: string = 'Español 🇲🇽';
 const startButtons = [
   {
     text: '📌 Commandos',
@@ -17,7 +17,7 @@ const startButtons = [
     text: '📄 Documentacion',
     url: 'http://github.com/carlos-burelo/CortanaTS',
   },
-]
+];
 export const modules = [
   {
     text: 'Administrador',
@@ -258,7 +258,7 @@ export const modules = [
       `<b>/fw (model) (csc)</b>\n` +
       `Retorna la ultima compilacion de los firmwares de samsung \n`,
   },
-]
+];
 const lang = {
   global: {
     requestApproved: 'Request approved, now Cortana is available un your chat.',
@@ -496,7 +496,7 @@ const lang = {
     unMuted: (u) => `${u} ahora puede volver a hablar`,
     noUnMuted: (u) => `No se ha podido remover el silencio de ${u}`,
   },
-}
+};
 const w = {
   ban: 'ban',
   demote: 'demote',
@@ -507,5 +507,5 @@ const w = {
   demoted: 'demoted',
   promoted: 'promoted',
   warn: 'warn',
-}
-export default lang
+};
+export default lang;

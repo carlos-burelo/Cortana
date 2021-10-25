@@ -1,4 +1,4 @@
-import { BOT_NAME, BOT_REPO, BOT_USERNAME, OWNER_USERNAME } from '@config';
+import { BOT_NAME, BOT_REPO, BOT_USERNAME, Image, OWNER_USERNAME } from '@config';
 import { status } from '@libs/messages';
 import { LangI } from '@interfaces/locales';
 
@@ -133,7 +133,7 @@ export const LANG: LangI = {
   },
   start: {
     msg: (a) =>
-      `Hola *${a}*, mi nombres es ${BOT_NAME}, soy un bot administrador de grupos y gestor ` +
+      `Hola *${a}*, mi nombres es [${BOT_NAME}](${Image}), soy un bot administrador de grupos y gestor ` +
       `de informacion desarrollado en typescript por @${OWNER_USERNAME}.\n` +
       `A continuacion le muestro una serie de opciones que actualmente tengo disponibles.\n`,
     btns: [

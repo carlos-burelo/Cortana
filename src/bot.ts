@@ -9,6 +9,7 @@ import helperModule from '@modules/help';
 import startModule from '@modules/start';
 import stickersModule from '@modules/stickers';
 import { Bot } from 'grammy';
+import nodeModule from './core/modules/node';
 
 export function modules(bot: Bot<Cortana>) {
   adminModule(bot);
@@ -18,6 +19,7 @@ export function modules(bot: Bot<Cortana>) {
   extrasModule(bot);
   githubModule(bot);
   helperModule(bot);
+  nodeModule(bot);
   startModule(bot);
   stickersModule(bot);
 }

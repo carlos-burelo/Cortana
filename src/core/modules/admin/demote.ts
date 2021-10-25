@@ -26,19 +26,14 @@ export async function demoteteCmd(ctx: Cortana) {
 
 export async function demote(ctx: Cortana, id: number) {
   try {
-    return await ctx.promoteChatMember(id, {
-      can_change_info: false,
-      // can_post_messages: false,
-      // can_edit_messages: false,
-      // can_delete_messages: false,
-      // can_invite_users: false,
-      // can_restrict_members: false,
-      // can_pin_messages: false,
-      // can_promote_members: false,
-      // can_manage_chat: false
-    });
+    // return ctx.api.promoteChatMember(ctx.chat.id, id, {
+    //   // can_change_info: false,
+    //   // can_delete_messages: false,
+    //   can_invite_users: false,
+    //   // can_restrict_members: false,
+    // })
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return false;
   }
 }

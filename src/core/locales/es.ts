@@ -103,6 +103,13 @@ export const LANG: LangI = {
   },
   admin: {
     adminList: `Lista de adminstradores`,
+    pinSuccess: 'Mensaje anclado satisfactoriamente',
+    pinError: 'No se ha podido anclar el mensaje',
+    unPinSuccess: 'Mensaje desanclado satisfactoriamente',
+    unPinAllSuccess: 'Todos los mensajes an sido deshanclados',
+    unPinError: 'El mensaje no ha podido ser desanclado',
+    unPinAllError: 'Los mensajes no han podido ser desanclados',
+    unPinSuggestion: 'Use `$all` para desanclar todos los mensajes',
   },
   android: {
     noModel: 'Porfavor coloque algun modelo',

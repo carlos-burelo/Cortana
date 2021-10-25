@@ -7,7 +7,7 @@ export async function promoteCmd(ctx: Cortana) {
     const _ = await ctx.lang();
     if (ctx.chat.type === 'private') return ctx.reply(_.global.noPrivateChat);
     if (!ctx.msg.reply_to_message) return ctx.reply(_.global.replyMissing);
-    const promoter: any = await ctx.getChatMember(ctx.from.id);
+    const promoter: any = await ctx.getChatMember(ctx.msg.from.id);
     const member = await ctx.getChatMember(ctx.msg.reply_to_message.from.id);
     if (!(promoter.can_promote_members || promoter.status == 'creator') /* || SUDO EXCEPTION*/) {
       return ctx.reply("You don't have the necessary rights to do that!");
@@ -17,12 +17,15 @@ export async function promoteCmd(ctx: Cortana) {
     }
     if (member.user.id == BOT_ID) {
       return ctx.reply("I can't promote myself! Get an admin to do it for me.");
-    } else {
-      if (!(await promote(ctx, member.user.id))) {
-        return ctx.reply('Hubo un erorr al promover al usuario');
-      }
     }
-    return ctx.reply('El usuario ha sido promovido');
+    // else {
+    console.log(promoter)
+    console.log(member)
+    // if (!(await promote(ctx, member.user.id))) {
+    //   return ctx.reply('Hubo un erorr al promover al usuario');
+    // }
+    // }
+    // return ctx.reply('El usuario ha sido promovido');
   } catch (error) {
     const [l] = error.stack.match(/(d+):(d+)/);
     log({ ctx, error, __filename, l, f: 'promoteCmd()' });
@@ -30,6 +33,7 @@ export async function promoteCmd(ctx: Cortana) {
 }
 export async function promote(ctx: Cortana, id: number): Promise<boolean> {
   try {
+    // console.log()
     return await ctx.promoteChatMember(id, {
       can_change_info: true,
       can_delete_messages: true,

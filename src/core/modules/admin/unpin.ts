@@ -4,15 +4,14 @@ import { log } from '@libs/messages';
 export async function unpinCmd(ctx: Cortana) {
   try {
     const _ = await ctx.lang();
-    let message_id: number;
-    if (ctx.chat.type == 'private') {
-      return ctx.reply(_.global.noPrivateChat);
+    // let message_id: number;
+    if (ctx.chat.type == 'private') return ctx.reply(_.global.noPrivateChat);
+    const id = ctx.msg.reply_to_message.message_id;
+    if (!id) {
+      ctx.unpinAllChatMessages()
+      return ctx.reply(_.admin.unPinAllSuccess)
     }
-    if (!ctx.message.reply_to_message) {
-      message_id = ctx.message.message_id;
-    }
-    message_id = ctx.message.reply_to_message.message_id;
-    ctx.pinChatMessage(message_id);
+    ctx.unpinChatMessage(id);
     ctx.reply(_.admin.pinSuccess);
   } catch (error) {
     const [l] = error.stack.match(/(d+):(d+)/);

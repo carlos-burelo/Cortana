@@ -21,10 +21,9 @@ export async function saveNoteCmd(ctx: Cortana) {
       ...match,
     };
     const noteExist = await getNote(note.key, note.chatId);
-    const noteName = `\`#${key}\``;
     noteExist
-      ? (await updateNote(note), ctx.reply(_.notes.updatedNote(noteName)))
-      : (await insertNote(note), ctx.reply(_.notes.noteCreated(noteName)));
+      ? (await updateNote(note), ctx.replyWithMarkdown(_.notes.updatedNote(key)))
+      : (await insertNote(note), ctx.replyWithMarkdown(_.notes.noteCreated(key)));
   } catch (error) {
     console.log(error.message);
     const [l] = error.stack.match(/(d+):(d+)/);

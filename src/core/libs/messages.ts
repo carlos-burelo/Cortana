@@ -156,7 +156,7 @@ export function sendMessage(message: sendMessageI): Promise<Message> {
       });
     }
     if (msg.type == 'sticker') {
-      ctx.api.sendSticker(id, msg.content, {
+      return ctx.api.sendSticker(id, msg.content, {
         reply_markup: msg.reply_markup,
       });
     }
@@ -192,9 +192,7 @@ export function sendMessage(message: sendMessageI): Promise<Message> {
       });
     }
   } catch (error) {
-    return ctx.api.sendMessage(id, msg.content, {
-      parse_mode: 'Markdown',
-    });
+    return;
   }
 }
 /**

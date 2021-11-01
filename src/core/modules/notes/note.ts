@@ -3,7 +3,7 @@ import { Cortana } from '@context';
 import { log, sendMessage } from '@libs/messages';
 
 export async function getNoteCmd(ctx: Cortana) {
-  const key: string = ctx.msg.text.replace(/#/, '');
+  const key: string = ctx.msg.text.replace(/#/, '').toLowerCase();
   const note = await getNote(key, ctx.chat.id);
   if (!note) return;
   await sendMessage({ ctx, msg: note });

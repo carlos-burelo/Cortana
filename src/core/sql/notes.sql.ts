@@ -27,7 +27,8 @@ export async function getNote(key: string, chatId: number): Promise<NoteI> {
 }
 
 export async function getNotes(chatId: number): Promise<NoteI[]> {
-  const { error, data } = await sql.from<NoteI>('notes').select('*').eq('chatId', chatId);
+  const { error, data } = await sql.from<NoteI>('notes').select('key').eq('chatId', chatId);
+  console.log(data);
   if (error) return undefined;
   else return data;
 }

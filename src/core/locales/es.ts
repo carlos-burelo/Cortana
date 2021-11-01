@@ -407,6 +407,8 @@ export const LANG: LangI = {
     noteDeleted: (a) => `La nota \`#${a}\` ha sido eliminada.`,
     noteCreated: (a) => `Se ha creado la nota \`#${a}\`.`,
     noteNotFound: (a) => `No se ha podido encontrar la nota: \`#${a}\`.`,
+    notesTitle: (a) => `Notas en ${a}`,
+    notesNotFound: 'No existen notas en el chat.',
   },
 };
 

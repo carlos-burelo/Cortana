@@ -10,6 +10,7 @@ export async function saveNoteCmd(ctx: Cortana) {
     if (!ctx.msg.reply_to_message) return ctx.reply(_.global.replyMissing);
     const { reply_to_message } = ctx.message;
     const match = matchMessage(reply_to_message);
+    if (!match) return ctx.reply('Error');
     const [key]: string[] = ctx.params;
     if (!key) return ctx.reply(_.notes.keyMissing);
     const note: NoteI = {
@@ -25,6 +26,7 @@ export async function saveNoteCmd(ctx: Cortana) {
       ? (await updateNote(note), ctx.reply(_.notes.updatedNote(noteName)))
       : (await insertNote(note), ctx.reply(_.notes.noteCreated(noteName)));
   } catch (error) {
+    console.log(error.message);
     const [l] = error.stack.match(/(d+):(d+)/);
     log({ ctx, error, __filename, l, f: 'saveNoteCmd()' });
   }

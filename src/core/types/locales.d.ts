@@ -149,6 +149,8 @@ export interface NotesI {
   noteDeleted: (a: string) => string;
   noteCreated: (a: string) => string;
   noteNotFound: (a: string) => string;
+  notesTitle: (a: string) => string;
+  notesNotFound: string;
 }
 
 export type ActionsI =

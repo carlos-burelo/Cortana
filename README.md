@@ -1,4 +1,4 @@
-![logo](./banner.jpg)
+![logo](https://github.com/carlos-burelo/CortanaTs/raw/master/banner.jpg)
 
 # Hi, I'm CortanaTS bot
 

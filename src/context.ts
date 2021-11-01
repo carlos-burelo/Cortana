@@ -2,7 +2,7 @@ import { argRegex, BOT_TOKEN, localesDir } from '@config';
 import { LangI } from '@interfaces/locales';
 import { AccountsTable } from '@interfaces/sql';
 import { request } from '@libs/request';
-import { createAccount, getLang, validate } from '@SQL';
+import { createAccount, getLang, validate } from '@sql_types';
 import { ArgsI } from '@typings';
 import { Api, Context, RawApi } from 'grammy';
 import { Other } from 'grammy/out/core/api';

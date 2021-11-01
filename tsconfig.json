@@ -5,7 +5,7 @@
       "@libs/*": ["core/libs/*"],
       "@locales/*": ["core/locales/*"],
       "@sql/*": ["core/sql/*"],
-      "@SQL": ["core/sql/index.ts"],
+      "@sql_types": ["core/sql/index.ts"],
       "@typings": ["core/types/index.d.ts"],
       "@interfaces/*": ["core/types/*"],
       "@modules/*": ["core/modules/*"],

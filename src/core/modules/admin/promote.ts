@@ -19,8 +19,6 @@ export async function promoteCmd(ctx: Cortana) {
       return ctx.reply("I can't promote myself! Get an admin to do it for me.");
     }
     // else {
-    console.log(promoter)
-    console.log(member)
     // if (!(await promote(ctx, member.user.id))) {
     //   return ctx.reply('Hubo un erorr al promover al usuario');
     // }

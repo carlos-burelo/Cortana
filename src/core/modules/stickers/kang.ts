@@ -29,13 +29,11 @@ export async function kangCmd(ctx: Cortana) {
   let kangSticker: string = `${Date.now()}.png`;
   let sticker: string;
   if (type == 'photo') {
-    console.log('FILE TYPE: PHOTO');
     const fileUrl = await ctx.getLink(file_id);
     const newFileDir: string = resolve(downloadDir, kangSticker);
     await downloadFile(fileUrl, newFileDir);
     sticker = await scaleImage(newFileDir);
   } else if (type == 'sticker') {
-    console.log('FILE TYPE: STICKER');
     sticker = file_id;
   } else {
     return ctx.reply('Incorrect format');

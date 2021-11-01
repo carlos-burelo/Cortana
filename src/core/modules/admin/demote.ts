@@ -16,7 +16,7 @@ export async function demoteteCmd(ctx: Cortana) {
     if (B.user.id === A.user.id) return ctx.reply(_.youCanNot('demote'));
     if (B.status === 'administrator' && A.status === 'administrator')
       return ctx.reply(_.alreadyIsAdmin(B.user.first_name));
-    await demote(ctx, B.user.id)
+    await demote(ctx, B.user.id);
     // return ctx.reply('El usuario ha sido degradado');
   } catch (error) {
     const [l] = error.stack.match(/(d+):(d+)/);

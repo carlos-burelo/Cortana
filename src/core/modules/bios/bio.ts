@@ -1,12 +1,18 @@
 import { Cortana } from '@context';
-import { log } from '@libs/messages';
-import { BiosSQL } from '@sql/bio.sql';
+import { log, md } from '@libs/messages';
+import { getBio } from '@sql/bio.sql';
 
 export async function bioCmd(ctx: Cortana) {
   try {
-    const sql = new BiosSQL(ctx);
-    const data = await sql.getOneBio();
-    // if (data == undefined)
+    const { reply_to_message: msg } = ctx.msg;
+    if (!msg) return ctx.reply('No message detect');
+    const {
+      from: { id: userId, first_name },
+    } = ctx.message.reply_to_message;
+    const bio = await getBio(ctx.chat.id, userId);
+    if (!bio) return ctx.reply('No bio found');
+    const text = `*${first_name || 'User'} Bio:*\n${md(bio.text)}`;
+    return ctx.replyWithMarkdown(text);
   } catch (error) {
     const [l] = error.stack.match(/(d+):(d+)/);
     log({ ctx, error, __filename, l, f: 'bioCmd()' });

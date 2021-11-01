@@ -28,13 +28,5 @@
     "forceConsistentCasingInFileNames": true,
     "removeComments": true
   },
-  "typedocOptions": {
-    "excludeExternals": true,
-    "includeVersion": true,
-    "media": "docs/assets/",
-    "name": "CortanaTs",
-    "out": "docs/",
-    "readme": "README2.md"
-  },
   "include": ["src/"]
 }

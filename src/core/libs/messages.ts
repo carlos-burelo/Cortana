@@ -197,7 +197,6 @@ export function sendMessage(message: sendMessageI): Promise<Message> {
     });
   }
 }
-
 /**
  * Describe your function
  * @param {logErrorI} error
@@ -228,16 +227,15 @@ export async function log({
   });
 }
 /**
- * Describe your function
+ * Concat simple text with backticks
  * @param {string} text
  * @return {string}
  */
 export function toCode(text: string): string {
   return `\`\`\`${text}\`\`\``;
 }
-
 /**
- * Describe your function
+ * Return some emoji depending on the boolean value
  * @param {boolean} value
  * @return {'✅'|'❌'}
  */
@@ -245,8 +243,14 @@ export function status(value: boolean): '✅' | '❌' {
   if (value) return '✅';
   else return '❌';
 }
-
-export function md(text: string) {
+/**
+ * Parse the special caracters in the text
+ * and replace them with the corresponding
+ * scaped characters in markdown format
+ * @param {string} text - The text to parse
+ * @return {string}
+ */
+export function md(text: string): string {
   text = text
     .replace(/\_/g, '_')
     .replace(/\*/g, '*')
@@ -256,8 +260,14 @@ export function md(text: string) {
     .replace(/\)/g, ')');
   return text;
 }
-
-export function html(text: string) {
+/**
+ * Parse characters in the text and replace them
+ * with the corresponding escaped characters
+ * in HTML TAGS
+ * @param  {string} text
+ * @returns {string}
+ */
+export function html(text: string): string {
   text = text.replace(/\</g, '<').replace(/\>/g, '>');
   return text;
 }

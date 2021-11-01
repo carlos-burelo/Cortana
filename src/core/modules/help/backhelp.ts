@@ -8,6 +8,7 @@ export async function backhelpCmd(ctx: Cortana) {
     let btns = _.modules.sort((a, b) => (a.text < b.text ? -1 : 1));
     ctx.editMessageText(_.help.msg, {
       reply_markup: buttonBuilder(btns, 3),
+      parse_mode: 'Markdown',
     });
   } catch (error) {
     const [l] = error.stack.match(/(d+):(d+)/);

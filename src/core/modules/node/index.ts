@@ -1,5 +1,5 @@
 import { Bot } from 'grammy';
-import { Cortana } from '../../../context';
+import { Cortana } from '@context';
 import { bashCmd } from './bash';
 
 export default function nodeModule(bot: Bot<Cortana>) {

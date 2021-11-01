@@ -1,5 +1,5 @@
-import { Cortana } from '../../../context';
-import { log } from '../../libs/messages';
+import { Cortana } from '@context';
+import { log } from '@libs/messages';
 
 export async function sendCmd(ctx: Cortana) {
   try {

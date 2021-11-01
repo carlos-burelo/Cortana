@@ -69,8 +69,8 @@ export class Cortana extends Context {
    * Generate message with parse_mode in
    * Markdown
    * @param {string} text
-   * @param {MessageParsed} other?
-   * @param {AbortSignal} signal?
+   * @param {MessageParsed} [other]
+   * @param {AbortSignal} [signal]
    * @return {Promise<Message.TextMessage>}
    */
   replyWithMarkdown(

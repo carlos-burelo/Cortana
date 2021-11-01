@@ -44,9 +44,9 @@ export const LANG: LangI = {
   helpers: {
     youDontHavePermissions: (a) => ``,
     youCanNot: (a) => `No puedes auto${actions[a]}te`,
-    canNot: (a) => ``,
-    memberToAdmin: (a) => ``,
-    adminToAdmin: (a) => ``,
+    canNot: (a) => `Any message`,
+    memberToAdmin: (a) => `Any message`,
+    adminToAdmin: (a) => `Any message`,
     anyToCreator: (a) => `No puedes ${actions[a]} al propietario del chat.`,
     youCantAffectMe: (a) => `No puedes ${actions[a]}me`,
     success: (a, b, c) => `${a} ha sido ${actions[b]} por ${c}`,

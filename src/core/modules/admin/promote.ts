@@ -17,13 +17,12 @@ export async function promoteCmd(ctx: Cortana) {
     }
     if (member.user.id == BOT_ID) {
       return ctx.reply("I can't promote myself! Get an admin to do it for me.");
+    } else {
+      if (!(await promote(ctx, member.user.id))) {
+        return ctx.reply('Hubo un erorr al promover al usuario');
+      }
     }
-    // else {
-    // if (!(await promote(ctx, member.user.id))) {
-    //   return ctx.reply('Hubo un erorr al promover al usuario');
-    // }
-    // }
-    // return ctx.reply('El usuario ha sido promovido');
+    return ctx.reply('El usuario ha sido promovido');
   } catch (error) {
     const [l] = error.stack.match(/(d+):(d+)/);
     log({ ctx, error, __filename, l, f: 'promoteCmd()' });
@@ -31,7 +30,6 @@ export async function promoteCmd(ctx: Cortana) {
 }
 export async function promote(ctx: Cortana, id: number): Promise<boolean> {
   try {
-    // console.log()
     return await ctx.promoteChatMember(id, {
       can_change_info: true,
       can_delete_messages: true,

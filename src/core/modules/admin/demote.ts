@@ -17,7 +17,6 @@ export async function demoteteCmd(ctx: Cortana) {
     if (B.status === 'administrator' && A.status === 'administrator')
       return ctx.reply(_.alreadyIsAdmin(B.user.first_name));
     await demote(ctx, B.user.id);
-    // return ctx.reply('El usuario ha sido degradado');
   } catch (error) {
     const [l] = error.stack.match(/(d+):(d+)/);
     log({ ctx, error, __filename, l, f: 'promoteCmd()' });
@@ -26,14 +25,11 @@ export async function demoteteCmd(ctx: Cortana) {
 
 export async function demote(ctx: Cortana, id: number) {
   try {
-    // return ctx.api.promoteChatMember(ctx.chat.id, id, {
-    //   // can_change_info: false,
-    //   // can_delete_messages: false,
-    //   can_invite_users: false,
-    //   // can_restrict_members: false,
-    // })
+    const c = await ctx.api.restrictChatMember(ctx.chat.id, id, {
+      can_invite_users: false,
+      can_change_info: false,
+    });
   } catch (error) {
-    // console.log(error);
     return false;
   }
 }

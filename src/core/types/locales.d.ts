@@ -14,6 +14,7 @@ export interface LangI {
   start: StartI;
   help: HelpI;
   modules: ModuleI[];
+  notes: NotesI;
 }
 
 export interface UtilsI {
@@ -140,6 +141,14 @@ export interface AndroidI {
 export interface StartI {
   msg: (a: string) => string;
   btns: InlineKeyboardButton[];
+}
+
+export interface NotesI {
+  keyMissing: string;
+  updatedNote: (a: string) => string;
+  noteDeleted: (a: string) => string;
+  noteCreated: (a: string) => string;
+  noteNotFound: (a: string) => string;
 }
 
 export type ActionsI =

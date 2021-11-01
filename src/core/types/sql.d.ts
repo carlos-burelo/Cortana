@@ -57,6 +57,7 @@ export type AccountI = User | Group;
 // Notes interfaces
 export interface NoteI extends MessageProps {
   chatId: number;
+  key: string;
   type: MsgType;
   content: string;
 }

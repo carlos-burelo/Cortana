@@ -401,6 +401,13 @@ export const LANG: LangI = {
         `Retorna la ultima compilacion de los firmwares de samsung \n`,
     },
   ],
+  notes: {
+    keyMissing: 'No se asigno un nombre para la nota',
+    updatedNote: (a) => `La nota \`#${a}\` ha sido actualizada.`,
+    noteDeleted: (a) => `La nota \`#${a}\` ha sido eliminada.`,
+    noteCreated: (a) => `Se ha creado la nota \`#${a}\`.`,
+    noteNotFound: (a) => `No se ha podido encontrar la nota: \`#${a}\`.`,
+  },
 };
 
 const actions = {

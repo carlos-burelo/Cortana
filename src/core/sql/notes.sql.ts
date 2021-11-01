@@ -14,3 +14,29 @@ export async function insertNote(note: NoteI): Promise<boolean> {
   if (error) return false;
   else return true;
 }
+
+export async function getNote(note: NoteI): Promise<NoteI> {
+  const { error, data } = await sql
+    .from<NoteI>('notes')
+    .select('*')
+    .eq('key', note.key)
+    .eq('chatId', note.chatId)
+    .single();
+  if (error) return undefined;
+  else return data;
+}
+
+export async function getNotes(chatId: number): Promise<NoteI[]> {
+  const { error, data } = await sql.from<NoteI>('notes').select('*').eq('chatId', chatId);
+  if (error) return undefined;
+  else return data;
+}
+export async function updateNote(note: NoteI): Promise<boolean> {
+  const { error } = await sql
+    .from<NoteI>('notes')
+    .update(note)
+    .eq('key', note.key)
+    .eq('chatId', note.chatId);
+  if (error) return false;
+  else return true;
+}

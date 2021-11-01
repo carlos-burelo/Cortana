@@ -19,7 +19,7 @@ export async function saveNoteCmd(ctx: Cortana) {
       content: match.content,
       ...match,
     };
-    const noteExist = await getNote(note);
+    const noteExist = await getNote(note.key, note.chatId);
     const noteName = `\`#${key}\``;
     noteExist
       ? (await updateNote(note), ctx.reply(_.notes.updatedNote(noteName)))

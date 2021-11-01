@@ -15,12 +15,12 @@ export async function insertNote(note: NoteI): Promise<boolean> {
   else return true;
 }
 
-export async function getNote(note: NoteI): Promise<NoteI> {
+export async function getNote(key: string, chatId: number): Promise<NoteI> {
   const { error, data } = await sql
     .from<NoteI>('notes')
     .select('*')
-    .eq('key', note.key)
-    .eq('chatId', note.chatId)
+    .eq('key', key)
+    .eq('chatId', chatId)
     .single();
   if (error) return undefined;
   else return data;

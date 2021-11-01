@@ -248,14 +248,17 @@ export function status(value: boolean): '✅' | '❌' {
  * @param {string} text - The text to parse
  * @return {string}
  */
+// prettier-ignore
 export function md(text: string): string {
   text = text
-    .replace(/\_/g, '_')
-    .replace(/\*/g, '*')
-    .replace(/\[/g, '[')
-    .replace(/\]/g, ']')
-    .replace(/\(/g, '(')
-    .replace(/\)/g, ')');
+    .replace(/\_/g, '\_')
+    .replace(/\./g, '\.')
+    .replace(/\-/g, '\-')
+    .replace(/\*/g, '\*')
+    .replace(/\[/g, '\[')
+    .replace(/\]/g, '\]')
+    .replace(/\(/g, '\(')
+    .replace(/\)/g, '\)');
   return text;
 }
 /**
@@ -265,7 +268,8 @@ export function md(text: string): string {
  * @param  {string} text
  * @returns {string}
  */
+// prettier-ignore
 export function html(text: string): string {
-  text = text.replace(/\</g, '<').replace(/\>/g, '>');
+  text = text.replace(/\</g, '\<').replace(/\>/g, '\>');
   return text;
 }

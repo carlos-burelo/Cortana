@@ -133,9 +133,8 @@ export const LANG: LangI = {
   },
   start: {
     msg: (a) =>
-      `Hola *${a}*, mi nombres es [${BOT_NAME}](${Image}), soy un bot administrador de grupos y gestor ` +
-      `de informacion desarrollado en typescript por @${OWNER_USERNAME}.\n` +
-      `A continuacion le muestro una serie de opciones que actualmente tengo disponibles.\n`,
+      `Hola *${a}*.\nMi nombres es [${BOT_NAME}](${Image}), soy un bot administrador de grupos y gestor ` +
+      `de informacion desarrollado en typescript por @${OWNER_USERNAME}.\n`,
     btns: [
       {
         text: '📌 Comandos',

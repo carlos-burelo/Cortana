@@ -15,7 +15,6 @@ export function buttonBuilder(buttons: InlineKeyboardButton[], columns: number =
   }
   return { inline_keyboard: rows };
 }
-
 /**
  * Extract buttons in text message an clean message
  * @param {string} text

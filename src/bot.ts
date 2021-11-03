@@ -1,6 +1,7 @@
 import { Cortana } from '@context';
 import adminModule from '@modules/admin';
 import androidModule from '@modules/android';
+import banModule from '@modules/ban';
 import biosModule from '@modules/bios';
 import blacklistModule from '@modules/blacklist';
 import extrasModule from '@modules/extras';
@@ -16,6 +17,7 @@ import { Bot } from 'grammy';
 export function modules(bot: Bot<Cortana>) {
   adminModule(bot);
   androidModule(bot);
+  banModule(bot);
   biosModule(bot);
   blacklistModule(bot);
   extrasModule(bot);

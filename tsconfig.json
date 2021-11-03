@@ -28,5 +28,6 @@
     "forceConsistentCasingInFileNames": true,
     "removeComments": true
   },
-  "include": ["src/"]
+  "include": ["src/"],
+  "exclude": [".old/", "node_modules/", "dist/"]
 }

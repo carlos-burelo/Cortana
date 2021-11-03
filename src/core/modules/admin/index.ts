@@ -1,12 +1,13 @@
-import { Bot } from 'grammy';
 import { Cortana } from '@context';
+import { Bot } from 'grammy';
 import { adminlistCmd } from './adminlist';
 import { demoteteCmd } from './demote';
+import { linkCmd } from './link';
 import { permsCmd } from './perms';
 import { pinCmd } from './pin';
 import { promoteCmd } from './promote';
+import { setpermsCmd } from './setperms';
 import { unpinCmd } from './unpin';
-import { linkCmd } from './link';
 
 export default function adminModule(bot: Bot<Cortana>) {
   bot.command('promote', async (ctx) => await promoteCmd(ctx));
@@ -16,4 +17,5 @@ export default function adminModule(bot: Bot<Cortana>) {
   bot.command('unpin', async (ctx) => await unpinCmd(ctx));
   bot.command('perms', async (ctx) => await permsCmd(ctx));
   bot.command(['link', 'invitelink'], async (ctx) => await linkCmd(ctx));
+  bot.command('setperms', async (ctx) => await setpermsCmd(ctx));
 }

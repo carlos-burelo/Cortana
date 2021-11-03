@@ -110,6 +110,7 @@ export const LANG: LangI = {
     unPinError: 'El mensaje no ha podido ser desanclado',
     unPinAllError: 'Los mensajes no han podido ser desanclados',
     unPinSuggestion: 'Use `$all` para desanclar todos los mensajes',
+    setPermsSuccess: 'Permisos actualizados satisfactoriamente',
   },
   android: {
     noModel: 'Porfavor coloque algun modelo',

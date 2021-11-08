@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { existsSync, mkdirSync } from 'fs';
 import { resolve } from 'path';
-import { CurrencyI } from '@typings';
+import { CurrencyI } from '@models/index';
 /**
  * Returns an alert if there is no
  * Environment variable and stop the deployment

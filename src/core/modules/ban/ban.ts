@@ -1,4 +1,4 @@
-import { canBan } from '@/core/guard/ban.guard';
+import { canBan } from '@guards/ban.guard';
 import { Cortana } from '@context';
 import { log } from '@libs/messages';
 import { ChatMember } from 'grammy/out/platform';

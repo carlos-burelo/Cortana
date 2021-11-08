@@ -1,6 +1,6 @@
 import { createClient, PostgrestError, SupabaseClient } from '@supabase/supabase-js';
 import { SUPABASE_KEY, SUPABASE_URL } from '@config';
-import { AccountsTable } from '@interfaces/sql';
+import { AccountsTable } from '@models/sql';
 
 export const sql: SupabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 

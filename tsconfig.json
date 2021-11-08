@@ -1,17 +1,13 @@
 {
   "compilerOptions": {
     "paths": {
-      "@/*": ["*"],
       "@libs/*": ["core/libs/*"],
-      "@locales/*": ["core/locales/*"],
-      "@sql/*": ["core/sql/*"],
-      "@sql_types": ["core/sql/index.ts"],
-      "@typings": ["core/types/index.d.ts"],
-      "@interfaces/*": ["core/types/*"],
+      "@guards/*": ["core/guards/*"],
       "@modules/*": ["core/modules/*"],
-      "@bot": ["bot.ts"],
+      "@models/*": ["core/typings/*"],
       "@config": ["config.ts"],
-      "@context": ["context.ts"]
+      "@context": ["context.ts"],
+      "@sql/*": ["core/sql/*"]
     },
     "baseUrl": "./src/",
     "target": "ESNext",

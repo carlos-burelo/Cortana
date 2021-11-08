@@ -4,8 +4,9 @@ import { getBio } from '@sql/bio.sql';
 
 export async function bioCmd(ctx: Cortana) {
   try {
+    const _ = await ctx.lang();
     const { reply_to_message: msg } = ctx.msg;
-    if (!msg) return ctx.reply('No message detect');
+    if (!msg) return ctx.reply(_.global.replyMissing);
     const {
       from: { id: userId, first_name },
     } = ctx.message.reply_to_message;

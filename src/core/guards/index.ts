@@ -1,6 +1,6 @@
 import { ChatMember } from '@grammyjs/types';
 import { OWNER_ID } from '@config';
-import { HelperTypes } from '@interfaces/locales';
+import { HelperTypes } from '@models/locales';
 
 /**
  * Function for delimit admin perms

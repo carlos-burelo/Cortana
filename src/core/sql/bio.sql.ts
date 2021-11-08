@@ -1,5 +1,5 @@
 import { sql } from '.';
-import { BioI } from '@interfaces/sql';
+import { BioI } from '@models/sql';
 
 export async function getBio(chatId: number, userId: number): Promise<BioI> {
   const { data, error } = await sql

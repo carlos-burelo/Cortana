@@ -1,6 +1,6 @@
 import { Cortana } from '@context';
 import { log, matchMessage } from '@libs/messages';
-import { NoteI } from '@interfaces/sql';
+import { NoteI } from '@models/sql';
 import { getNote, insertNote, updateNote } from '@sql/notes.sql';
 
 export async function saveNoteCmd(ctx: Cortana) {

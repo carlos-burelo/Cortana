@@ -1,5 +1,5 @@
 import { sql } from '.';
-import { NoteI } from '@interfaces/sql';
+import { NoteI } from '@models/sql';
 
 /**
  * create one note in the notes table

@@ -1,9 +1,9 @@
 import { argRegex, BOT_TOKEN, localesDir } from '@config';
-import { LangI } from '@interfaces/locales';
-import { AccountsTable } from '@interfaces/sql';
+import { LangI } from '@models/locales';
+import { AccountsTable } from '@models/sql';
 import { request } from '@libs/request';
-import { createAccount, getLang, validate } from '@sql_types';
-import { ArgsI } from '@typings';
+import { createAccount, getLang, validate } from '@sql/index';
+import { ArgsI } from '@models/index';
 import { Api, Context, RawApi } from 'grammy';
 import { Other } from 'grammy/out/core/api';
 import { Message, Update, UserFromGetMe } from 'grammy/out/platform';

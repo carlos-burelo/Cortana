@@ -1,7 +1,7 @@
 import { getNotes } from '@sql/notes.sql';
 import { Cortana } from '@context';
 import { log } from '@libs/messages';
-import { NoteI } from '@interfaces/sql';
+import { NoteI } from '@models/sql';
 
 export async function notesCmd(ctx: Cortana) {
   try {

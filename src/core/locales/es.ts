@@ -1,6 +1,6 @@
 import { BOT_NAME, BOT_REPO, BOT_USERNAME, Image, OWNER_USERNAME } from '@config';
 import { status } from '@libs/messages';
-import { LangI } from '@interfaces/locales';
+import { LangI } from '@models/locales';
 
 export const LANG: LangI = {
   id: `Español 🇲🇽`,

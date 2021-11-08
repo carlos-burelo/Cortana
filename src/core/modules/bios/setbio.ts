@@ -1,4 +1,4 @@
-import { BioI } from '@/core/types/sql';
+import { BioI } from '@models/sql';
 import { Cortana } from '@context';
 import { log } from '@libs/messages';
 import { addBio, getBio, updateBio } from '@sql/bio.sql';

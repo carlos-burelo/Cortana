@@ -1,6 +1,6 @@
 import { Message, Update } from 'grammy/out/platform';
 import { BOT_REPO } from '@config';
-import { ChatUserI, editMessageI, logErrorI, MsgI, sendMessageI } from '@typings';
+import { ChatUserI, editMessageI, logErrorI, MsgI, sendMessageI } from '@models/index';
 
 /**
  * Iterate over the properties of the object,

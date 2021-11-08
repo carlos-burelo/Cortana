@@ -1,7 +1,7 @@
 import { Bot } from 'grammy';
-import { BOT_TOKEN } from '@config';
-import { modules } from '@bot';
-import { Cortana } from '@context';
+import { BOT_TOKEN } from './config';
+import { modules } from './bot';
+import { Cortana } from './context';
 
 /**
  * Start the bot

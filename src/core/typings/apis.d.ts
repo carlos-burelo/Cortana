@@ -1,4 +1,3 @@
-// declare module GitHubApiResponse {
 export interface Owner {
   login: string;
   avatar_url: string;
@@ -56,8 +55,7 @@ export interface RootObject {
   network_count: number;
   subscribers_count: number;
 }
-// }
-export interface GitHubApiResponse extends RootObject {
+export interface GitHubRepoApiResponse extends RootObject {
   owner: Owner;
   license: License;
 }

@@ -1,7 +1,7 @@
 {
   "name": "cortana-ts",
-  "version": "2.2.0",
-  "main": "index.js",
+  "version": "2.3.0",
+  "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
     "start": "node dist/index.js",

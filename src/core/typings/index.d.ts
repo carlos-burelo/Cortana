@@ -316,7 +316,7 @@ export interface editMessageI {
 export interface sendMessageI {
   ctx: Cortana;
   msg: MsgI;
-  id?: number;
+  id?: number | string;
   vars?: ChatUserI;
 }
 export interface logErrorI {

@@ -128,67 +128,48 @@ export function editMessage(
 export function sendMessage(message: sendMessageI): Promise<Message> {
   const { ctx, msg, id = ctx.chat.id, vars } = message;
   try {
-    if (vars) {
-      msg.content = parseVars(vars, msg.content);
-    }
+    if (vars) msg.content = parseVars(vars, msg.content);
     if (msg.type == 'text') {
       return ctx.api.sendMessage(id, msg.content, {
-        entities: msg.entities,
-        reply_markup: msg.reply_markup,
-        ...((!msg.entities || !msg.caption_entities) && {
-          parse_mode: 'Markdown',
-        }),
+        ...msg,
+        parse_mode: 'Markdown',
       });
     }
     if (msg.type == 'photo') {
       return ctx.api.sendPhoto(id, msg.content, {
-        caption: msg.caption,
-        caption_entities: msg.caption_entities,
-        reply_markup: msg.reply_markup,
+        ...msg,
       });
     }
     if (msg.type == 'document') {
       return ctx.api.sendDocument(id, msg.content, {
-        reply_markup: msg.reply_markup,
-        caption: msg.caption,
-        caption_entities: msg.caption_entities,
-        thumb: msg.thumb,
+        ...msg,
       });
     }
     if (msg.type == 'sticker') {
       return ctx.api.sendSticker(id, msg.content, {
-        reply_markup: msg.reply_markup,
+        ...msg,
       });
     }
     if (msg.type == 'audio') {
       return ctx.api.sendAudio(id, msg.content, {
-        caption: msg.caption,
-        caption_entities: msg.caption_entities,
-        thumb: msg.thumb,
+        ...msg,
       });
     }
     if (msg.type == 'voice') {
       return ctx.api.sendVideo(id, msg.content, {
-        caption: msg.caption,
-        caption_entities: msg.caption_entities,
-        reply_markup: msg.reply_markup,
-        thumb: msg.thumb,
+        ...msg,
       });
     }
     if (msg.type == 'video') {
       return ctx.api.sendVideo(id, msg.content, {
-        caption: msg.caption,
-        caption_entities: msg.caption_entities,
-        reply_markup: msg.reply_markup,
-        thumb: msg.thumb,
+        ...msg,
       });
     }
     if (msg.type == 'poll') {
       return ctx.api.sendPoll(id, msg.content, msg.options, msg.args);
     } else {
       return ctx.api.sendMessage(id, msg.content, {
-        entities: msg.entities,
-        reply_markup: msg.reply_markup,
+        ...msg,
       });
     }
   } catch (error) {

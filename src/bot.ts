@@ -12,9 +12,11 @@ import notesModule from '@modules/notes';
 import ownerModule from '@modules/owner';
 import startModule from '@modules/start';
 import stickersModule from '@modules/stickers';
+import handlersModule from '@modules/_handlers';
 import { Bot } from 'grammy';
 
 export function modules(bot: Bot<Cortana>) {
+  handlersModule(bot);
   adminModule(bot);
   androidModule(bot);
   banModule(bot);

@@ -15,6 +15,7 @@ export interface LangI {
   help: HelpI;
   modules: ModuleI[];
   notes: NotesI;
+  extras: any;
 }
 
 export interface UtilsI {

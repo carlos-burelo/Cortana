@@ -410,6 +410,12 @@ export const LANG: LangI = {
     notesTitle: (a) => `Notas en ${a}`,
     notesNotFound: 'No existen notas en el chat.',
   },
+  extras: {
+    noBaseFound: 'Escriba un valor base',
+    baseIsNaN: 'EL valor base debe ser un numero',
+    origNotFound: 'Escriba un valor de origen',
+    destNotFound: 'Escriba un valor de destino',
+  },
 };
 
 const actions = {

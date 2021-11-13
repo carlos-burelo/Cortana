@@ -1,7 +1,6 @@
 import Cheerio from 'cheerio';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { SAMSUNG_API, TWRP_API } from '@config';
-import { parse } from 'node-html-parser';
 
 // GITHUB_SCRAPING
 export interface RepoInterface {

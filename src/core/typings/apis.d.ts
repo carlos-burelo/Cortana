@@ -12,8 +12,7 @@ export interface License {
   spdx_id: string;
   url: string;
 }
-
-export interface RootObject {
+export interface GitHubRepoApiResponse {
   id: number;
   node_id: string;
   name: string;
@@ -54,8 +53,6 @@ export interface RootObject {
   temp_clone_token?: any;
   network_count: number;
   subscribers_count: number;
-}
-export interface GitHubRepoApiResponse extends RootObject {
   owner: Owner;
   license: License;
 }

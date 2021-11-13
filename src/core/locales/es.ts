@@ -111,6 +111,11 @@ export const LANG: LangI = {
     unPinAllError: 'Los mensajes no han podido ser desanclados',
     unPinSuggestion: 'Use `$all` para desanclar todos los mensajes',
     setPermsSuccess: 'Permisos actualizados satisfactoriamente',
+    noTitleFound: 'Ingrese un nombre para el titulo.',
+    titleTooLong: 'El titulo debe ser menor a 16 caractetes',
+    setTitleSuccess: 'Titulo actualizado satisfactoriamente',
+    noAutoRole: 'No puedes actualizar tu propio rol',
+    notAdmin: (a) => `${a} o es administrador`,
   },
   android: {
     noModel: 'Porfavor coloque algun modelo',

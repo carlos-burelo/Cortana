@@ -5,6 +5,7 @@ import { mdv2helpCmd } from './mdv2help';
 import { highlightCmd } from './highlight';
 import { loliCmd } from './loli';
 import { ccCmd } from './currency';
+import { commandsCmd } from './commands';
 
 export default function extrasModule(bot: Bot<Cortana>) {
   bot.command('mdv2', async (ctx) => await mdv2Cmd(ctx));
@@ -12,4 +13,5 @@ export default function extrasModule(bot: Bot<Cortana>) {
   bot.command('hl', async (ctx) => await highlightCmd(ctx));
   bot.command('loli', async (ctx) => await loliCmd(ctx));
   bot.command('cc', async (ctx) => await ccCmd(ctx));
+  bot.command('cmds', async (ctx) => await commandsCmd(ctx));
 }

@@ -6,7 +6,9 @@ import { linkCmd } from './link';
 import { permsCmd } from './perms';
 import { pinCmd } from './pin';
 import { promoteCmd } from './promote';
+import { roleCmd } from './role';
 import { setpermsCmd } from './setperms';
+import { setTitleCmd } from './title';
 import { unpinCmd } from './unpin';
 
 export default function adminModule(bot: Bot<Cortana>) {
@@ -18,4 +20,6 @@ export default function adminModule(bot: Bot<Cortana>) {
   bot.command('perms', async (ctx) => await permsCmd(ctx));
   bot.command(['link', 'invitelink'], async (ctx) => await linkCmd(ctx));
   bot.command('setperms', async (ctx) => await setpermsCmd(ctx));
+  bot.command('title', async (ctx) => await setTitleCmd(ctx));
+  bot.command('role', async (ctx) => await roleCmd(ctx));
 }

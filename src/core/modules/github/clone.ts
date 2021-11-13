@@ -1,5 +1,6 @@
 import { Cortana } from '@context';
-import { repoScrapping } from '@libs/scraping';
+import { request } from '@libs/request';
+import { GitHubApiResponse } from '@models/apis';
 
 export async function cloneCmd(ctx: Cortana) {
   try {
@@ -9,12 +10,15 @@ export async function cloneCmd(ctx: Cortana) {
     let user: string, repo: string;
     if (match !== null) (user = match[1]), (repo = match[2]);
     else (user = ctx.params[0]), (repo = ctx.params[1]);
-    const i = await repoScrapping(user, repo);
-    const info = _.cloneTemplate(repo, user, i.branch, i.description);
-    ctx.replyWithDocument(i.download, {
-      caption: info,
-      parse_mode: 'Markdown',
-    });
+    const i = await request<GitHubApiResponse>(`https://api.github.com/repos/${user}/${repo}`);
+    const info = _.cloneTemplate(repo, user, i.default_branch, i.description);
+    ctx.replyWithDocument(
+      `https://github.com/${user}/${repo}/archive/refs/heads/${i.default_branch}.zip`,
+      {
+        caption: info,
+        parse_mode: 'Markdown',
+      }
+    );
   } catch (error) {
     const { github: _ } = await ctx.lang();
     return ctx.reply(_.repoGetError);

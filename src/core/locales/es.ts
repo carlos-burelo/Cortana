@@ -79,6 +79,7 @@ export const LANG: LangI = {
     reposTitle: (a) => `*Repositorios: (${a})*\n\n`,
     cloneTemplate: (a, b, c, d) =>
       `*Repositorio:* \`${a}\`\n` +
+      `*Url:* [${a}](http://github.com/${b}/${a})\n` +
       `*Propietario:* \`${b}\`\n` +
       `*Rama:* \`${c}\`\n` +
       `*Descripción:*\n ${d}\n\n`,

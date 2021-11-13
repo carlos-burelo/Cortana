@@ -1,6 +1,7 @@
 import Cheerio from 'cheerio';
 import axios, { AxiosResponse } from 'axios';
 import { SAMSUNG_API, TWRP_API } from '@config';
+import { parse } from 'node-html-parser';
 
 // GITHUB_SCRAPING
 export interface RepoInterface {
@@ -12,6 +13,16 @@ export interface RepoInterface {
   forks: number;
   stars: number;
 }
+// export interface RepoInterfaceResponse {
+
+// }
+
+// export async function scrapingRepo(user:string,repo:string ): Promise<RepoInterface> {
+//   const {data} = await axios.get(`https://api.github.com/repos/${user}/${repo}`);
+//   // const $ = parse(data);
+
+//   return
+// }
 
 export async function repoScrapping(
   user: string,

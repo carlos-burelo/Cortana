@@ -1,5 +1,5 @@
 import { Cortana } from '@context';
-import { log } from '@libs/messages';
+import { log, md } from '@libs/messages';
 import { buttonBuilder } from '@libs/buttons';
 
 export async function helpmoduleCmd(ctx: Cortana) {
@@ -7,8 +7,8 @@ export async function helpmoduleCmd(ctx: Cortana) {
     const module: string = ctx.callbackQuery.data;
     const { modules: _, utils: u } = await ctx.lang();
     const { content } = _.find((i) => i.callback_data === module);
-    ctx.editMessageText(content, {
-      parse_mode: 'HTML',
+    ctx.editMessageText(md(content), {
+      parse_mode: 'Markdown',
       reply_markup: buttonBuilder(u.backBtn),
     });
   } catch (error) {

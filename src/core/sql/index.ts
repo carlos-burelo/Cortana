@@ -31,6 +31,15 @@ export async function getLang(id: number): Promise<string> {
   if (error) return 'es';
   return data.lang;
 }
+export async function updateLang(lang: string, id: number): Promise<any> {
+  const { data, error } = await sql
+    .from<AccountsTable>('accounts')
+    .update({ lang })
+    .eq('id', id)
+    .single();
+  if (error) return error;
+  return data;
+}
 
 export async function createAccount(account: AccountsTable) {
   try {

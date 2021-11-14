@@ -6,7 +6,7 @@ export async function helpCmd(ctx: Cortana) {
   try {
     const _ = await ctx.lang();
     let btns = _.modules.sort((a, b) => (a.text < b.text ? -1 : 1));
-    ctx.replyWithMarkdownV2(md(_.help.msg), {
+    ctx.replyWithMarkdown(md(_.help.msg), {
       reply_markup: buttonBuilder(btns, 3),
     });
   } catch (error) {

@@ -3,6 +3,7 @@ import { InlineKeyboardButton } from 'grammy';
 export interface LangI {
   /** Language ID */
   id: string;
+  flag: string;
   /** Generic multipurpose words*/
   utils: UtilsI;
   global: GlobalI;
@@ -49,7 +50,7 @@ export interface GlobalI {
   preventBot: string;
   preventOwner: string;
   notHavePerms: string;
-  chooseLang: string;
+  chooseLang: (a: number) => string;
   codeLangError: string;
   noPrivateChat: string;
   argsError: string;

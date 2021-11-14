@@ -24,7 +24,7 @@ export async function setbioCmd(ctx: Cortana) {
     const status = !bioExist ? await addBio(bio) : await updateBio(bio);
     status ? ctx.reply('Bio updated') : ctx.reply('Something went wrong');
   } catch (error) {
-    const [l] = error.stack.match(/(d+):(d+)/);
+    const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: 'setbioCmd()' });
   }
 }

@@ -27,7 +27,7 @@ export async function reposCmd(ctx: Cortana) {
       return ctx.reply(_.profileNotFound);
     }
   } catch (error) {
-    const [l] = error.stack.match(/(d+):(d+)/);
+    const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: '' });
   }
 }

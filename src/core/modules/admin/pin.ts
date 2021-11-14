@@ -11,7 +11,7 @@ export async function pinCmd(ctx: Cortana) {
     ctx.pinChatMessage(id);
     ctx.reply(_.admin.pinSuccess);
   } catch (error) {
-    const [l] = error.stack.match(/(d+):(d+)/);
+    const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: 'unpinCmd()' });
   }
 }

@@ -1,7 +1,7 @@
 import { Bot } from 'grammy';
 import { BOT_TOKEN } from './config';
 import { modules } from './bot';
-import { Cortana } from './context';
+import { Cortana, errorHandler } from './context';
 
 /**
  * Start the bot
@@ -17,6 +17,7 @@ export async function start(): Promise<void> {
     if (isAllow) return next();
     else return ctx.signIn();
   });
+  errorHandler(bot);
   bot.start();
   console.clear();
   console.log('Bot is runing');

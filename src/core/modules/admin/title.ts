@@ -14,7 +14,7 @@ export async function setTitleCmd(ctx: Cortana) {
     await ctx.setChatTitle(title);
     ctx.reply(_.admin.setTitleSuccess);
   } catch (error) {
-    const [l] = error.stack.match(/(d+):(d+)/);
+    const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: 'setTitleCmd()' });
   }
 }

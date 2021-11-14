@@ -15,7 +15,7 @@ export async function roleCmd(ctx: Cortana) {
     ctx.setChatAdministratorAuthorCustomTitle(role);
     if (B.user.id == A.user.id) return ctx.reply(admin.noAutoRole);
   } catch (error) {
-    const [l] = error.stack.match(/(d+):(d+)/);
+    const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: 'roleCmd()' });
   }
 }

@@ -8,7 +8,7 @@ export async function mdv2Cmd(ctx: Cortana) {
       ctx.reply('Ha occurrido un error al tratar de parsear el texto');
     });
   } catch (error) {
-    const [l] = error.stack.match(/(d+):(d+)/);
+    const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: '' });
   }
 }

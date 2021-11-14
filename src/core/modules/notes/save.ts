@@ -25,7 +25,7 @@ export async function saveNoteCmd(ctx: Cortana) {
       ? (await updateNote(note), ctx.replyWithMarkdown(_.notes.updatedNote(key)))
       : (await insertNote(note), ctx.replyWithMarkdown(_.notes.noteCreated(key)));
   } catch (error) {
-    const [l] = error.stack.match(/(d+):(d+)/);
+    const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: 'saveNoteCmd()' });
   }
 }

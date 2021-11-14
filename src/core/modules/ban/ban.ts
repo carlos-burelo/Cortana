@@ -16,7 +16,7 @@ export async function banCmd(ctx: Cortana) {
       ctx.reply('This user has been banned (test)');
     }
   } catch (error) {
-    const [l] = error.stack.match(/(d+):(d+)/);
+    const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: 'banCmd()' });
   }
 }

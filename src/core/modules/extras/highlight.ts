@@ -16,7 +16,7 @@ export async function highlightCmd(ctx: Cortana) {
     console.log(link);
     await browser.close();
   } catch (error) {
-    const [l] = error.stack.match(/(d+):(d+)/);
+    const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: 'highlightCmd()' });
   }
 }

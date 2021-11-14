@@ -11,7 +11,7 @@ export async function linkCmd(ctx: Cortana) {
       allow_sending_without_reply: true,
     });
   } catch (error) {
-    const [l] = error.stack.match(/(d+):(d+)/);
+    const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: 'linkCmd()' });
   }
 }

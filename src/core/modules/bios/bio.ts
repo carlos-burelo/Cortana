@@ -15,7 +15,7 @@ export async function bioCmd(ctx: Cortana) {
     const text = `*${first_name || 'User'} Bio:*\n${md(bio.text)}`;
     return ctx.replyWithMarkdown(text);
   } catch (error) {
-    const [l] = error.stack.match(/(d+):(d+)/);
+    const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: 'bioCmd()' });
   }
 }

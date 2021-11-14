@@ -22,7 +22,7 @@ export async function stickerHandleCmd(ctx: Cortana) {
       await sendMessage({ ctx, msg: { type: 'text', content: message }, id });
     } else return;
   } catch (error) {
-    const [l] = error.stack.match(/(d+):(d+)/);
+    const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: 'stickerHandleCmd()' });
   }
 }

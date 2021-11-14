@@ -9,7 +9,7 @@ export async function getNoteCmd(ctx: Cortana) {
   await sendMessage({ ctx, msg: note });
   try {
   } catch (error) {
-    const [l] = error.stack.match(/(d+):(d+)/);
+    const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: 'getNoteCmd()' });
   }
 }

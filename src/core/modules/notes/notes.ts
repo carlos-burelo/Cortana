@@ -16,7 +16,7 @@ export async function notesCmd(ctx: Cortana) {
     const template = `${_.notesTitle(`*${title}*`)}\n\n${notesString}`;
     ctx.replyWithMarkdown(template);
   } catch (error) {
-    const [l] = error.stack.match(/(d+):(d+)/);
+    const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: 'notesCmd()' });
   }
 }

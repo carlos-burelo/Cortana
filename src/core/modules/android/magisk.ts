@@ -15,7 +15,7 @@ export async function magiskCmd(ctx: Cortana) {
     const message = _.android.magiskTemplate(s, c);
     return ctx.replyWithMarkdown(message);
   } catch (error) {
-    const [l] = error.stack.match(/(d+):(d+)/);
+    const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: 'magiskCmd()' });
   }
 }

@@ -18,7 +18,7 @@ export async function demoteteCmd(ctx: Cortana) {
       return ctx.reply(_.alreadyIsAdmin(B.user.first_name));
     await demote(ctx, B.user.id);
   } catch (error) {
-    const [l] = error.stack.match(/(d+):(d+)/);
+    const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: 'promoteCmd()' });
   }
 }

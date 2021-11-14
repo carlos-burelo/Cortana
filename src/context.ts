@@ -1,13 +1,14 @@
-import { argRegex, BOT_TOKEN, localesDir } from '@config';
+import { argRegex, BOT_TOKEN, localesDir, LOG_CHANEL } from '@config';
 import { LangI } from '@models/locales';
 import { AccountsTable } from '@models/sql';
 import { request } from '@libs/request';
 import { createAccount, getLang, validate } from '@sql/index';
-import { ArgsI } from '@models/index';
-import { Api, Context, RawApi } from 'grammy';
+import { ArgsI, MsgI } from '@models/index';
+import { Api, Bot, Context, GrammyError, HttpError, RawApi } from 'grammy';
 import { Other } from 'grammy/out/core/api';
 import { Message, Update, UserFromGetMe } from 'grammy/out/platform';
 import { resolve as join } from 'path';
+import { sendMessage } from '@libs/messages';
 
 interface MessageParsed extends Omit<Other<RawApi, 'sendMessage', 'text'>, 'parse_mode'> {}
 
@@ -205,4 +206,20 @@ export class Cortana extends Context {
     };
     await createAccount(newAccount);
   }
+}
+export function errorHandler(bot: Bot<Cortana>) {
+  bot.catch((err) => {
+    const ctx = err.ctx;
+    const e = err.error;
+    const msg: MsgI = { content: '', type: 'text' };
+    if (e instanceof GrammyError) {
+      msg.content = e.description;
+    } else if (e instanceof HttpError) {
+      msg.content = e.message;
+    } else {
+      const err = e as any;
+      msg.content = err;
+    }
+    sendMessage({ ctx, msg, id: LOG_CHANEL });
+  });
 }

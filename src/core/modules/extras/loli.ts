@@ -30,7 +30,7 @@ export async function loliCmd(ctx: Cortana) {
   try {
     return ctx.replyWithSticker(lolis[Math.floor(Math.random() * lolis.length)]);
   } catch (error) {
-    const [l] = error.stack.match(/(d+):(d+)/);
+    const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: 'loliCmd()' });
   }
 }

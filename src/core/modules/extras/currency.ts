@@ -22,7 +22,7 @@ export async function ccCmd(ctx: Cortana) {
       reply_to_message_id: ctx.message.message_id,
     });
   } catch (error) {
-    const [l] = error.stack.match(/(d+):(d+)/);
+    const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: 'ccCmd()' });
   }
 }

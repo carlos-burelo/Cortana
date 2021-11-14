@@ -16,7 +16,7 @@ export async function rmbioCmd(ctx: Cortana) {
     const status = bioExist ? await removeBio(chatId, userId) : false;
     return ctx.reply(status ? 'Bio removed' : 'No bio found');
   } catch (error) {
-    const [l] = error.stack.match(/(d+):(d+)/);
+    const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: 'rmbioCmd()' });
   }
 }

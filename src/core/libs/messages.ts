@@ -1,5 +1,5 @@
 import { Message, Update } from 'grammy/out/platform';
-import { BOT_REPO } from '@config';
+import { BOT_REPO, LOG_CHANEL } from '@config';
 import { ChatUserI, editMessageI, logErrorI, MsgI, sendMessageI } from '@models/index';
 
 /**
@@ -177,21 +177,13 @@ export function sendMessage(message: sendMessageI): Promise<Message> {
   }
 }
 /**
- * Describe your function
+ * Global log and redirect to the `source`
  * @param {logErrorI} error
- * @return {Promise<Message.TextMessage>}
  */
-export async function log({
-  ctx,
-  error,
-  __filename,
-  l,
-  f,
-}: logErrorI): Promise<Message.TextMessage> {
+export function log({ ctx, error, __filename, l, f }: logErrorI) {
   const name = __filename.split(/[\\/]/).pop();
-  let [link] = __filename.match(/\\\w+\\\w+\.\w+\.ts/g);
-  link = link.replace(/\\/g, '/');
-  let root = '/blob/master/src/core';
+  let link = __filename.replace(process.cwd(), '').replace(/\\/g, '/');
+  let root = '/blob/master';
   let line = `${l.split(':')[0]}`;
   let url = `${BOT_REPO}${root}${link}\#L${line}`;
   const msg =
@@ -200,9 +192,8 @@ export async function log({
     `<b>Location:</b> ${l}\n` +
     `<b>Function:</b> ${f}\n` +
     `<b>Description:</b>\n<code>${error.message}</code>`;
-  return ctx.api.sendMessage('@CortanaLogs', msg, {
+  ctx.api.sendMessage(LOG_CHANEL, msg, {
     parse_mode: 'HTML',
-    disable_web_page_preview: true,
   });
 }
 /**

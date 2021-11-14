@@ -12,7 +12,7 @@ export async function helpmoduleCmd(ctx: Cortana) {
       reply_markup: buttonBuilder(u.backBtn),
     });
   } catch (error) {
-    const [l] = error.stack.match(/(d+):(d+)/);
+    const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: 'helpmoduleCmd()' });
   }
 }

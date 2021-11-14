@@ -14,7 +14,7 @@ export async function bashCmd(ctx: Cortana) {
     if (stderr) return ctx.reply(stderr);
     return ctx.reply(stdout);
   } catch (error) {
-    const [l] = error.stack.match(/(d+):(d+)/);
+    const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: 'bashCmd()' });
   }
 }

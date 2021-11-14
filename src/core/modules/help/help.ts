@@ -10,7 +10,7 @@ export async function helpCmd(ctx: Cortana) {
       reply_markup: buttonBuilder(btns, 3),
     });
   } catch (error) {
-    const [l] = error.stack.match(/(d+):(d+)/);
+    const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: 'helpCmd()' });
   }
 }

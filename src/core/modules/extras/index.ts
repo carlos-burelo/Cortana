@@ -12,4 +12,7 @@ export default function extrasModule(bot: Bot<Cortana>) {
   bot.command('loli', async (ctx) => await loliCmd(ctx));
   bot.command('cc', async (ctx) => await ccCmd(ctx));
   bot.command('cmds', async (ctx) => await commandsCmd(ctx));
+  bot.command('test', async (ctx) => {
+    ctx.replyWithPhoto('http://localhost:3000/banner.jpg');
+  });
 }

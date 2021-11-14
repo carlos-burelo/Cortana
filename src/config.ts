@@ -75,6 +75,9 @@ let LOG_CHANEL: string = process.env.LOG_CHANEL;
 let SUPABASE_URL: string = process.env.SUPABASE_URL;
 /** Secret key for your bot project*/
 let SUPABASE_KEY: string = process.env.SUPABASE_KEY;
+/** url of the bot hosted on server */
+let URL: string = process.env.URL;
+/** Port of the hosting (local/heroku... etc)*/
 
 /** Magisk Repository URL*/
 export const MAGISK_API: string = 'https://raw.githubusercontent.com/topjohnwu/magisk-files/master';
@@ -115,6 +118,7 @@ export function enviroment(): void {
     'LOG_CHANEL',
     'SUPABASE_URL',
     'SUPABASE_KEY',
+    'URL',
   ];
   enVars.forEach((e) => {
     if (!env[e] || env[e].length === 0) {
@@ -136,4 +140,5 @@ export {
   LOG_CHANEL,
   SUPABASE_URL,
   SUPABASE_KEY,
+  URL,
 };

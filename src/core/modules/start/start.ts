@@ -10,7 +10,6 @@ export async function startCmd(ctx: Cortana) {
     ctx.replyWithMarkdown(md(_.msg(user)), {
       reply_markup: buttons,
     });
-    throw new Error('Error de prueba');
   } catch (error) {
     const [l] = error.stack.match(/(\d+):(\d+)/);
     log({ ctx, error, __filename, l, f: 'startCmd()' });

@@ -20,24 +20,9 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "isolatedModules": true,
-    "allowJs": true,
     "forceConsistentCasingInFileNames": true,
     "removeComments": true
   },
   "include": ["src/"],
   "exclude": [".old/", "node_modules/", "dist/"]
-  // "ts-node": {
-  //   "compilerOptions": {
-  //     // "paths": {
-  //     //   "@libs/*": ["core/libs/*"],
-  //     //   "@guards/*": ["core/guards/*"],
-  //     //   "@modules/*": ["core/modules/*"],
-  //     //   "@models/*": ["core/typings/*"],
-  //     //   "@config": ["config.js"],
-  //     //   "@context": ["context.js"],
-  //     //   "@sql/*": ["core/sql/*"]
-  //     // },
-  //     "module": "esnext"
-  //   }
-  // }
 }

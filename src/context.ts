@@ -200,10 +200,6 @@ export class Cortana extends Context {
       id: data.id,
       type: data.type,
       lang: data.language_code || 'es',
-      ...(data.title && { title: data.title }),
-      ...(data.username && { username: data.usename }),
-      ...(data.first_name && { first_name: data.first_name }),
-      ...(data.invite_link && { invite_link: data.invite_link }),
     };
     await createAccount(newAccount);
   }

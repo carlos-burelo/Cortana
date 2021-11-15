@@ -1,15 +1,8 @@
 import { MsgType } from '.';
 
 export interface AccountsTable {
-  _id?: number;
-  created_at?: string;
-  updated_at?: string;
   id: number;
-  first_name?: string | null;
-  title?: string | null;
-  type: 'private' | 'group' | 'supergroup' | null;
-  username?: string | null;
-  invite_link?: string;
+  type: 'private' | 'group' | 'supergroup' | 'channel';
   lang: string | null;
 }
 

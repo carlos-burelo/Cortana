@@ -8,12 +8,6 @@ import { CurrencyI } from '@models/index';
  * from the bot.
  */
 export const noEnv = (env: string): never => {
-  const template =
-    `==========================================` +
-    `\n\t${env} is Missing\n` +
-    `==========================================`;
-  console.clear();
-  console.log(template);
   throw new Error(`${env} variable is missing`);
 };
 

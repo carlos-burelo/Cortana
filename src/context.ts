@@ -186,7 +186,6 @@ export class Cortana extends Context {
    */
   async login(id: number): Promise<{ id: number } | undefined> {
     const users = await validate();
-    console.log(users);
     return users.find((i) => id === i.id);
   }
   /**

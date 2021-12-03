@@ -19,9 +19,8 @@ export async function start(): Promise<void> {
   });
   modules(bot);
   errorHandler(bot);
-  app.listen(3000);
+  app.listen(4000);
   console.clear();
   bot.start();
-  console.log('Bot is runing');
 }
 start();

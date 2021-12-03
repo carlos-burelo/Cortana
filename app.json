@@ -14,11 +14,6 @@
       "value": "production",
       "required": true
     },
-    "URL": {
-      "description": "your host url from heroku",
-      "value": "https://<your app name>.herokuapp.com",
-      "required": true
-    },
     "PORT": {
       "description": "your port from heroku",
       "value": "3000",

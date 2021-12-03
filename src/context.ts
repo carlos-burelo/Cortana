@@ -1,14 +1,14 @@
 import { argRegex, BOT_TOKEN, localesDir, LOG_CHANEL } from '@config';
+import { sendMessage } from '@libs/messages';
+import { request } from '@libs/request';
+import { ArgsI, MsgI } from '@models/index';
 import { LangI } from '@models/locales';
 import { AccountsTable } from '@models/sql';
-import { request } from '@libs/request';
 import { createAccount, getLang, validate } from '@sql/index';
-import { ArgsI, MsgI } from '@models/index';
 import { Api, Bot, Context, GrammyError, HttpError, RawApi } from 'grammy';
 import { Other } from 'grammy/out/core/api';
-import { Message, Update, UserFromGetMe } from 'grammy/out/platform';
+import { Message, Update, UserFromGetMe } from 'grammy/out/platform.node';
 import { resolve as join } from 'path';
-import { sendMessage } from '@libs/messages';
 
 interface MessageParsed extends Omit<Other<RawApi, 'sendMessage', 'text'>, 'parse_mode'> {}
 

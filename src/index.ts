@@ -1,7 +1,6 @@
 import { Bot } from 'grammy';
-import { BOT_TOKEN } from './config';
 import { modules } from './bot';
-import app from './app';
+import { BOT_TOKEN, app } from './config';
 import { Cortana, errorHandler } from './context';
 
 /**
@@ -21,6 +20,7 @@ export async function start(): Promise<void> {
   errorHandler(bot);
   app.listen(4000);
   console.clear();
+  console.log('Bot alive')
   bot.start();
 }
 start();

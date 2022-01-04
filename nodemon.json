@@ -1,5 +1,5 @@
 {
   "ext": "ts",
-  "exec": "ts-node -r tsconfig-paths/register --transpile-only src/index.ts",
+  "exec": "ts-node -r tsconfig-paths/register --transpile-only -r dotenv/config src/index.ts",
   "ignore": ["node_modules/*"]
 }

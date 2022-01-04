@@ -536,6 +536,11 @@ color@^4.0.1:
     color-convert "^2.0.1"
     color-string "^1.6.0"
 
+command-line-parser@^0.1.10:
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/command-line-parser/-/command-line-parser-0.1.10.tgz#e7a8994a53187bfbc8d70129ffd4d57bc3726c12"
+  integrity sha1-56iZSlMYe/vI1wEp/9TVe8NybBI=
+
 commander@^8.2.0:
   version "8.3.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-8.3.0.tgz#4837ea1b2da67b9c616a67afbb0fafee567bca66"

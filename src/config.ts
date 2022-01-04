@@ -1,7 +1,15 @@
-import 'dotenv/config';
+// import dotenv from 'dotenv';
 import { existsSync, mkdirSync } from 'fs';
 import { resolve } from 'path';
 import { CurrencyI } from '@models/index';
+import express from 'express';
+
+const app = express();
+
+// !process.env.NODE_ENV ? dotenv.config() : ''
+
+app.use('/', express.static(resolve(__dirname, 'downloads')));
+
 /**
  * Returns an alert if there is no
  * Environment variable and stop the deployment
@@ -135,4 +143,5 @@ export {
   SUPABASE_URL,
   SUPABASE_KEY,
   URL,
+  app,
 };

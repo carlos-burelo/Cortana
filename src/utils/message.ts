@@ -1,16 +1,5 @@
-export function md(text: string): string {
-  text = text
-    .replace(/\_/g, `\_`)
-    .replace(/\!/g, `\\!`)
-    .replace(/\./g, `\\.`)
-    .replace(/\|/g, `\|`)
-    .replace(/\-/g, `\-`)
-    .replace(/\*/g, `\*`)
-    .replace(/\[/g, `\[`)
-    .replace(/\]/g, `\]`)
-    .replace(/\(/g, `\(`)
-    .replace(/\)/g, `\)`)
-    .replace(/\</g, `\<`)
-    .replace(/\>/g, `\>`)
-  return text
+export const md = (text: string): string => {
+  const normalScape = /[\|\-\*\[\]\(\)\<\>]/g
+  const specialScape = /[\_\!\.]/g
+  return text.replace(normalScape, `\$&`).replace(specialScape, `\\$&`)
 }

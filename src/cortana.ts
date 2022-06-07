@@ -4,9 +4,13 @@ import { Api, Context, RawApi } from 'grammy'
 import { Other } from 'grammy/out/core/api'
 import { Message, Update, UserFromGetMe } from 'grammy/out/platform.node'
 interface MessageParsed
-  extends Omit<Other<RawApi, 'sendMessage', 'text'>, 'parse_mode'> {}
+  extends Omit<Other<RawApi, 'sendMessage', 'text'>, 'parse_mode'> { }
 
-export class CortanaCtx extends Context {
+export type Module = {
+  default: (ctx: Ctx) => Promise<MessageParsed>
+}
+
+export class Ctx extends Context {
   constructor(update: Update, api: Api, me: UserFromGetMe) {
     super(update, api, me)
   }

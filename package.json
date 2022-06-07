@@ -7,7 +7,7 @@
     "dev": "ts-node-dev -r tsconfig-paths/register --transpile-only -r dotenv/config src/index.ts"
   },
   "dependencies": {
-    "grammy": "1.7.2"
+    "grammy": "^1.8.3"
   },
   "devDependencies": {
     "@types/dotenv": "8.2.0",
